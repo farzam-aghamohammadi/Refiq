@@ -53,7 +53,9 @@ dependencies {
 
     implementation(platform("com.walletconnect:android-bom:1.17.0"))
     implementation("com.walletconnect:android-core")
-    implementation("com.walletconnect:web3wallet")
+    implementation("com.walletconnect:web3modal")
+    implementation("com.walletconnect:sign:2.20.0")
+
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
 
