@@ -5,8 +5,9 @@ import com.eth.refiq.di.appModule
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
-import com.walletconnect.sign.client.Sign
-import com.walletconnect.sign.client.SignClient
+
+import com.walletconnect.web3.modal.client.Modal
+import com.walletconnect.web3.modal.client.Web3Modal
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -51,7 +52,7 @@ class RefiqApplication : Application() {
             println("Error CoreClient.initialize $it")
         }
 
-        SignClient.initialize(
+       /* SignClient.initialize(
             init = Sign.Params.Init(CoreClient),
             onSuccess = {
                 println("onSuccess: SignClient.initialize")
@@ -59,6 +60,15 @@ class RefiqApplication : Application() {
             onError = { error ->
                 println("Error SignClient.initialize $error")
                 return@initialize
+            }
+        )*/
+        Web3Modal.initialize(
+            init = Modal.Params.Init(CoreClient),
+            onSuccess = {
+                // Callback will be called if initialization is successful
+            },
+            onError = { error ->
+                // Error will be thrown if there's an issue during initialization
             }
         )
     }

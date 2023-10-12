@@ -1,19 +1,12 @@
 package com.eth.refiq
 
-import android.opengl.Visibility
 import android.os.Bundle
-import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.eth.refiq.databinding.ActivityMainBinding
-import com.eth.refiq.ui.home.HomeViewModel
+import com.walletconnect.web3.modal.ui.openWeb3Modal
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         //setConnectWalletUI()
         val navView: BottomNavigationView = binding.navView
 
@@ -36,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val navGraph=navController.navInflater.inflate(R.navigation.mobile_navigation)
 
 
-        navGraph.setStartDestination(R.id.navigation_main)
+        navGraph.setStartDestination(R.id.navigation_connect_wallet)
         navView.isGone=true
 
         navController.graph = navGraph
@@ -55,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun setConnectWalletUI(){
-        findNavController(R.id.nav_host_fragment_activity_main).graph.setStartDestination(R.id.navigation_main)
+        findNavController(R.id.nav_host_fragment_activity_main).graph.setStartDestination(R.id.navigation_connect_wallet)
 
     }
     private fun setUpLoggedInUI(){

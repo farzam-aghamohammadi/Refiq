@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.main.ConnectWalletFragment">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_connectWallet_eth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        style="@style/Theme.AppCompat"
+        android:theme="@style/Theme.AppCompat"
+        android:layout_gravity="center"
+        android:gravity="center"
+
+        android:text="@string/connect_to_the_eth_wallet"
+         />
+
+</FrameLayout>

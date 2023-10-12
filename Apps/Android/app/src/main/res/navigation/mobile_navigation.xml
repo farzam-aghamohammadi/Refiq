@@ -3,12 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_main">
+    app:startDestination="@id/navigation_connect_wallet">
     <fragment
-        android:id="@+id/navigation_main"
-        android:name="com.eth.refiq.ui.main.MainFragment"
-        android:label="@string/title_main"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_connect_wallet"
+        android:name="com.eth.refiq.ui.main.ConnectWalletFragment"
+        android:label="@string/title_connect_wallet"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_to_bottomSheet"
+            app:destination="@id/bottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheet"
+        android:name="com.walletconnect.web3.modal.ui.Web3ModalSheet" />
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.eth.refiq.ui.home.HomeFragment"
