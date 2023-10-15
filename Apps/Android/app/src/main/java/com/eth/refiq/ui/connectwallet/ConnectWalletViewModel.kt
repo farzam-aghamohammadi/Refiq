@@ -1,4 +1,4 @@
-package com.eth.refiq.ui.main
+package com.eth.refiq.ui.connectwallet
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

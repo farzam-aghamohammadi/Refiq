@@ -1,4 +1,4 @@
-package com.eth.refiq.ui.main
+package com.eth.refiq.ui.connectwallet
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.eth.refiq.Chains
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentConnectWalletBinding
+import com.walletconnect.web3.modal.client.Modal
 import com.walletconnect.web3.modal.client.Web3Modal
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.walletconnect.web3.modal.ui.openWeb3Modal
@@ -36,7 +37,7 @@ class ConnectWalletFragment : Fragment() {
                 requiredNamespaces = getRequiredNameSpace(),
             ))*/
 
-            val ethereumChain = com.walletconnect.web3.modal.client.Modal.Model.Chain(
+            val ethereumChain = Modal.Model.Chain(
                 chainName = "Ethereum",
                 chainNamespace = "eip155",
                 chainReference = "1",
@@ -53,6 +54,10 @@ class ConnectWalletFragment : Fragment() {
             findNavController().openWeb3Modal(id = R.id.action_to_bottomSheet)
 
 
+            println("ConnectWalletFragment${Web3Modal.getSelectedChain()}")
+            println("ConnectWalletFragment${Web3Modal.getListOfActiveSessions()}")
+            Web3Modal.getListOfActiveSessions().first()
+            //Web3Modal.request(Modal.Params.Request())
             //connectWalletViewModel.connectWithEthWallet()
         }
 

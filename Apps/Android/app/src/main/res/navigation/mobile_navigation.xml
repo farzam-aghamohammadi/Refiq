@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_connect_wallet">
     <fragment
         android:id="@+id/navigation_connect_wallet"
-        android:name="com.eth.refiq.ui.main.ConnectWalletFragment"
+        android:name="com.eth.refiq.ui.connectwallet.ConnectWalletFragment"
         android:label="@string/title_connect_wallet"
         tools:layout="@layout/fragment_home" >
         <action
@@ -20,7 +20,17 @@
         android:id="@+id/navigation_home"
         android:name="com.eth.refiq.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_to_search_topic"
+            app:destination="@id/navigation_search_topic" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_search_topic"
+        android:name="com.eth.refiq.ui.searchtopic.SearchTopicFragment"
+        android:label="@string/search_topic"
+        tools:layout="@layout/fragment_search_topic" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

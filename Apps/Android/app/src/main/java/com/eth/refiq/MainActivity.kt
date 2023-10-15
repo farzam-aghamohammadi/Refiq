@@ -1,13 +1,20 @@
 package com.eth.refiq
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import com.eth.refiq.databinding.ActivityMainBinding
-import com.walletconnect.web3.modal.ui.openWeb3Modal
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
+import com.eth.refiq.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,36 +30,64 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        //setConnectWalletUI()
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val navGraph=navController.navInflater.inflate(R.navigation.mobile_navigation)
+        val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
 
 
-        navGraph.setStartDestination(R.id.navigation_connect_wallet)
-        navView.isGone=true
+        setNavigationGraph(navGraph, navController, navView)
 
-        navController.graph = navGraph
-        /*val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            println("gggg ${R.id.navigation_home}")
+            if (destination.id == R.id.navigation_home) {
+                navView.isGone = false
+            } else {
+                navView.isGone = true
+            }
+        }
+    }
+
+    private fun setNavigationGraph(
+        navGraph: NavGraph,
+        navController: NavController,
+        navView: BottomNavigationView
+    ) {
+
+        navGraph.setStartDestination(R.id.navigation_home)
+
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)*/
-    }
-    private fun setNavigationGraph() {
+        navView.setupWithNavController(navController)
+
+        navController.graph = navGraph
+
 
     }
-    private fun setConnectWalletUI(){
-        findNavController(R.id.nav_host_fragment_activity_main).graph.setStartDestination(R.id.navigation_connect_wallet)
 
+    private fun setConnectWalletUI(
+        navGraph: NavGraph,
+        navController: NavController,
+        navView: BottomNavigationView
+    ) {
+        navGraph.setStartDestination(R.id.navigation_connect_wallet)
+        navView.isGone = true
+
+        navController.graph = navGraph
     }
-    private fun setUpLoggedInUI(){
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+
+        println("new Intent ${intent?.data} : ${intent} : ${intent}")
+    }
+
+    private fun setUpLoggedInUI() {
 
     }
 }

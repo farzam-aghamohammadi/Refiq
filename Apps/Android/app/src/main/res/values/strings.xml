@@ -6,5 +6,6 @@
     <string name="title_connect_wallet">Home</string>
     <string name="connect_to_the_eth_wallet">Connect to the eth wallet</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="search_topic">Search Topics</string>
 
 </resources>

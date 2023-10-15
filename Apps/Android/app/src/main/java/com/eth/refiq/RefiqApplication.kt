@@ -17,7 +17,7 @@ class RefiqApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        initWalletConnect()
+       // initWalletConnect()
         initKoin()
     }
 
