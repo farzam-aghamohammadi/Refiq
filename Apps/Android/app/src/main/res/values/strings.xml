@@ -16,4 +16,9 @@
     <string name="please_enter_a_password_for_the_wallet">Please enter the wallet password</string>
     <string name="continue_enter_password">Continue</string>
     <string name="title_enter_password">Enter password</string>
+    <string name="title_new_wallet">New Wallet</string>
+    <string name="new_wallet_title">Your Secret Phrase</string>
+    <string name="newwallet_description">Write down or copy these words in the right order and save them somewhere safe.</string>
+    <string name="copy_secret_phrase">COPY</string>
+    <string name="newwallet_done">Done</string>
 </resources>

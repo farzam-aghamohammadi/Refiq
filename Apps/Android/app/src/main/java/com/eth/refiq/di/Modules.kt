@@ -5,9 +5,11 @@ import com.eth.refiq.MainViewModel
 import com.eth.refiq.data.RemotePostRepository
 import com.eth.refiq.data.RemoteTopicRepository
 import com.eth.refiq.data.SharedPrefLocalDataStorage
+import com.eth.refiq.data.Web3JRepository
 import com.eth.refiq.domain.LocalDataStorage
 import com.eth.refiq.domain.PostRepository
 import com.eth.refiq.domain.TopicRepository
+import com.eth.refiq.domain.Web3Repository
 import com.eth.refiq.ui.connectwallet.ConnectWalletViewModel
 import com.eth.refiq.ui.searchtopic.SearchTopicViewModel
 import com.eth.refiq.ui.topic.TopicViewModel
@@ -28,7 +30,7 @@ val appModule = module {
     }
     viewModel { SearchTopicViewModel(get(),get()) }
 
-    viewModel{WalletViewModel()}
+    viewModel{WalletViewModel(get(),get())}
 
     single <TopicRepository>{ RemoteTopicRepository() }
     single <PostRepository>{ RemotePostRepository() }
@@ -38,4 +40,5 @@ val appModule = module {
     }
     single <LocalDataStorage> { SharedPrefLocalDataStorage(androidApplication())  }
 
+    single<Web3Repository> { Web3JRepository(androidApplication()) }
 }

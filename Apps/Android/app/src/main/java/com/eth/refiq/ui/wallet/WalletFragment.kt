@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentWalletBinding
+import com.eth.refiq.ui.wallet.password.EnterPasswordFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class WalletFragment : Fragment() {
@@ -38,10 +39,13 @@ class WalletFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.walletImport.setOnClickListener {
-            findNavController().navigate(R.id.action_to_enter_password)
-        }
+            findNavController().navigate(R.id.action_to_enter_password,Bundle().apply {
+                putString(EnterPasswordFragment.DESTINATION,EnterPasswordFragment.DESTINATION_IMPORT_WALLET)
+            })        }
         binding.walletNew.setOnClickListener {
-            findNavController().navigate(R.id.action_to_enter_password)
+            findNavController().navigate(R.id.action_to_enter_password,Bundle().apply {
+                putString(EnterPasswordFragment.DESTINATION,EnterPasswordFragment.DESTINATION_NEW_WALLET)
+            })
         }
 
     }
