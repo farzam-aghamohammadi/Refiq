@@ -5,13 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eth.refiq.domain.WalletRepository
 import com.eth.refiq.domain.Web3Repository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class WalletViewModel constructor(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    private val web3Repository: Web3Repository
+    private val web3Repository: Web3Repository,
+    private val walletRepository: WalletRepository
 ) : ViewModel() {
 
     private val _mnemonicLiveData = MutableLiveData<String>()
@@ -29,6 +31,16 @@ class WalletViewModel constructor(
             }, {
                 it.printStackTrace()
             })
+        }
+    }
+
+    fun saveMnemonic(mnemonic: String) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                withContext(coroutineDispatcherProvider.ioDispatcher()) {
+                    walletRepository.saveSecretPhrase(mnemonic)
+                }
+            }
         }
     }
 }

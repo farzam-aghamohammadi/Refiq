@@ -7,7 +7,7 @@ import androidx.security.crypto.MasterKey
 import com.eth.refiq.domain.LocalDataStorage
 
 
-class SharedPrefLocalDataStorage constructor(private val context: Context) : LocalDataStorage {
+class SharedPrefLocalDataStorage constructor(context: Context) : LocalDataStorage {
     private val sharedPreferences: SharedPreferences
 
     init {

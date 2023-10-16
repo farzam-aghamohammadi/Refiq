@@ -7,8 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentNewWalletBinding
 import com.eth.refiq.ui.wallet.WalletViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -43,6 +44,11 @@ class NewWalletFragment : Fragment() {
                 requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
             val clip = ClipData.newPlainText("label", binding.newwalletTextviewMnemonic.text.toString())
             clipboard?.setPrimaryClip(clip)
+
+        }
+        binding.newwalletDon.setOnClickListener {
+            walletViewModel.saveMnemonic( binding.newwalletTextviewMnemonic.text.toString())
+            findNavController().popBackStack(R.id.navigation_wallet,true)
         }
     }
 }
