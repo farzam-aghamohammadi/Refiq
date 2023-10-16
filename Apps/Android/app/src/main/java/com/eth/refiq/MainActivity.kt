@@ -6,7 +6,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,7 +13,6 @@ import com.eth.refiq.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.ui.setupWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.eth.refiq.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_wallet
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

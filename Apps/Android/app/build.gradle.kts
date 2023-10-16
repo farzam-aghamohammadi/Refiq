@@ -75,16 +75,14 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation(platform("com.walletconnect:android-bom:1.17.0"))
-  /*  implementation("com.walletconnect:android-core")
-    implementation("com.walletconnect:web3modal")
-    implementation("com.walletconnect:sign:2.20.0")
-    implementation("com.walletconnect:walletconnect-modal")
-
-    implementation(platform("com.walletconnect:android-bom:$BOM_VERSION"))*/
     implementation("com.walletconnect:android-core")
     implementation("com.walletconnect:web3modal")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
+    implementation ("org.web3j:core:4.9.0")
+
+
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     implementation("io.insert-koin:koin-android:3.4.2")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))

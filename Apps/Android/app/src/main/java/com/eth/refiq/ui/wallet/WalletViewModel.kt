@@ -1,13 +1,13 @@
-package com.eth.refiq.ui.notifications
+package com.eth.refiq.ui.wallet
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NotificationsViewModel : ViewModel() {
+class WalletViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        value = "This is wallet Fragment"
     }
     val text: LiveData<String> = _text
 }
