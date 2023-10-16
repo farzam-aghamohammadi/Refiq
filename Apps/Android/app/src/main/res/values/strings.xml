@@ -13,4 +13,7 @@
     <string name="check_out_topic_info">Check out topic info</string>
     <string name="import_a_wallet">Import a wallet</string>
     <string name="create_a_new_wallet">Create a new wallet</string>
+    <string name="please_enter_a_password_for_the_wallet">Please enter the wallet password</string>
+    <string name="continue_enter_password">Continue</string>
+    <string name="title_enter_password">Enter password</string>
 </resources>

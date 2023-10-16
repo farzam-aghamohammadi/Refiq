@@ -51,5 +51,14 @@
         android:id="@+id/navigation_wallet"
         android:name="com.eth.refiq.ui.wallet.WalletFragment"
         android:label="@string/title_wallet"
-        tools:layout="@layout/fragment_wallet" />
+        tools:layout="@layout/fragment_wallet" >
+        <action android:id="@+id/action_to_enter_password" app:destination="@id/navigation_enterpassword"/>
+    </fragment>
+
+
+    <dialog android:id="@+id/navigation_enterpassword"
+        android:name="com.eth.refiq.ui.wallet.newwallet.password.EnterPasswordFragment"
+        android:label="@string/title_enter_password"
+        tools:layout="@layout/fragment_enter_password"
+        />
 </navigation>

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentWalletBinding
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -37,8 +38,12 @@ class WalletFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.walletImport.setOnClickListener {
-
+            findNavController().navigate(R.id.action_to_enter_password)
         }
+        binding.walletNew.setOnClickListener {
+            findNavController().navigate(R.id.action_to_enter_password)
+        }
+
     }
     override fun onDestroyView() {
         super.onDestroyView()
