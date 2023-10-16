@@ -1,0 +1,23 @@
+{
+  "name": "refiq",
+  "license": "GPL-3.0",
+  "scripts": {
+    "format": "prettier . --write",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy-test": "graph deploy --node https://api.studio.thegraph.com/deploy/ refiq-test",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ refiq",
+    "create-local": "graph create --node http://localhost:8020/ refiq",
+    "remove-local": "graph remove --node http://localhost:8020/ refiq",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 refiq",
+    "test": "graph test -d"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.59.0",
+    "@graphprotocol/graph-ts": "0.30.0"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0",
+    "prettier": "3.0.3"
+  }
+}

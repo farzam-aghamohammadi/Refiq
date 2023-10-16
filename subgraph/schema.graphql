@@ -1,0 +1,5 @@
+type Topic @entity {
+  id: String!
+  name: String!
+  owner: String!
+}

@@ -1,0 +1,26 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Topics
+    network: scroll-sepolia
+    source:
+      address: "0x0B13F05c343e5AEbD4b8F096A5Bb657Ad2F626BD"
+      abi: Topics
+      startBlock: 42770
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Topic
+      abis:
+        - name: Topics
+          file: ./abis/Topics.json
+      eventHandlers:
+        - event: TopicCreated(uint256,string)
+          handler: handleTopicCreated
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/topics.ts
