@@ -1,14 +1,19 @@
 package com.eth.refiq.ui.searchtopic
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.eth.refiq.databinding.FragmentSearchTopicBinding
 import com.eth.refiq.ui.searchtopic.adapter.TopicAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.eth.refiq.R
 
 
 class SearchTopicFragment : Fragment() {
@@ -35,6 +40,9 @@ class SearchTopicFragment : Fragment() {
            binding.searchviewSearchtopic.requestFocusFromTouch()*/
 
         val adapter = TopicAdapter { topic ->
+            findNavController().navigate(R.id.action_to_topic, Bundle().apply {
+                putSerializable("topic", topic)
+            })
         }
         binding.searchtopicList.adapter = adapter
         searchTopicViewModel.topicsLiveData.observe(viewLifecycleOwner) {
@@ -48,7 +56,8 @@ class SearchTopicFragment : Fragment() {
         observeSearchQuery()
 
     }
-    private fun observeSearchQuery(){
+
+    private fun observeSearchQuery() {
         binding.searchtopicSearchview.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

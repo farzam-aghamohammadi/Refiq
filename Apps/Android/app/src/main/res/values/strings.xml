@@ -7,5 +7,9 @@
     <string name="connect_to_the_eth_wallet">Connect to the eth wallet</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="search_topic">Search Topics</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="topic">Topic</string>
+    <string name="check_out_topic_info">Check out topic info</string>
 
 </resources>

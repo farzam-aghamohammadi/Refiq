@@ -27,7 +27,7 @@ class TopicAdapter constructor(private val onTopicClicked: ((Topic) -> Unit)) :
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: TopicItemViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position],onTopicClicked)
     }
 
 }
@@ -35,7 +35,10 @@ class TopicAdapter constructor(private val onTopicClicked: ((Topic) -> Unit)) :
 class TopicItemViewHolder(private val binding: ItemTopicBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(topic: Topic) {
+    fun bind(topic: Topic, onTopicClicked: (Topic) -> Unit) {
         binding.textviewTopicitem.text = topic.name
+        binding.root.setOnClickListener {
+            onTopicClicked(topic)
+        }
     }
 }

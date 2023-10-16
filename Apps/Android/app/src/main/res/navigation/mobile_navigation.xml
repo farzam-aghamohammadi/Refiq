@@ -30,8 +30,17 @@
         android:id="@+id/navigation_search_topic"
         android:name="com.eth.refiq.ui.searchtopic.SearchTopicFragment"
         android:label="@string/search_topic"
-        tools:layout="@layout/fragment_search_topic" />
+        tools:layout="@layout/fragment_search_topic" >
+        <action
+            android:id="@+id/action_to_topic"
+            app:destination="@id/navigation_topic" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/navigation_topic"
+        android:name="com.eth.refiq.ui.topic.TopicFragment"
+        android:label="@string/topic"
+        tools:layout="@layout/fragment_topic"/>
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.eth.refiq.ui.dashboard.DashboardFragment"
