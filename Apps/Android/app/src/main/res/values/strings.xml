@@ -11,4 +11,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="topic">Topic</string>
     <string name="check_out_topic_info">Check out topic info</string>
+    <string name="import_a_wallet">Import a wallet</string>
+    <string name="create_a_new_wallet">Create a new wallet</string>
 </resources>
