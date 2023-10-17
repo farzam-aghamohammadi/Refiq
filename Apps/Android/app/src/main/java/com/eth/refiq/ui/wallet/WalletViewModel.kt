@@ -25,7 +25,7 @@ class WalletViewModel constructor(
     private val _walletInfo = MutableLiveData<WalletInfo>()
 
     val walletInfo: LiveData<WalletInfo> = _walletInfo
-
+    fun init(){}
     init {
         viewModelScope.launch {
             kotlin.runCatching {
