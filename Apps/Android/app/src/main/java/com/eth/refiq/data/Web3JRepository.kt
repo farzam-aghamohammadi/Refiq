@@ -52,15 +52,12 @@ class Web3JRepository constructor(
     }
 
     override suspend fun loadWallet(password: String) {
-        val walletDir = getWalletDirectory()
         val walletFileName = localDataStorage.getValue(WALLET_FILE_NAME)
         val file= File(getWalletDirectory()+"/"+walletFileName)
-        println("loadWallet ${walletDir} ${walletFileName} ${file.isFile} ${file}")
         credential = WalletUtils.loadCredentials(
             localDataStorage.getValue(PASSWORD),
            file
         )
-        println("credd ${credential?.address}")
     }
 
     override suspend fun getBalance(): String {

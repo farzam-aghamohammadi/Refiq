@@ -39,12 +39,8 @@ class MainActivity : AppCompatActivity() {
         setNavigationGraph(navGraph, navController, navView)
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            println("gggg ${R.id.navigation_home}")
-            if (destination.id == R.id.navigation_home || destination.id == R.id.navigation_wallet) {
-                navView.isGone = false
-            } else {
-                navView.isGone = true
-            }
+            navView.isGone =
+                !(destination.id == R.id.navigation_home || destination.id == R.id.navigation_wallet)
         }
     }
 

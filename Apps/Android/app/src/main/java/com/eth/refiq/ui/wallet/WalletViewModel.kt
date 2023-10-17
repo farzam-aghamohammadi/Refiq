@@ -33,10 +33,12 @@ class WalletViewModel constructor(
                     web3Repository.isWalletCreated()
                 }
             }.fold({
-                _walletConnected.value = it
-                if (it) {
-                    onWalletCreated()
-                }
+                _walletConnected.postValue(it)
+               withContext(coroutineDispatcherProvider.ioDispatcher()){
+                   if (it) {
+                       onWalletCreated()
+                   }
+               }
             }, {
                 it.printStackTrace()
             })
@@ -72,7 +74,7 @@ class WalletViewModel constructor(
     }
 
     private fun onWalletCreated() {
-        _walletConnected.value = true
+        _walletConnected.postValue(true)
         loadCredential()
     }
 
@@ -85,7 +87,6 @@ class WalletViewModel constructor(
                     Pair( web3Repository.getAddress(),web3Repository.getBalance())
                 }
             }.fold({
-                println("dssds ${it.second} : ${it.first}")
                    _walletInfo.value= WalletInfo(it.first,it.second)
             }, {
                 it.printStackTrace()

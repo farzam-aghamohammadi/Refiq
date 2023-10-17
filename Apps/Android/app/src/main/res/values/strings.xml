@@ -21,4 +21,6 @@
     <string name="newwallet_description">Write down or copy these words in the right order and save them somewhere safe.</string>
     <string name="copy_secret_phrase">COPY</string>
     <string name="newwallet_done">Done</string>
+    <string name="walletInfo_balance">BALANCE:</string>
+    <string name="walletinfo_address">ADDRESS:</string>
 </resources>
