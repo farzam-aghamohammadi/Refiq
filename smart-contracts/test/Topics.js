@@ -18,8 +18,9 @@ describe("RefiqTopics", function () {
     const topicName = "test_topic";
     const topicId =
       "27804793435090195748552391999461632910659124896759557810118903205356103197977";
-    await topics.connect(owner1).createTopic(topicName);
-    return { ...result, topicName, topicId };
+    const topicInfoCid = "randoc-cid-for-info";
+    await topics.connect(owner1).createTopic(topicName, topicInfoCid);
+    return { ...result, topicName, topicId, topicInfoCid };
   }
 
   async function deployFixtureWithPost() {
@@ -54,7 +55,8 @@ describe("RefiqTopics", function () {
       const name = "test_topic";
       const id =
         "27804793435090195748552391999461632910659124896759557810118903205356103197977";
-      await expect(topics.connect(owner1).createTopic(name))
+      const infoCid = "randoc-cid-for-info";
+      await expect(topics.connect(owner1).createTopic(name, infoCid))
         .to.emit(topics, "Transfer")
         .withArgs(ethers.ZeroAddress, owner1.address, id);
     });
@@ -64,9 +66,10 @@ describe("RefiqTopics", function () {
       const name = "test_topic";
       const id =
         "27804793435090195748552391999461632910659124896759557810118903205356103197977";
-      await expect(topics.connect(owner1).createTopic(name))
+      const infoCid = "randoc-cid-for-info";
+      await expect(topics.connect(owner1).createTopic(name, infoCid))
         .to.emit(topics, "TopicCreated")
-        .withArgs(id, name);
+        .withArgs(id, name, infoCid);
     });
 
     it("Should topic owner have been set correctly", async function () {
@@ -74,15 +77,40 @@ describe("RefiqTopics", function () {
       const name = "test_topic";
       const id =
         "27804793435090195748552391999461632910659124896759557810118903205356103197977";
-      await topics.connect(owner1).createTopic(name);
+      const infoCid = "randoc-cid-for-info";
+      await topics.connect(owner1).createTopic(name, infoCid);
       await expect(topics.ownerOf(id)).to.eventually.equal(owner1.address);
     });
 
     it("Should revert on duplicate topic", async function () {
       const { topics, owner1 } = await loadFixture(deployFixture);
       const name = "test_topic";
-      await topics.connect(owner1).createTopic(name);
-      await expect(topics.connect(owner1).createTopic(name)).to.reverted;
+      const infoCid = "randoc-cid-for-info";
+      await topics.connect(owner1).createTopic(name, infoCid);
+      await expect(topics.connect(owner1).createTopic(name, infoCid)).to
+        .reverted;
+    });
+  });
+
+  describe("updateTopicInfo", async function () {
+    it("Should emit TopicInfoUpdated event with correct args", async function () {
+      const { topics, topicId, owner1 } = await loadFixture(
+        deployFixtureWithTopic,
+      );
+      const newInfoCid = "new-cid-for-info";
+      await expect(topics.connect(owner1).updateTopicInfo(topicId, newInfoCid))
+        .to.emit(topics, "TopicInfoUpdated")
+        .withArgs(topicId, newInfoCid);
+    });
+
+    it("Should revert on unauthorized access", async function () {
+      const { topics, topicId, author1 } = await loadFixture(
+        deployFixtureWithTopic,
+      );
+      const newInfoCid = "new-cid-for-info";
+      await expect(
+        topics.connect(author1).updateTopicInfo(topicId, newInfoCid),
+      ).to.revertedWithCustomError(topics, "Unauthorized");
     });
   });
 
