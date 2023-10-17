@@ -10,4 +10,5 @@ interface Web3Repository {
     suspend fun getAddress():String
 
     suspend fun saveWallet()
+    suspend fun importWallet(secretPhrase: String, password: String)
 }

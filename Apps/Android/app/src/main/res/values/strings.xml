@@ -23,4 +23,5 @@
     <string name="newwallet_done">Done</string>
     <string name="walletInfo_balance">BALANCE:</string>
     <string name="walletinfo_address">ADDRESS:</string>
+    <string name="importwallet_paste">PASTE</string>
 </resources>

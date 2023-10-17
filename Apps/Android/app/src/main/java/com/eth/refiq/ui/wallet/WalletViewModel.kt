@@ -25,7 +25,13 @@ class WalletViewModel constructor(
     private val _walletInfo = MutableLiveData<WalletInfo>()
 
     val walletInfo: LiveData<WalletInfo> = _walletInfo
-    fun init(){}
+
+
+    private val _walletImported = MutableLiveData(false)
+
+    val walletImported: LiveData<Boolean> = _walletImported
+    fun init() {}
+
     init {
         viewModelScope.launch {
             kotlin.runCatching {
@@ -34,11 +40,11 @@ class WalletViewModel constructor(
                 }
             }.fold({
                 _walletConnected.postValue(it)
-               withContext(coroutineDispatcherProvider.ioDispatcher()){
-                   if (it) {
-                       onWalletCreated()
-                   }
-               }
+                withContext(coroutineDispatcherProvider.ioDispatcher()) {
+                    if (it) {
+                        onWalletCreated()
+                    }
+                }
             }, {
                 it.printStackTrace()
             })
@@ -84,11 +90,26 @@ class WalletViewModel constructor(
                 withContext(coroutineDispatcherProvider.ioDispatcher()) {
                     //TODO should get password from user
                     web3Repository.loadWallet("")
-                    Pair( web3Repository.getAddress(),web3Repository.getBalance())
+                    Pair(web3Repository.getAddress(), web3Repository.getBalance())
                 }
             }.fold({
-                   _walletInfo.value= WalletInfo(it.first,it.second)
+                _walletInfo.value = WalletInfo(it.first, it.second)
             }, {
+                it.printStackTrace()
+            })
+        }
+    }
+
+    fun importWallet(secretPhrase: String, password: String) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                withContext(coroutineDispatcherProvider.ioDispatcher()){
+                    web3Repository.importWallet(secretPhrase,password)
+                }
+            }.fold({
+                   _walletImported.postValue(true)
+            }, {
+
                 it.printStackTrace()
             })
         }

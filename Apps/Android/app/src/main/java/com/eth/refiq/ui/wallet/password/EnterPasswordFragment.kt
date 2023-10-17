@@ -40,7 +40,9 @@ class EnterPasswordFragment : DialogFragment() {
         val password = binding.enterpassEdittext.text.toString()
         when (arguments?.getString(DESTINATION)) {
             DESTINATION_IMPORT_WALLET -> {
-
+                findNavController().navigate(R.id.action_to_import_wallet,Bundle().apply {
+                    putString(PASSWORD,password)
+                })
             }
 
             DESTINATION_NEW_WALLET -> {

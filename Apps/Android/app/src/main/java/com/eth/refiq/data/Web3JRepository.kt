@@ -39,12 +39,24 @@ class Web3JRepository constructor(
             file.mkdirs()
         }
         val bip39Wallet = WalletUtils.generateBip39Wallet(password, file)
-        bip39Wallet.filename
         localDataStorage.saveValue(PASSWORD, password)
         localDataStorage.saveValue(WALLET_FILE_NAME, bip39Wallet.filename)
 
         println("fileName ${bip39Wallet.filename} ${file.name}")
         return bip39Wallet.mnemonic
+    }
+
+    override suspend fun importWallet(secretPhrase: String, password: String) {
+        val file = File(getWalletDirectory()) // the etherium wallet location
+
+        //create the directory if it does not exist
+        if (!file.mkdirs()) {
+            file.mkdirs()
+        }
+        val bip39Wallet = WalletUtils.generateBip39WalletFromMnemonic(password, secretPhrase, file)
+        localDataStorage.saveValue(WALLET_FILE_NAME, bip39Wallet.filename)
+        localDataStorage.saveValue(PASSWORD, password)
+
     }
 
     override suspend fun isWalletCreated(): Boolean {
@@ -53,10 +65,10 @@ class Web3JRepository constructor(
 
     override suspend fun loadWallet(password: String) {
         val walletFileName = localDataStorage.getValue(WALLET_FILE_NAME)
-        val file= File(getWalletDirectory()+"/"+walletFileName)
+        val file = File(getWalletDirectory() + "/" + walletFileName)
         credential = WalletUtils.loadCredentials(
             localDataStorage.getValue(PASSWORD),
-           file
+            file
         )
     }
 

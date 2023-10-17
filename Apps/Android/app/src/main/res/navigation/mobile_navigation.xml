@@ -62,6 +62,7 @@
         tools:layout="@layout/fragment_enter_password"
         >
         <action android:id="@+id/action_to_new_wallet" app:destination="@id/navigation_newwallet"/>
+        <action android:id="@+id/action_to_import_wallet" app:destination="@id/navigation_importwallet"/>
 
     </dialog>
     <fragment
@@ -69,5 +70,11 @@
         android:name="com.eth.refiq.ui.wallet.newwallet.NewWalletFragment"
         android:label="@string/title_new_wallet"
         tools:layout="@layout/fragment_new_wallet" >
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_importwallet"
+        android:name="com.eth.refiq.ui.wallet.importwallet.ImportWalletFragment"
+        android:label="Import wallet"
+        tools:layout="@layout/fragment_import_wallet" >
     </fragment>
 </navigation>
