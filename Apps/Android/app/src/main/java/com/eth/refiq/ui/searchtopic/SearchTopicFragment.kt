@@ -1,19 +1,17 @@
 package com.eth.refiq.ui.searchtopic
-
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentSearchTopicBinding
 import com.eth.refiq.ui.searchtopic.adapter.TopicAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.eth.refiq.R
 
 
 class SearchTopicFragment : Fragment() {
@@ -35,10 +33,14 @@ class SearchTopicFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.searchtopicSearchview.onActionViewExpanded()
+       //
         /*   binding.searchviewSearchtopic.requestFocus()
            binding.searchviewSearchtopic.requestFocusFromTouch()*/
 
+       // binding.searchtopicSearchview.onActionViewExpanded()
+        binding.searchtopicSearchview.onActionViewExpanded()
+        //binding.searchtopicSearchview.requestFocus()
+        showSoftKeyboard(binding.searchtopicSearchview)
         val adapter = TopicAdapter { topic ->
             findNavController().navigate(R.id.action_to_topic, Bundle().apply {
                 putSerializable("topic", topic)
@@ -56,7 +58,14 @@ class SearchTopicFragment : Fragment() {
         observeSearchQuery()
 
     }
-
+    fun showSoftKeyboard(view: View) {
+        /*if (view.requestFocus()) {
+            val imm = requireContext().getSystemService(InputMethodManager::class.java)
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }*/
+        view.requestFocus()
+        WindowCompat.getInsetsController(requireActivity().window, view)!!.show(WindowInsetsCompat.Type.ime())
+    }
     private fun observeSearchQuery() {
         binding.searchtopicSearchview.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
