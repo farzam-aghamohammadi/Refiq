@@ -6,6 +6,19 @@ import {IERC721Metadata} from "@openzeppelin/contracts/token/ERC721/extensions/I
 
 interface IRefiqTopics is IERC721, IERC721Metadata {
     event TopicCreated(uint256 id, string name);
+    event PostCreated(uint256 id, uint256 topicId, address author, string cid);
+    event CommentCreated(
+        uint256 id,
+        uint256 parentId,
+        address author,
+        string cid
+    );
+
+    error DuplicateContent(uint256 contentId);
 
     function createTopic(string calldata name) external;
+
+    function createPost(uint256 topicId, string calldata cid) external;
+
+    function createComment(uint256 parentId, string calldata cid) external;
 }
