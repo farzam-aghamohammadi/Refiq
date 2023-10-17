@@ -31,8 +31,20 @@ class SharedPrefLocalDataStorage constructor(context: Context) : LocalDataStorag
         }
     }
 
+    override fun saveValue(key: String, value: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(key, value)
+            apply()
+        }
+    }
+
     override fun getValue(key: String): String? {
         return sharedPreferences.getString(key, null)
+    }
+
+    override fun getBooleanValue(key: String): Boolean {
+        return sharedPreferences.getBoolean(key, false)
+
     }
 
 }

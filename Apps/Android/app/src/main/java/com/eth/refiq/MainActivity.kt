@@ -13,6 +13,7 @@ import com.eth.refiq.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.ui.setupWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.eth.refiq.ui.wallet.WalletViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
 
     val mainViewModel: MainViewModel by viewModel()
+    private val walletViewModel:WalletViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             println("gggg ${R.id.navigation_home}")
-            if (destination.id == R.id.navigation_home) {
+            if (destination.id == R.id.navigation_home || destination.id == R.id.navigation_wallet) {
                 navView.isGone = false
             } else {
                 navView.isGone = true

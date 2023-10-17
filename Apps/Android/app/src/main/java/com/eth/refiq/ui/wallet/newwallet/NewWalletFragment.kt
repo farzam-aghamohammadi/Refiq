@@ -47,7 +47,7 @@ class NewWalletFragment : Fragment() {
 
         }
         binding.newwalletDon.setOnClickListener {
-            walletViewModel.saveMnemonic( binding.newwalletTextviewMnemonic.text.toString())
+            walletViewModel.saveWallet()
             findNavController().popBackStack(R.id.navigation_wallet,true)
         }
     }
