@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
 
-    private val walletViewModel:WalletViewModel by viewModel()
+    private val walletViewModel: WalletViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             navView.isGone =
-                !(destination.id == R.id.navigation_home || destination.id == R.id.navigation_wallet)
+                !(destination.id == R.id.navigation_home || destination.id == R.id.navigation_wallet || destination.id == R.id.navigation_new)
         }
     }
 
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_wallet
+                R.id.navigation_home, R.id.navigation_new, R.id.navigation_wallet
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

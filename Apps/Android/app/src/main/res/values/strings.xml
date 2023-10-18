@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Refiq</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_new">New</string>
     <string name="title_wallet">Wallet</string>
     <string name="title_connect_wallet">Home</string>
     <string name="connect_to_the_eth_wallet">Connect to the eth wallet</string>
@@ -24,4 +24,7 @@
     <string name="walletInfo_balance">BALANCE:</string>
     <string name="walletinfo_address">ADDRESS:</string>
     <string name="importwallet_paste">PASTE</string>
+    <string name="newtopic_">New Topic</string>
+    <string name="newtopic">New Topic</string>
+    <string name="newpost">New Post\n</string>
 </resources>

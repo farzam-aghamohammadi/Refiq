@@ -41,11 +41,11 @@
         android:name="com.eth.refiq.ui.topic.TopicFragment"
         android:label="@string/topic"
         tools:layout="@layout/fragment_topic"/>
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.eth.refiq.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+    <dialog
+        android:id="@+id/navigation_new"
+        android:name="com.eth.refiq.ui.dashboard.NewBottomSheetNavigationFragment"
+        android:label="@string/title_new"
+        tools:layout="@layout/fragement_bottomsheet_new" />
 
     <fragment
         android:id="@+id/navigation_wallet"
