@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import com.eth.refiq.R
-import com.eth.refiq.databinding.FragementBottomsheetNewBinding
 import com.eth.refiq.databinding.FragmentCreateTopicBinding
 import com.eth.refiq.ui.topic.TopicViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class CreateTopicFragment : BottomSheetDialogFragment() {
@@ -22,7 +20,7 @@ class CreateTopicFragment : BottomSheetDialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val topicViewModel:TopicViewModel by  activityViewModel()
+    private val topicViewModel: TopicViewModel by viewModel()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,7 +46,11 @@ class CreateTopicFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.createtopicDone.setOnClickListener {
-            topicViewModel.createTopic()
+            topicViewModel.createTopic(
+                binding.createtopicName.text.toString(),
+                binding.createtopicBio.text.toString(),
+                binding.createtopicRules.text.toString()
+            )
         }
     }
 

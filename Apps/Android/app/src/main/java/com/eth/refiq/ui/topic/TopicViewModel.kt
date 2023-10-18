@@ -13,12 +13,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TopicViewModel constructor(
-    private val topic: Topic,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
+    private val topicRepository: TopicRepository
 ) : ViewModel() {
     init {
-        getPosts(topic)
+        //getPosts(topic)
     }
 
     val postsLiveData: LiveData<List<Post>>
@@ -27,7 +27,7 @@ class TopicViewModel constructor(
     private val _postsLiveData =
         MutableLiveData<List<Post>>()
 
-   private fun getPosts(topic: Topic) {
+    private fun getPosts(topic: Topic) {
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(coroutineDispatcherProvider.ioDispatcher()) {
@@ -45,8 +45,19 @@ class TopicViewModel constructor(
 
     }
 
-    fun createTopic() {
-
+    fun createTopic(name: String, bio: String, rule: String) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                withContext(coroutineDispatcherProvider.ioDispatcher()) {
+                    val cid = topicRepository.createTopic(name, bio, listOf(rule))
+                    
+                }
+            }.fold({
+                println("$it")
+            }, {
+                it.printStackTrace()
+            })
+        }
     }
 
 }

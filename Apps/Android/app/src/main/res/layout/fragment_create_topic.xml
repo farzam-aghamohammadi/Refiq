@@ -20,19 +20,28 @@
         android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/createtopic_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Topic name"
         app:backgroundTint="@color/black" />
 
     <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/createtopic_bio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Topic bio"
         app:backgroundTint="@color/black"
 
         />
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/createtopic_rules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Topic Rules"
+        app:backgroundTint="@color/black"
 
+        />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createtopic_done"
         android:layout_width="match_parent"

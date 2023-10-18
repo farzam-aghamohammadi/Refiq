@@ -2,6 +2,7 @@ package com.eth.refiq.di
 
 import CoroutineDispatcherProvider
 import com.eth.refiq.MainViewModel
+import com.eth.refiq.data.Api
 import com.eth.refiq.data.RemotePostRepository
 import com.eth.refiq.data.RemoteTopicRepository
 import com.eth.refiq.data.SharedPrefLocalDataStorage
@@ -25,8 +26,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
-
-    single<TopicRepository> { RemoteTopicRepository() }
+    single<Api> {
+        get<Retrofit>().create(Api::class.java)
+    }
+    single<TopicRepository> { RemoteTopicRepository(get()) }
     single<PostRepository> { RemotePostRepository() }
     single<CoroutineDispatcherProvider> {
         AppDispatcherProvider()
