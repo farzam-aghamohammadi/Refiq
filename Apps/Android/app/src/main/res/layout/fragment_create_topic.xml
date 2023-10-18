@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".ui.add.topic.CreateTopicFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:hint="Topic name"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:text="Start creating your own topic"
+        android:textStyle="bold" />
 
-</FrameLayout>
+    <androidx.appcompat.widget.AppCompatEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Topic name"
+        app:backgroundTint="@color/black" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Topic bio"
+        app:backgroundTint="@color/black"
+
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/createtopic_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/create"
+        android:textColor="@color/white" />
+</androidx.appcompat.widget.LinearLayoutCompat>

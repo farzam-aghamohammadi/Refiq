@@ -5,10 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragementBottomsheetNewBinding
 import com.eth.refiq.databinding.FragmentCreateTopicBinding
+import com.eth.refiq.ui.topic.TopicViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
 class CreateTopicFragment : BottomSheetDialogFragment() {
@@ -18,6 +22,7 @@ class CreateTopicFragment : BottomSheetDialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val topicViewModel:TopicViewModel by  activityViewModel()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,10 +39,17 @@ class CreateTopicFragment : BottomSheetDialogFragment() {
         _binding = null
     }
 
-    override fun getTheme(): Int {
-        return R.style.CustomBottomSheetDialog
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.createtopicDone.setOnClickListener {
+            topicViewModel.createTopic()
+        }
+    }
 
 }

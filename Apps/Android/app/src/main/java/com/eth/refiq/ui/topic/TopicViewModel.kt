@@ -44,4 +44,9 @@ class TopicViewModel constructor(
     fun addPost() {
 
     }
+
+    fun createTopic() {
+
+    }
+
 }

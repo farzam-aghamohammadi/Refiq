@@ -28,4 +28,5 @@
     <string name="newtopic">New Topic</string>
     <string name="newpost">New Post\n</string>
     <string name="title_create_topic">Create Topic</string>
+    <string name="create">Create</string>
 </resources>
