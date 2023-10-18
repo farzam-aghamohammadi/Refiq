@@ -25,7 +25,7 @@
             android:layout_marginStart="16dp"
             app:tint="@color/white"
             android:foreground="?attr/selectableItemBackground"
-            app:srcCompat="@drawable/ic_search"
+            app:srcCompat="@drawable/baseline_search_24"
             />
     </androidx.appcompat.widget.Toolbar>
     <TextView

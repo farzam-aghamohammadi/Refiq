@@ -10,7 +10,6 @@ import com.eth.refiq.domain.LocalDataStorage
 import com.eth.refiq.domain.PostRepository
 import com.eth.refiq.domain.TopicRepository
 import com.eth.refiq.domain.Web3Repository
-import com.eth.refiq.ui.connectwallet.ConnectWalletViewModel
 import com.eth.refiq.ui.searchtopic.SearchTopicViewModel
 import com.eth.refiq.ui.topic.TopicViewModel
 import com.eth.refiq.ui.wallet.WalletViewModel
@@ -33,9 +32,7 @@ val appModule = module {
     viewModel {
         MainViewModel()
     }
-    viewModel {
-        ConnectWalletViewModel()
-    }
+
     viewModel {
         TopicViewModel(get(), get(), get())
     }

@@ -64,17 +64,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setConnectWalletUI(
-        navGraph: NavGraph,
-        navController: NavController,
-        navView: BottomNavigationView
-    ) {
-        navGraph.setStartDestination(R.id.navigation_connect_wallet)
-        navView.isGone = true
-
-        navController.graph = navGraph
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 

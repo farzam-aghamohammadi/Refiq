@@ -74,10 +74,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    implementation(platform("com.walletconnect:android-bom:1.17.0"))
-    implementation("com.walletconnect:android-core")
-    implementation("com.walletconnect:web3modal")
-
+    implementation ("androidx.security:security-crypto:1.1.0-alpha06")
     implementation ("org.web3j:core:4.9.0")
 
 
