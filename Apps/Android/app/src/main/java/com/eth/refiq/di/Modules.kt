@@ -13,9 +13,16 @@ import com.eth.refiq.domain.Web3Repository
 import com.eth.refiq.ui.searchtopic.SearchTopicViewModel
 import com.eth.refiq.ui.topic.TopicViewModel
 import com.eth.refiq.ui.wallet.WalletViewModel
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
 
@@ -40,4 +47,29 @@ val appModule = module {
 
     viewModel { WalletViewModel(get(), get()) }
 
+
+    single {
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
+        OkHttpClient.Builder()
+            .followRedirects(true)
+            .addInterceptor(logging)
+            .addInterceptor(AuthTokenInterceptor())
+            .build()
+    }
+    single<AuthTokenInterceptor> { AuthTokenInterceptor() }
+    single {
+        Retrofit.Builder()
+
+            .baseUrl(API_BASE_URL)
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create(get()))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
+    }
+
+    single<Gson> {
+        GsonBuilder().setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
+            .create()
+    }
 }
