@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
 
 
-        println("new Intent ${intent?.data} : ${intent} : ${intent}")
+        println("add Intent ${intent?.data} : ${intent} : ${intent}")
     }
 
 }

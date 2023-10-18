@@ -8,7 +8,7 @@
         android:id="@+id/navigation_connect_wallet"
         android:name="com.eth.refiq.ui.connectwallet.ConnectWalletFragment"
         android:label="@string/title_connect_wallet"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_to_bottomSheet"
             app:destination="@id/bottomSheet" />
@@ -20,7 +20,7 @@
         android:id="@+id/navigation_home"
         android:name="com.eth.refiq.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_to_search_topic"
             app:destination="@id/navigation_search_topic" />
@@ -30,7 +30,7 @@
         android:id="@+id/navigation_search_topic"
         android:name="com.eth.refiq.ui.searchtopic.SearchTopicFragment"
         android:label="@string/search_topic"
-        tools:layout="@layout/fragment_search_topic" >
+        tools:layout="@layout/fragment_search_topic">
         <action
             android:id="@+id/action_to_topic"
             app:destination="@id/navigation_topic" />
@@ -40,41 +40,56 @@
         android:id="@+id/navigation_topic"
         android:name="com.eth.refiq.ui.topic.TopicFragment"
         android:label="@string/topic"
-        tools:layout="@layout/fragment_topic"/>
+        tools:layout="@layout/fragment_topic" />
     <dialog
         android:id="@+id/navigation_new"
-        android:name="com.eth.refiq.ui.dashboard.NewBottomSheetNavigationFragment"
+        android:name="com.eth.refiq.ui.add.CreateTopicPostBottomSheetFragment"
         android:label="@string/title_new"
-        tools:layout="@layout/fragement_bottomsheet_new" />
+        tools:layout="@layout/fragement_bottomsheet_new">
+        <action
+            android:id="@+id/action_to_create_topic"
+            app:destination="@id/navigation_crete_topic" />
+
+    </dialog>
+    <dialog
+        android:id="@+id/navigation_crete_topic"
+        android:name="com.eth.refiq.ui.add.topic.CreateTopicFragment"
+        android:label="@string/title_create_topic"
+        tools:layout="@layout/fragment_create_topic" />
 
     <fragment
         android:id="@+id/navigation_wallet"
         android:name="com.eth.refiq.ui.wallet.WalletFragment"
         android:label="@string/title_wallet"
-        tools:layout="@layout/fragment_wallet" >
-        <action android:id="@+id/action_to_enter_password" app:destination="@id/navigation_enterpassword"/>
+        tools:layout="@layout/fragment_wallet">
+        <action
+            android:id="@+id/action_to_enter_password"
+            app:destination="@id/navigation_enterpassword" />
     </fragment>
 
 
-    <dialog android:id="@+id/navigation_enterpassword"
+    <dialog
+        android:id="@+id/navigation_enterpassword"
         android:name="com.eth.refiq.ui.wallet.password.EnterPasswordFragment"
         android:label="@string/title_enter_password"
-        tools:layout="@layout/fragment_enter_password"
-        >
-        <action android:id="@+id/action_to_new_wallet" app:destination="@id/navigation_newwallet"/>
-        <action android:id="@+id/action_to_import_wallet" app:destination="@id/navigation_importwallet"/>
+        tools:layout="@layout/fragment_enter_password">
+        <action
+            android:id="@+id/action_to_new_wallet"
+            app:destination="@id/navigation_newwallet" />
+        <action
+            android:id="@+id/action_to_import_wallet"
+            app:destination="@id/navigation_importwallet" />
 
     </dialog>
     <fragment
         android:id="@+id/navigation_newwallet"
         android:name="com.eth.refiq.ui.wallet.newwallet.NewWalletFragment"
         android:label="@string/title_new_wallet"
-        tools:layout="@layout/fragment_new_wallet" >
-    </fragment>
+        tools:layout="@layout/fragment_new_wallet"></fragment>
+
     <fragment
         android:id="@+id/navigation_importwallet"
         android:name="com.eth.refiq.ui.wallet.importwallet.ImportWalletFragment"
         android:label="Import wallet"
-        tools:layout="@layout/fragment_import_wallet" >
-    </fragment>
+        tools:layout="@layout/fragment_import_wallet"></fragment>
 </navigation>

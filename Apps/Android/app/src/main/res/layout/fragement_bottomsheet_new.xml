@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.dashboard.NewBottomSheetNavigationFragment">
+    tools:context=".ui.add.CreateTopicPostBottomSheetFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newtopic_textview"
@@ -14,6 +14,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:text="@string/newtopic" />
 
     <com.google.android.material.divider.MaterialDivider
@@ -29,5 +32,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:text="@string/newpost" />
 </androidx.appcompat.widget.LinearLayoutCompat>

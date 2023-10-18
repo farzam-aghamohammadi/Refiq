@@ -1,18 +1,18 @@
-package com.eth.refiq.ui.dashboard
+package com.eth.refiq.ui.add.topic
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragementBottomsheetNewBinding
+import com.eth.refiq.databinding.FragmentCreateTopicBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class NewBottomSheetNavigationFragment : BottomSheetDialogFragment() {
 
-    private var _binding: FragementBottomsheetNewBinding? = null
+class CreateTopicFragment : BottomSheetDialogFragment() {
+    private var _binding: FragmentCreateTopicBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,7 +24,7 @@ class NewBottomSheetNavigationFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragementBottomsheetNewBinding.inflate(inflater, container, false)
+        _binding = FragmentCreateTopicBinding.inflate(inflater, container, false)
         val root: View = binding.root
         return root
     }
@@ -37,4 +37,7 @@ class NewBottomSheetNavigationFragment : BottomSheetDialogFragment() {
     override fun getTheme(): Int {
         return R.style.CustomBottomSheetDialog
     }
+
+
+
 }
