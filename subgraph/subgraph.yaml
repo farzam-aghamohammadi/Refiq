@@ -25,10 +25,16 @@ dataSources:
           handler: handleTopicCreated
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: ModeratorAdded(uint256,address)
+          handler: handleModeratorAdded
+        - event: ModeratorRemoved(uint256,address)
+          handler: handleModeratorRemoved
         - event: TopicInfoUpdated(uint256,string)
           handler: handleTopicInfoUpdated
         - event: PostCreated(uint256,uint256,address,string)
           handler: handlePostCreated
         - event: CommentCreated(uint256,uint256,address,string)
           handler: handleTopicCreated
+        - event: ContentRemoved(uint256)
+          handler: handleContentRemoved
       file: ./src/topics.ts

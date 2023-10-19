@@ -3,9 +3,12 @@ import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts";
 import {
   TopicCreated,
   Transfer,
+  ModeratorAdded,
+  ModeratorRemoved,
   TopicInfoUpdated,
   PostCreated,
   CommentCreated,
+  ContentRemoved,
 } from "../generated/Topics/Topics";
 
 export function createTopicCreatedEvent(
@@ -53,6 +56,48 @@ export function createTransferEvent(
   );
 
   return transferEvent;
+}
+
+export function createModeratorAddedEvent(
+  topicId: BigInt,
+  moderator: Address
+): ModeratorAdded {
+  let moderatorAddedEvent = changetype<ModeratorAdded>(newMockEvent());
+
+  moderatorAddedEvent.parameters = new Array();
+
+  moderatorAddedEvent.parameters.push(
+    new ethereum.EventParam(
+      "topicId",
+      ethereum.Value.fromUnsignedBigInt(topicId)
+    )
+  );
+  moderatorAddedEvent.parameters.push(
+    new ethereum.EventParam("moderator", ethereum.Value.fromAddress(moderator))
+  );
+
+  return moderatorAddedEvent;
+}
+
+export function createModeratorRemovedEvent(
+  topicId: BigInt,
+  moderator: Address
+): ModeratorRemoved {
+  let moderatorRemovedEvent = changetype<ModeratorRemoved>(newMockEvent());
+
+  moderatorRemovedEvent.parameters = new Array();
+
+  moderatorRemovedEvent.parameters.push(
+    new ethereum.EventParam(
+      "topicId",
+      ethereum.Value.fromUnsignedBigInt(topicId)
+    )
+  );
+  moderatorRemovedEvent.parameters.push(
+    new ethereum.EventParam("moderator", ethereum.Value.fromAddress(moderator))
+  );
+
+  return moderatorRemovedEvent;
 }
 
 export function createTopicInfoUpdatedEvent(
@@ -129,4 +174,19 @@ export function createCommentCreatedEvent(
   );
 
   return commentCreatedEvent;
+}
+
+export function createContentRemovedEvent(topicId: BigInt): ContentRemoved {
+  let contentRemovedEvent = changetype<ContentRemoved>(newMockEvent());
+
+  contentRemovedEvent.parameters = new Array();
+
+  contentRemovedEvent.parameters.push(
+    new ethereum.EventParam(
+      "topicId",
+      ethereum.Value.fromUnsignedBigInt(topicId)
+    )
+  );
+
+  return contentRemovedEvent;
 }

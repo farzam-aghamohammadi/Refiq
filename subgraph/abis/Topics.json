@@ -71,7 +71,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "id",
+        "name": "contentId",
         "type": "uint256"
       },
       {
@@ -102,7 +102,58 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "id",
+        "name": "contentId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ContentRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "topicId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "moderator",
+        "type": "address"
+      }
+    ],
+    "name": "ModeratorAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "topicId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "moderator",
+        "type": "address"
+      }
+    ],
+    "name": "ModeratorRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "contentId",
         "type": "uint256"
       },
       {
@@ -133,7 +184,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "id",
+        "name": "topicId",
         "type": "uint256"
       },
       {
@@ -158,7 +209,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "id",
+        "name": "topicId",
         "type": "uint256"
       },
       {
@@ -195,6 +246,24 @@
     ],
     "name": "Transfer",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "topicId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "moderator",
+        "type": "address"
+      }
+    ],
+    "name": "addModerator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -365,6 +434,37 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "contentId",
+        "type": "uint256"
+      }
+    ],
+    "name": "removeContent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "topicId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "moderator",
+        "type": "address"
+      }
+    ],
+    "name": "removeModerator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "from",
         "type": "address"
@@ -501,6 +601,24 @@
       }
     ],
     "name": "transferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "topicId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "infoCid",
+        "type": "string"
+      }
+    ],
+    "name": "updateTopicInfo",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

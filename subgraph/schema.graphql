@@ -9,6 +9,7 @@ type Topic @entity {
   id: String!
   name: String!
   owner: String!
+  moderators: [String!]!
   infoCid: String!
   posts: [Post!]! @derivedFrom(field: "topic")
 }

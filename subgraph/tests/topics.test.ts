@@ -11,17 +11,23 @@ import { Topic, Post, Comment } from "../generated/schema";
 import {
   handleTopicCreated,
   handleTransfer,
+  handleModeratorAdded,
+  handleModeratorRemoved,
   handleTopicInfoUpdated,
   handlePostCreated,
   handleCommentCreated,
+  handleContentRemoved,
 } from "../src/topics";
 
 import {
   createTopicCreatedEvent,
   createTransferEvent,
+  createModeratorAddedEvent,
+  createModeratorRemovedEvent,
   createTopicInfoUpdatedEvent,
   createPostCreatedEvent,
   createCommentCreatedEvent,
+  createContentRemovedEvent,
 } from "./topics-utils";
 
 describe("Topics", function () {
@@ -48,6 +54,7 @@ describe("Topics", function () {
       "owner",
       "0x0000000000000000000000000000000000000000"
     );
+    assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
   });
 
@@ -61,6 +68,7 @@ describe("Topics", function () {
     const topic = new Topic(topicId.toString());
     topic.name = topicName;
     topic.owner = topicOwner.toHexString();
+    topic.moderators = [];
     topic.infoCid = topicInfoCid;
     topic.save();
 
@@ -82,6 +90,82 @@ describe("Topics", function () {
       "owner",
       newTopicOwner.toHexString()
     );
+    assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
+    assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
+  });
+
+  test("handleModeratorAdded", function () {
+    const topicName = "test_topic";
+    const topicId = BigInt.fromI32(420);
+    const topicOwner = Address.fromString(
+      "0x0000000000000000000000000000000000000001"
+    );
+    const topicInfoCid = "test_info_cid";
+    const topic = new Topic(topicId.toString());
+    topic.name = topicName;
+    topic.owner = topicOwner.toHexString();
+    topic.moderators = [];
+    topic.infoCid = topicInfoCid;
+    topic.save();
+
+    const newTopicModerator = Address.fromString(
+      "0x0000000000000000000000000000000000000002"
+    );
+    const moderatorAddedEvent = createModeratorAddedEvent(
+      topicId,
+      newTopicModerator
+    );
+    handleModeratorAdded(moderatorAddedEvent);
+
+    assert.entityCount("Topic", 1);
+    assert.fieldEquals("Topic", topicId.toString(), "name", topicName);
+    assert.fieldEquals(
+      "Topic",
+      topicId.toString(),
+      "owner",
+      topicOwner.toHexString()
+    );
+    assert.fieldEquals(
+      "Topic",
+      topicId.toString(),
+      "moderators",
+      "[" + newTopicModerator.toHexString() + "]"
+    );
+    assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
+  });
+
+  test("handleModeratorRemoved", function () {
+    const topicName = "test_topic";
+    const topicId = BigInt.fromI32(420);
+    const topicOwner = Address.fromString(
+      "0x0000000000000000000000000000000000000001"
+    );
+    const topicModerator = Address.fromString(
+      "0x0000000000000000000000000000000000000002"
+    );
+    const topicInfoCid = "test_info_cid";
+    const topic = new Topic(topicId.toString());
+    topic.name = topicName;
+    topic.owner = topicOwner.toHexString();
+    topic.moderators = [topicModerator.toHexString()];
+    topic.infoCid = topicInfoCid;
+    topic.save();
+
+    const moderatorRemovedEvent = createModeratorRemovedEvent(
+      topicId,
+      topicModerator
+    );
+    handleModeratorRemoved(moderatorRemovedEvent);
+
+    assert.entityCount("Topic", 1);
+    assert.fieldEquals("Topic", topicId.toString(), "name", topicName);
+    assert.fieldEquals(
+      "Topic",
+      topicId.toString(),
+      "owner",
+      topicOwner.toHexString()
+    );
+    assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
   });
 
@@ -95,6 +179,7 @@ describe("Topics", function () {
     const topic = new Topic(topicId.toString());
     topic.name = topicName;
     topic.owner = topicOwner.toHexString();
+    topic.moderators = [];
     topic.infoCid = topicInfoCid;
     topic.save();
 
@@ -113,6 +198,7 @@ describe("Topics", function () {
       "owner",
       topicOwner.toHexString()
     );
+    assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", newTopicInfoCid);
   });
 
@@ -121,6 +207,7 @@ describe("Topics", function () {
     const topic = new Topic(topicId.toString());
     topic.name = "test_topic";
     topic.owner = "0x0000000000000000000000000000000000000001";
+    topic.moderators = [];
     topic.infoCid = "test_info_cid";
     topic.save();
 
@@ -153,6 +240,7 @@ describe("Topics", function () {
     const topic = new Topic(topicId.toString());
     topic.name = "test_topic";
     topic.owner = "0x0000000000000000000000000000000000000001";
+    topic.moderators = [];
     topic.infoCid = "test_info_cid";
     topic.save();
 
@@ -228,5 +316,27 @@ describe("Topics", function () {
       "parent",
       commentId.toString()
     );
+  });
+
+  test("handleContentRemoved", function () {
+    const topicId = BigInt.fromI32(420);
+    const topic = new Topic(topicId.toString());
+    topic.name = "test_topic";
+    topic.owner = "0x0000000000000000000000000000000000000001";
+    topic.moderators = [];
+    topic.infoCid = "test_info_cid";
+    topic.save();
+
+    const postId = BigInt.fromI64(64);
+    const post = new Post(postId.toString());
+    post.author = "0x0000000000000000000000000000000000000002";
+    post.contentCid = "test_post_content_cid";
+    post.topic = topicId.toString();
+    post.save();
+
+    const contentRemovedEvent = createContentRemovedEvent(postId);
+    handleContentRemoved(contentRemovedEvent);
+
+    assert.entityCount("Post", 0);
   });
 });
