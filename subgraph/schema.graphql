@@ -1,3 +1,11 @@
+type _Schema_
+  @fulltext(
+    name: "topicSearch"
+    language: en
+    algorithm: proximityRank
+    include: [{ entity: "Topic", fields: [{ name: "name" }] }]
+  )
+
 interface Content {
   id: String!
   author: String!
