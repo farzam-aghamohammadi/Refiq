@@ -1,58 +1,64 @@
 package com.eth.refiq.ui.add.content
 
+import CoroutineDispatcherProvider
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.eth.refiq.domain.CreateContentRepository
+import com.eth.refiq.domain.Post
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
-class AddContentViewModel constructor() : ViewModel() {
+class AddContentViewModel constructor(
+    private val contentRepository: CreateContentRepository,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
+) : ViewModel() {
 
     private var videoUri: String? = null
     private var imageUri: String? = null
+    val enableCreateContent: LiveData<Boolean>
+        get() = _enableCreateContent
+
+    private val _enableCreateContent =
+        MutableLiveData<Boolean>(false)
 
     fun onVideoUriSelected(uri: String) {
+        _enableCreateContent.value = true
+
         videoUri = uri
         imageUri = null
     }
 
     fun onImageUriSelected(uri: String) {
+        _enableCreateContent.value = true
+
         imageUri = uri
         videoUri = null
     }
 
-    private fun getRealPathFromURI(uri: Uri, context: Context): String? {
-        val returnCursor = context.contentResolver.query(uri, null, null, null, null)
-        val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
-        returnCursor.moveToFirst()
-        val name = returnCursor.getString(nameIndex)
-        val size = returnCursor.getLong(sizeIndex).toString()
-        val file = File(context.filesDir, name)
-        try {
-            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-            val outputStream = FileOutputStream(file)
-            var read = 0
-            val maxBufferSize = 1 * 1024 * 1024
-            val bytesAvailable: Int = inputStream?.available() ?: 0
-            //int bufferSize = 1024;
-            val bufferSize = Math.min(bytesAvailable, maxBufferSize)
-            val buffers = ByteArray(bufferSize)
-            while (inputStream?.read(buffers).also {
-                    if (it != null) {
-                        read = it
-                    }
-                } != -1) {
-                outputStream.write(buffers, 0, read)
-            }
-            inputStream?.close()
-            outputStream.close()
+    fun onContentTextChanged(text: String) {
+        _enableCreateContent.value = !(text.isEmpty() && imageUri == null && videoUri == null)
+    }
 
-        } catch (e: java.lang.Exception) {
+    fun createContent(text: String) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                withContext(coroutineDispatcherProvider.ioDispatcher()){
+                    contentRepository.createContent(text, imageUri, videoUri)
+                }
+            }.fold({
+                   println(it)
+            },{
+                it.printStackTrace()
+            })
         }
-        return file.path
     }
 
 }

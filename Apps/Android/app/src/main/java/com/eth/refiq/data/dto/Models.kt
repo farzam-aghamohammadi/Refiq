@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SaveTopicDto(
     @SerializedName("info")
-    val info:TopicInfoDto
+    val info: TopicInfoDto
 )
 
 data class TopicInfoDto(
@@ -19,9 +19,18 @@ data class TopicInfoDto(
     val rules: List<String>
 )
 
+data class ContentDto(
+    @SerializedName("text")
+    val text: String,
+    @SerializedName("imageCid")
+    val imageCid: String?,
+    @SerializedName("videoCid")
+    val videoCid: String?
+)
+
 data class UploadApiResponse(
     @SerializedName("cid")
-    val cid:String
+    val cid: String
 )
 
 

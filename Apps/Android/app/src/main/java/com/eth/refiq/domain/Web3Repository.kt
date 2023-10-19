@@ -13,5 +13,6 @@ interface Web3Repository {
     suspend fun importWallet(secretPhrase: String, password: String)
 
     suspend fun createTopic(name: String, cid: String)
+    suspend fun createPost(topicId:String,cid: String)
 
 }

@@ -8,6 +8,17 @@
     android:orientation="vertical"
     tools:context=".ui.add.content.AddContentFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?colorPrimary"
+        app:titleTextColor="@color/white"
+        app:title="Creating Content"
+
+        >
+
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/addcontent_editText"
         android:layout_width="match_parent"
@@ -42,12 +53,15 @@
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
-        android:layout_height="2dp" />
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:orientation="horizontal"
+        android:animateLayoutChanges="true"
         android:padding="8dp">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -59,6 +73,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:padding="8dp"
+            android:layout_gravity="center"
             app:srcCompat="@drawable/baseline_photo_library_24" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -68,8 +83,20 @@
             android:layout_margin="8dp"
             android:clickable="true"
             android:focusable="true"
+            android:layout_gravity="center"
             android:foreground="?attr/selectableItemBackground"
             android:padding="8dp"
             app:srcCompat="@drawable/baseline_video_library_24" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <com.eth.refiq.ui.custom.AppProgressButton
+            android:id="@+id/addcontent_createContentButton"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="4dp"
+            android:paddingStart="4dp"
+            android:layout_gravity="end"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

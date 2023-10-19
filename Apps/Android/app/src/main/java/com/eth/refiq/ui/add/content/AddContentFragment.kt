@@ -3,28 +3,25 @@ package com.eth.refiq.ui.add.content
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.loader.content.CursorLoader
 import com.eth.refiq.databinding.FragmentAddContentBinding
-import com.eth.refiq.ui.topic.TopicViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import com.eth.refiq.R
 
 
 class AddContentFragment : Fragment() {
@@ -48,6 +45,7 @@ class AddContentFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.addcontentCreateContentButton.onClicked = null
         _binding = null
     }
 
@@ -69,6 +67,21 @@ class AddContentFragment : Fragment() {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "video/*"
             getVideResult.launch(intent)
+        }
+        binding.addcontentEditText.addTextChangedListener {
+            it.toString().let {
+                addContentViewModel.onContentTextChanged(it)
+
+            }
+
+        }
+        binding.addcontentCreateContentButton.setText(getString(R.string.create))
+        binding.addcontentCreateContentButton.hideLoading()
+        addContentViewModel.enableCreateContent.observe(viewLifecycleOwner) {
+            binding.addcontentCreateContentButton.isGone = it.not()
+        }
+        binding.addcontentCreateContentButton.onClicked = {
+            addContentViewModel.createContent(binding.addcontentEditText.text.toString())
         }
     }
 

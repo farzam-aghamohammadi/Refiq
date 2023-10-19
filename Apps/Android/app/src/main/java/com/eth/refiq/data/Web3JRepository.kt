@@ -89,6 +89,22 @@ class Web3JRepository constructor(
 
     }
 
+    override suspend fun createPost(topicId: String, cid: String) {
+        val transactionManager: TransactionManager = RawTransactionManager(
+            web3, credential, CHAIN_ID
+        )
+
+
+        val topic = IRefeqTopics.load(
+            contractAddress, web3, transactionManager,
+            StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
+        )
+
+        val createTopic = topic.createPost(BigInteger.valueOf(1000), cid)
+        val transactionReceipt = createTopic.send()
+
+    }
+
     override suspend fun isWalletCreated(): Boolean {
         return localDataStorage.getBooleanValue(IS_WALLET_CREATED)
     }

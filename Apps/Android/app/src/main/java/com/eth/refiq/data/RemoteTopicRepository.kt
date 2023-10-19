@@ -13,7 +13,7 @@ class RemoteTopicRepository constructor(private val api: Api) : TopicRepository 
 
     override suspend fun createTopic(name: String, bio: String, rules: List<String>): String {
         val saveTopicDto = SaveTopicDto(TopicInfoDto(bio, name, null, rules))
-        return api.upload(saveTopicDto).cid
+        return api.uploadTopicInfo(saveTopicDto).cid
     }
 
 

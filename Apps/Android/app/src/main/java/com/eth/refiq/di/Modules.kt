@@ -5,10 +5,12 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
 import com.eth.refiq.MainViewModel
 import com.eth.refiq.data.Api
+import com.eth.refiq.data.CreateContent
 import com.eth.refiq.data.RemotePostRepository
 import com.eth.refiq.data.RemoteTopicRepository
 import com.eth.refiq.data.SharedPrefLocalDataStorage
 import com.eth.refiq.data.Web3JRepository
+import com.eth.refiq.domain.CreateContentRepository
 import com.eth.refiq.domain.LocalDataStorage
 import com.eth.refiq.domain.PostRepository
 import com.eth.refiq.domain.TopicRepository
@@ -40,7 +42,7 @@ val appModule = module {
     single<LocalDataStorage> { SharedPrefLocalDataStorage(androidApplication()) }
 
     single<Web3Repository> { Web3JRepository(androidApplication(), get(), get()) }
-
+    single<CreateContentRepository> { CreateContent(get()) }
 
 
     single {
@@ -84,5 +86,5 @@ val appModule = module {
 
     viewModel { WalletViewModel(get(), get()) }
 
-    viewModel { AddContentViewModel() }
+    viewModel { AddContentViewModel(get(), get()) }
 }
