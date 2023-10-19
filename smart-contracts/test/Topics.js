@@ -8,8 +8,9 @@ describe("RefiqTopics", function () {
   async function deployFixture() {
     const Topics = await ethers.getContractFactory("RefiqTopics");
     const topics = await Topics.deploy();
-    const [, owner1, author1, author2] = await ethers.getSigners();
-    return { topics, owner1, author1, author2 };
+    const [, owner1, moderator1, moderator2, author1, author2, nobody] =
+      await ethers.getSigners();
+    return { topics, owner1, moderator1, moderator2, author1, author2, nobody };
   }
 
   async function deployFixtureWithTopic() {
@@ -23,8 +24,15 @@ describe("RefiqTopics", function () {
     return { ...result, topicName, topicId, topicInfoCid };
   }
 
-  async function deployFixtureWithPost() {
+  async function deployFixtureWithModerator() {
     const result = await loadFixture(deployFixtureWithTopic);
+    const { topics, topicId, owner1, moderator1 } = result;
+    await topics.connect(owner1).addModerator(topicId, moderator1.address);
+    return result;
+  }
+
+  async function deployFixtureWithPost() {
+    const result = await loadFixture(deployFixtureWithModerator);
     const { topics, topicId, author1 } = result;
     const postId =
       "108355461378729987362265230430483131655744934225951456976902664848123781277909";
@@ -92,6 +100,50 @@ describe("RefiqTopics", function () {
     });
   });
 
+  describe("addModerator", async function () {
+    it("Should emit ModeratorAdded event with correct args", async function () {
+      const { topics, topicId, owner1, moderator2 } = await loadFixture(
+        deployFixtureWithTopic,
+      );
+      await expect(
+        topics.connect(owner1).addModerator(topicId, moderator2.address),
+      )
+        .to.emit(topics, "ModeratorAdded")
+        .withArgs(topicId, moderator2.address);
+    });
+
+    it("Should not emit anything on already add moderator", async function () {
+      const { topics, topicId, owner1, moderator1 } = await loadFixture(
+        deployFixtureWithModerator,
+      );
+      await expect(
+        topics.connect(owner1).addModerator(topicId, moderator1.address),
+      ).to.not.emit(topics, "ModeratorAdded");
+    });
+  });
+
+  describe("removeModerator", async function () {
+    it("Should emit ModeratorRemoved event with correct args", async function () {
+      const { topics, topicId, owner1, moderator1 } = await loadFixture(
+        deployFixtureWithModerator,
+      );
+      await expect(
+        topics.connect(owner1).removeModerator(topicId, moderator1.address),
+      )
+        .to.emit(topics, "ModeratorRemoved")
+        .withArgs(topicId, moderator1.address);
+    });
+
+    it("Should not emit anything on not a moderator", async function () {
+      const { topics, topicId, owner1, moderator2 } = await loadFixture(
+        deployFixtureWithTopic,
+      );
+      await expect(
+        topics.connect(owner1).removeModerator(topicId, moderator2.address),
+      ).to.not.emit(topics, "ModeratorRemoved");
+    });
+  });
+
   describe("updateTopicInfo", async function () {
     it("Should emit TopicInfoUpdated event with correct args", async function () {
       const { topics, topicId, owner1 } = await loadFixture(
@@ -103,13 +155,25 @@ describe("RefiqTopics", function () {
         .withArgs(topicId, newInfoCid);
     });
 
+    it("Moderators should be able to update topic info", async function () {
+      const { topics, topicId, moderator1 } = await loadFixture(
+        deployFixtureWithModerator,
+      );
+      const newInfoCid = "new-cid-for-info";
+      await expect(
+        topics.connect(moderator1).updateTopicInfo(topicId, newInfoCid),
+      )
+        .to.emit(topics, "TopicInfoUpdated")
+        .withArgs(topicId, newInfoCid);
+    });
+
     it("Should revert on unauthorized access", async function () {
-      const { topics, topicId, author1 } = await loadFixture(
+      const { topics, topicId, nobody } = await loadFixture(
         deployFixtureWithTopic,
       );
       const newInfoCid = "new-cid-for-info";
       await expect(
-        topics.connect(author1).updateTopicInfo(topicId, newInfoCid),
+        topics.connect(nobody).updateTopicInfo(topicId, newInfoCid),
       ).to.revertedWithCustomError(topics, "Unauthorized");
     });
   });
@@ -165,6 +229,44 @@ describe("RefiqTopics", function () {
       await expect(topics.connect(author2).createComment(postId, cid))
         .to.revertedWithCustomError(topics, "DuplicateContent")
         .withArgs(id);
+    });
+  });
+
+  describe("removeContent", async function () {
+    it("Should emit contentRemoved event with correct args for owner", async function () {
+      const { topics, postId, owner1 } = await loadFixture(
+        deployFixtureWithPost,
+      );
+      await expect(topics.connect(owner1).removeContent(postId))
+        .to.emit(topics, "ContentRemoved")
+        .withArgs(postId);
+    });
+
+    it("Should emit contentRemoved event with correct args for moderator", async function () {
+      const { topics, postId, moderator1 } = await loadFixture(
+        deployFixtureWithPost,
+      );
+      await expect(topics.connect(moderator1).removeContent(postId))
+        .to.emit(topics, "ContentRemoved")
+        .withArgs(postId);
+    });
+
+    it("Should emit contentRemoved event with correct args for author", async function () {
+      const { topics, postId, author1 } = await loadFixture(
+        deployFixtureWithPost,
+      );
+      await expect(topics.connect(author1).removeContent(postId))
+        .to.emit(topics, "ContentRemoved")
+        .withArgs(postId);
+    });
+
+    it("Should revert on Unauthorized", async function () {
+      const { topics, postId, nobody } = await loadFixture(
+        deployFixtureWithPost,
+      );
+      await expect(
+        topics.connect(nobody).removeContent(postId),
+      ).to.revertedWithCustomError(topics, "Unauthorized");
     });
   });
 });

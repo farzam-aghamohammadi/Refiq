@@ -9,6 +9,9 @@ async function main() {
   await topics.waitForDeployment();
   const topicsAddress = await topics.getAddress();
   console.log(`topics address: ${topicsAddress}`);
+
+  const blockNumber = await ethers.provider.getBlockNumber();
+  console.log(`current block number: ${blockNumber}`);
 }
 
 main().catch((error) => {

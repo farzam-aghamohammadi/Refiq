@@ -5,6 +5,8 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {IRefiqTopics} from "./interfaces/ITopics.sol";
 
 contract RefiqTopics is ERC721, IRefiqTopics {
+    mapping(uint256 topicId => mapping(address user => bool isModerator))
+        private _moderators;
     mapping(uint256 contentId => uint256 topicId) private _topics;
     mapping(uint256 contentId => address author) private _authors;
     mapping(uint256 contentId => string contentCid) private _contents;
@@ -15,40 +17,87 @@ contract RefiqTopics is ERC721, IRefiqTopics {
         string calldata name,
         string calldata infoCid
     ) external {
-        uint256 id = uint256(keccak256(abi.encodePacked(name)));
-        emit TopicCreated(id, name, infoCid);
-        _safeMint(msg.sender, id);
+        uint256 topicId = uint256(keccak256(abi.encodePacked(name)));
+        emit TopicCreated(topicId, name, infoCid);
+        _safeMint(msg.sender, topicId);
     }
 
-    function updateTopicInfo(uint256 id, string calldata infoCid) external {
-        if (msg.sender != ownerOf(id)) {
+    function addModerator(uint256 topicId, address moderator) external {
+        if (msg.sender != ownerOf(topicId)) {
             revert Unauthorized();
         }
-        emit TopicInfoUpdated(id, infoCid);
+        bool isModerator = _moderators[topicId][moderator];
+        if (isModerator) {
+            return;
+        }
+        _moderators[topicId][moderator] = true;
+        emit ModeratorAdded(topicId, moderator);
+    }
+
+    function removeModerator(uint256 topicId, address moderator) external {
+        if (msg.sender != ownerOf(topicId)) {
+            revert Unauthorized();
+        }
+        bool isModerator = _moderators[topicId][moderator];
+        if (!isModerator) {
+            return;
+        }
+        delete _moderators[topicId][moderator];
+        emit ModeratorRemoved(topicId, moderator);
+    }
+
+    function updateTopicInfo(
+        uint256 topicId,
+        string calldata infoCid
+    ) external {
+        address sender = msg.sender;
+        if (!_moderators[topicId][sender] && sender != ownerOf(topicId)) {
+            revert Unauthorized();
+        }
+        emit TopicInfoUpdated(topicId, infoCid);
     }
 
     function createPost(uint256 topicId, string calldata contentCid) external {
-        uint256 id = uint256(keccak256(abi.encodePacked(topicId, contentCid)));
-        if (_topics[id] != 0) {
-            revert DuplicateContent(id);
+        uint256 contentId = uint256(
+            keccak256(abi.encodePacked(topicId, contentCid))
+        );
+        if (_topics[contentId] != 0) {
+            revert DuplicateContent(contentId);
         }
-        _topics[id] = topicId;
-        _authors[id] = msg.sender;
-        _contents[id] = contentCid;
-        emit PostCreated(id, topicId, msg.sender, contentCid);
+        _topics[contentId] = topicId;
+        _authors[contentId] = msg.sender;
+        _contents[contentId] = contentCid;
+        emit PostCreated(contentId, topicId, msg.sender, contentCid);
     }
 
     function createComment(
         uint256 parentId,
         string calldata contentCid
     ) external {
-        uint256 id = uint256(keccak256(abi.encodePacked(parentId, contentCid)));
-        if (_topics[id] != 0) {
-            revert DuplicateContent(id);
+        uint256 contentId = uint256(
+            keccak256(abi.encodePacked(parentId, contentCid))
+        );
+        if (_topics[contentId] != 0) {
+            revert DuplicateContent(contentId);
         }
-        _topics[id] = _topics[parentId];
-        _authors[id] = msg.sender;
-        _contents[id] = contentCid;
-        emit CommentCreated(id, parentId, msg.sender, contentCid);
+        _topics[contentId] = _topics[parentId];
+        _authors[contentId] = msg.sender;
+        _contents[contentId] = contentCid;
+        emit CommentCreated(contentId, parentId, msg.sender, contentCid);
+    }
+
+    function removeContent(uint256 contentId) external {
+        uint256 topicId = _topics[contentId];
+        address sender = msg.sender;
+        if (
+            _authors[contentId] != sender &&
+            !_moderators[topicId][sender] &&
+            sender != ownerOf(topicId)
+        ) {
+            revert Unauthorized();
+        }
+        delete _authors[contentId];
+        delete _contents[contentId];
+        emit ContentRemoved(contentId);
     }
 }
