@@ -28,7 +28,16 @@
         android:id="@+id/navigation_topic"
         android:name="com.eth.refiq.ui.topic.TopicFragment"
         android:label="@string/topic"
-        tools:layout="@layout/fragment_topic" />
+        tools:layout="@layout/fragment_topic" >
+        <action android:id="@+id/action_to_add_content" app:destination="@+id/navigation_addContent"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_addContent"
+        android:name="com.eth.refiq.ui.add.content.AddContentFragment"
+        android:label="Add Content"
+        tools:layout="@layout/fragment_add_content" />
+
+
     <dialog
         android:id="@+id/navigation_new"
         android:name="com.eth.refiq.ui.add.CreateTopicPostBottomSheetFragment"
@@ -73,11 +82,11 @@
         android:id="@+id/navigation_newwallet"
         android:name="com.eth.refiq.ui.wallet.newwallet.NewWalletFragment"
         android:label="@string/title_new_wallet"
-        tools:layout="@layout/fragment_new_wallet"></fragment>
+        tools:layout="@layout/fragment_new_wallet"/>
 
     <fragment
         android:id="@+id/navigation_importwallet"
         android:name="com.eth.refiq.ui.wallet.importwallet.ImportWalletFragment"
         android:label="Import wallet"
-        tools:layout="@layout/fragment_import_wallet"></fragment>
+        tools:layout="@layout/fragment_import_wallet"/>
 </navigation>

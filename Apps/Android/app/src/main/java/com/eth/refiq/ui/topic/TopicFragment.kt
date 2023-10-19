@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.eth.refiq.databinding.FragmentTopicBinding
 import com.eth.refiq.domain.Topic
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import com.eth.refiq.R
 
 
 class TopicFragment : Fragment() {
@@ -17,6 +18,7 @@ class TopicFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    private val topicViewModel: TopicViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +35,9 @@ class TopicFragment : Fragment() {
         binding.topicToolbar.title = topic.name
         binding.topicTextviewTopicinfo.paintFlags = binding.topicTextviewTopicinfo.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
-
+        binding.topicNewpost.setOnClickListener {
+            findNavController().navigate(R.id.action_to_add_content)
+        }
 
     }
 

@@ -91,6 +91,7 @@ dependencies {
 
     implementation("com.apollographql.apollo3:apollo-runtime:3.6.2")
 
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")

@@ -19,7 +19,8 @@
         app:title="@string/title_home"
         >
 
-        <androidx.appcompat.widget.SearchView
+        <androidx.appcompat.widget.AppCompatEditText
+            android:padding="8dp"
             android:id="@+id/searchtopic_searchview"
             android:layout_width="match_parent"
             android:background="@drawable/search_bar_background"
