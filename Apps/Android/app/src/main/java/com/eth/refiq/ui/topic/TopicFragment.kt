@@ -17,9 +17,6 @@ class TopicFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val topicViewModel:TopicViewModel by viewModel {
-        parametersOf(requireArguments().getSerializable("topic"))
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

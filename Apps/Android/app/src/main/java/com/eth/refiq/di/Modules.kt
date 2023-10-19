@@ -39,17 +39,6 @@ val appModule = module {
     single<Web3Repository> { Web3JRepository(androidApplication(), get(), get()) }
 
 
-    viewModel {
-        MainViewModel()
-    }
-
-    viewModel {
-        TopicViewModel(get(), get(), get())
-    }
-    viewModel { SearchTopicViewModel(get(), get()) }
-
-    viewModel { WalletViewModel(get(), get()) }
-
 
     single {
         val logging = HttpLoggingInterceptor()
@@ -75,4 +64,17 @@ val appModule = module {
         GsonBuilder().setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
             .create()
     }
+
+
+    viewModel {
+        MainViewModel()
+    }
+
+    viewModel {
+        TopicViewModel(get(), get(), get(),get())
+    }
+    viewModel { SearchTopicViewModel(get(), get()) }
+
+    viewModel { WalletViewModel(get(), get()) }
+
 }

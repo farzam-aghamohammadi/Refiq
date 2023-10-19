@@ -1,5 +1,8 @@
 package com.eth.refiq.ui.wallet
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -61,6 +64,12 @@ class WalletFragment : Fragment() {
         walletViewModel.walletInfo.observe(viewLifecycleOwner) {
             binding.walletviewaccountTextviewBalance.text = it.balance
             binding.walletviewaccountTextviewAddress.text=it.address
+        }
+        binding.walletviewaccountTextviewAddress.setOnClickListener {
+            val clipboard: ClipboardManager? =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+            val clip = ClipData.newPlainText("label", binding.walletviewaccountTextviewAddress.text.toString())
+            clipboard?.setPrimaryClip(clip)
         }
     }
 
