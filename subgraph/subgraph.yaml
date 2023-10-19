@@ -6,21 +6,29 @@ dataSources:
     name: Topics
     network: scroll-sepolia
     source:
-      address: "0x0B13F05c343e5AEbD4b8F096A5Bb657Ad2F626BD"
+      address: "0x3661b6d0d1b27f6C942f56567deEc9A6e5c9246d"
       abi: Topics
-      startBlock: 42770
+      startBlock: 1692230
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Topic
+        - Post
+        - Comment
       abis:
         - name: Topics
           file: ./abis/Topics.json
       eventHandlers:
-        - event: TopicCreated(uint256,string)
+        - event: TopicCreated(uint256,string,string)
           handler: handleTopicCreated
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: TopicInfoUpdated(uint256,string)
+          handler: handleTopicInfoUpdated
+        - event: PostCreated(uint256,uint256,address,string)
+          handler: handlePostCreated
+        - event: CommentCreated(uint256,uint256,address,string)
+          handler: handleTopicCreated
       file: ./src/topics.ts
