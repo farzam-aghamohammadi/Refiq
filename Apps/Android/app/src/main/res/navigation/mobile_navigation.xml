@@ -39,7 +39,7 @@
             app:destination="@id/navigation_crete_topic" />
 
     </dialog>
-    <dialog
+    <fragment
         android:id="@+id/navigation_crete_topic"
         android:name="com.eth.refiq.ui.add.topic.CreateTopicFragment"
         android:label="@string/title_create_topic"

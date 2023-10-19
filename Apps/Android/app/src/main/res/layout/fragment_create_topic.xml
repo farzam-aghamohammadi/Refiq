@@ -42,16 +42,8 @@
         app:backgroundTint="@color/black"
 
         />
-    <androidx.appcompat.widget.AppCompatButton
+    <com.eth.refiq.ui.custom.AppProgressButton
         android:id="@+id/createtopic_done"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/black"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="@string/create"
-        android:textColor="@color/white" />
+        android:layout_height="wrap_content"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
