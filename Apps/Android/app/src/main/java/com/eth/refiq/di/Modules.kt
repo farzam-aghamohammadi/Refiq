@@ -1,6 +1,8 @@
 package com.eth.refiq.di
 
 import CoroutineDispatcherProvider
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.network.okHttpClient
 import com.eth.refiq.MainViewModel
 import com.eth.refiq.data.Api
 import com.eth.refiq.data.RemotePostRepository
@@ -52,7 +54,6 @@ val appModule = module {
     single<AuthTokenInterceptor> { AuthTokenInterceptor() }
     single {
         Retrofit.Builder()
-
             .baseUrl(API_BASE_URL)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create(get()))
@@ -64,6 +65,11 @@ val appModule = module {
         GsonBuilder().setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
             .create()
     }
+    single {
+        ApolloClient.Builder()
+            .serverUrl("https://api.studio.thegraph.com/query/50954/refiq-test/v0.0.1")
+            .okHttpClient(get()).build()
+    }
 
 
     viewModel {
@@ -71,7 +77,7 @@ val appModule = module {
     }
 
     viewModel {
-        TopicViewModel(get(), get(), get(),get())
+        TopicViewModel(get(), get(), get(), get())
     }
     viewModel { SearchTopicViewModel(get(), get()) }
 

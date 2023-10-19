@@ -89,6 +89,7 @@ dependencies {
     implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
+    implementation("com.apollographql.apollo3:apollo-runtime:3.6.2")
 
 
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))

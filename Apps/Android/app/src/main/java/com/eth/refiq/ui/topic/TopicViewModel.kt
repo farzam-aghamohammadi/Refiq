@@ -1,6 +1,7 @@
 package com.eth.refiq.ui.topic
 
 import CoroutineDispatcherProvider
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +19,7 @@ class TopicViewModel constructor(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val postRepository: PostRepository,
     private val topicRepository: TopicRepository,
-    private val web3JRepository: Web3Repository
+    private val web3JRepository: Web3Repository,
 ) : ViewModel() {
     init {
         //getPosts(topic)

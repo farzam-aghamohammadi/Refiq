@@ -37,11 +37,10 @@
             android:id="@+id/walletviewaccount_textview_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="@id/walletviewaccount_image"
-            app:layout_constraintStart_toEndOf="@id/walletviewaccount_balanctext"
-            app:layout_constraintTop_toBottomOf="@id/walletviewaccount_image" />
+            app:layout_constraintTop_toBottomOf="@id/walletviewaccount_balanctext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/walletviewaccount_addresstext"
@@ -51,7 +50,7 @@
             android:text="@string/walletinfo_address"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/walletviewaccount_balanctext"
-            app:layout_constraintTop_toBottomOf="@id/walletviewaccount_balanctext" />
+            app:layout_constraintTop_toBottomOf="@id/walletviewaccount_textview_balance" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/walletviewaccount_textview_address"
@@ -60,6 +59,11 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             app:layout_constraintTop_toBottomOf="@id/walletviewaccount_addresstext" />
 
 
