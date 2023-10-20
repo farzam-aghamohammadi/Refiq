@@ -14,6 +14,7 @@ import com.eth.refiq.R
 import com.eth.refiq.domain.ContentType
 import com.eth.refiq.ui.add.content.AddContentFragment
 import com.eth.refiq.ui.add.content.AddContentViewModel
+import com.eth.refiq.ui.topic.adapter.PostAdapter
 import org.koin.core.parameter.parametersOf
 
 
@@ -48,9 +49,12 @@ class TopicFragment : Fragment() {
                 putString(AddContentFragment.PARENT_ID, topic.id)
             })
         }
+        val adapter = PostAdapter({
 
-        topicViewModel.postsLiveData.observe(viewLifecycleOwner){
-
+        })
+        binding.topicListPost.adapter = adapter
+        topicViewModel.postsLiveData.observe(viewLifecycleOwner) {
+            adapter.updateAdapter(it)
         }
     }
 

@@ -2,7 +2,9 @@ package com.eth.refiq.ui.topic.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.eth.refiq.databinding.ItemPostImageBinding
 import com.eth.refiq.databinding.ItemPostTextBinding
 import com.eth.refiq.databinding.ItemPostVideoBinding
@@ -17,33 +19,40 @@ class PostAdapter constructor(private val onPostClicked: ((Post) -> Unit)) :
     private val items = mutableListOf<Post>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostItemViewHolder {
-      return when (viewType){
-           TEXT_POST_TYPE-> PostTextItemViewHolder(
-               ItemPostTextBinding.inflate(
-                   LayoutInflater.from(parent.context),
-                   parent, false
-               )
-           )
-          IMAGE_POST_TYPE-> PostImageItemViewHolder(
-              ItemPostImageBinding.inflate(
-                  LayoutInflater.from(parent.context),
-                  parent, false
-              )
-          )
-          VIDEO_POST_TYPE-> PostVideoItemViewHolder(
-              ItemPostVideoBinding.inflate(
-                  LayoutInflater.from(parent.context),
-                  parent, false
-              )
-          )
-          else -> throw Throwable("Not found!!")
-       }
-    }
+        return when (viewType) {
+            TEXT_POST_TYPE -> PostTextItemViewHolder(
+                ItemPostTextBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent, false
+                )
+            )
 
+            IMAGE_POST_TYPE -> PostImageItemViewHolder(
+                ItemPostImageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent, false
+                )
+            )
+
+            VIDEO_POST_TYPE -> PostVideoItemViewHolder(
+                ItemPostVideoBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent, false
+                )
+            )
+
+            else -> throw Throwable("Not found!!")
+        }
+    }
+    fun updateAdapter(items: List<Post>) {
+        this.items.clear()
+        this.items.addAll(items)
+        notifyDataSetChanged()
+    }
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: PostItemViewHolder, position: Int) {
-       holder.bind(items[position])
+        holder.bind(items[position])
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -69,7 +78,9 @@ abstract class PostItemViewHolder(private val view: ViewGroup) : RecyclerView.Vi
 class PostTextItemViewHolder(private val binding: ItemPostTextBinding) :
     PostItemViewHolder(binding.root) {
     override fun bind(post: Post) {
-
+        binding.itemcontentTextTop.itemcontentText.text = post.text
+        binding.itemcontentTextTop.itemcontentAuthorid.text=post.walletAddress
+        binding.itemcontentTextTop.itemcontentText.isGone=post.text.isEmpty()
     }
 }
 
@@ -83,6 +94,10 @@ class PostVideoItemViewHolder(private val binding: ItemPostVideoBinding) :
 class PostImageItemViewHolder(private val binding: ItemPostImageBinding) :
     PostItemViewHolder(binding.root) {
     override fun bind(post: Post) {
-
+        binding.itemImageTop.itemcontentAuthorid.text = post.walletAddress
+        binding.itemImageTop.itemcontentText.text = post.text
+        binding.itemImageTop.itemcontentText.isGone = post.text.isEmpty()
+        Glide.with(binding.itemImageContent).load((post.postType as PostType.Image).uri)
+            .into(binding.itemImageContent)
     }
 }

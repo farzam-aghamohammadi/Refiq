@@ -17,8 +17,6 @@ class TopicViewModel constructor(
     private val topic: Topic?,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val postRepository: PostRepository,
-    private val topicRepository: TopicRepository,
-    private val web3JRepository: Web3Repository,
 ) : ViewModel() {
     init {
         println("initt")
@@ -55,36 +53,5 @@ class TopicViewModel constructor(
 
     }
 
-    val creatingTopic: LiveData<Boolean>
-        get() = _creatingTopic
-
-    private val _creatingTopic =
-        MutableLiveData<Boolean>(false)
-
-    val errorMessage: LiveData<String>
-        get() = _errorMessage
-
-    private val _errorMessage =
-        MutableLiveData<String>()
-
-    fun createTopic(name: String, bio: String, rule: String) {
-        viewModelScope.launch {
-            _creatingTopic.value = true
-            kotlin.runCatching {
-                withContext(coroutineDispatcherProvider.ioDispatcher()) {
-                    val cid = topicRepository.createTopic(name, bio, listOf(rule))
-                    web3JRepository.createTopic(name, cid)
-                }
-            }.fold({
-                println("$it")
-                _creatingTopic.value = false
-
-            }, {
-                _creatingTopic.value = false
-                _errorMessage.value = it.message
-                it.printStackTrace()
-            })
-        }
-    }
 
 }
