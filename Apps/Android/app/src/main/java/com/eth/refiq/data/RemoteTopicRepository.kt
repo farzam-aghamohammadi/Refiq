@@ -1,5 +1,4 @@
 package com.eth.refiq.data
-
 import GetTopicByNameQuery
 import com.apollographql.apollo3.ApolloClient
 import com.eth.refiq.data.dto.SaveTopicDto

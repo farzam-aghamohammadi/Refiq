@@ -35,7 +35,7 @@ val appModule = module {
         get<Retrofit>().create(Api::class.java)
     }
     single<TopicRepository> { RemoteTopicRepository(get(),get()) }
-    single<PostRepository> { RemotePostRepository() }
+    single<PostRepository> { RemotePostRepository(get()) }
     single<CoroutineDispatcherProvider> {
         AppDispatcherProvider()
     }
@@ -80,7 +80,7 @@ val appModule = module {
     }
 
     viewModel {
-        TopicViewModel(get(), get(), get(), get())
+        TopicViewModel(get(), get(), get(), get(),get())
     }
     viewModel { SearchTopicViewModel(get(), get()) }
 

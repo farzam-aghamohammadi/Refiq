@@ -25,7 +25,14 @@ data class ContentDto(
     @SerializedName("imageCid")
     val imageCid: String?,
     @SerializedName("videoCid")
-    val videoCid: String?
+    val videoCid: String?,
+)
+
+data class ContentResponseDto(
+    val id: String,
+    val contentCid: String,
+    val author: String,
+    val comments: List<String>
 )
 
 data class UploadApiResponse(

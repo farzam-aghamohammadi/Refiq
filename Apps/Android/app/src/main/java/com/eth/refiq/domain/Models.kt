@@ -1,5 +1,6 @@
 package com.eth.refiq.domain
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 
@@ -12,16 +13,22 @@ enum class ContentType : Serializable {
 }
 
 data class Post(
+    val id: String,
     val walletAddress: String,
     val postType: PostType,
     val text: String,
-    val comments: List<Comment>
+    val comments: List<String>
 )
 
-data class Comment(val string: String)
 sealed class PostType {
     data object Text : PostType()
     data class Image(val uri: String) : PostType()
     data class Video(val uri: String) : PostType()
 
 }
+
+data class Content(
+    val text: String,
+    val imageCid: String?,
+    val videoCid: String?
+)

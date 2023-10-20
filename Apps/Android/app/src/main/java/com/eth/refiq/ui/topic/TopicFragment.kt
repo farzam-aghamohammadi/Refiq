@@ -14,6 +14,7 @@ import com.eth.refiq.R
 import com.eth.refiq.domain.ContentType
 import com.eth.refiq.ui.add.content.AddContentFragment
 import com.eth.refiq.ui.add.content.AddContentViewModel
+import org.koin.core.parameter.parametersOf
 
 
 class TopicFragment : Fragment() {
@@ -21,7 +22,9 @@ class TopicFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val topicViewModel: TopicViewModel by viewModel()
+    private val topicViewModel: TopicViewModel by viewModel {
+        parametersOf(requireArguments().getSerializable(TOPIC))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +36,7 @@ class TopicFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val topic: Topic = arguments?.getSerializable("topic") as Topic
+        val topic: Topic = arguments?.getSerializable(TOPIC) as Topic
 
         binding.topicToolbar.title = topic.name
         binding.topicTextviewTopicinfo.paintFlags =
@@ -46,6 +49,9 @@ class TopicFragment : Fragment() {
             })
         }
 
+        topicViewModel.postsLiveData.observe(viewLifecycleOwner){
+
+        }
     }
 
     override fun onDestroyView() {
@@ -53,4 +59,7 @@ class TopicFragment : Fragment() {
         _binding = null
     }
 
+    companion object {
+        const val TOPIC = "topic"
+    }
 }

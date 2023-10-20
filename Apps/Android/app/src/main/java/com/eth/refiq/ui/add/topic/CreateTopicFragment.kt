@@ -9,10 +9,13 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentCreateTopicBinding
+import com.eth.refiq.domain.Topic
 import com.eth.refiq.ui.custom.showMessage
+import com.eth.refiq.ui.topic.TopicFragment
 import com.eth.refiq.ui.topic.TopicViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class CreateTopicFragment : Fragment() {
@@ -22,7 +25,10 @@ class CreateTopicFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val topicViewModel: TopicViewModel by viewModel()
+    private var topic:Topic?=null
+    private val topicViewModel: TopicViewModel by viewModel {
+        parametersOf(topic)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

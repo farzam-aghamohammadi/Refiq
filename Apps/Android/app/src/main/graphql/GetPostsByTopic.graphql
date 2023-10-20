@@ -1,0 +1,13 @@
+query GetPostsByTopicId($id:ID!){
+    topic(id: $id) {
+        name
+        posts {
+            id,
+            contentCid,
+            author
+            comments(first: 5, skip: 0){
+                id
+            }
+        }
+    }
+}

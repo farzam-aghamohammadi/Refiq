@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentSearchTopicBinding
 import com.eth.refiq.ui.searchtopic.adapter.TopicAdapter
+import com.eth.refiq.ui.topic.TopicFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -38,7 +39,7 @@ class SearchTopicFragment : Fragment() {
         showSoftKeyboard(binding.searchtopicSearchview)
         val adapter = TopicAdapter { topic ->
             findNavController().navigate(R.id.action_to_topic, Bundle().apply {
-                putSerializable("topic", topic)
+                putSerializable(TopicFragment.TOPIC, topic)
             })
         }
         binding.searchtopicList.adapter = adapter

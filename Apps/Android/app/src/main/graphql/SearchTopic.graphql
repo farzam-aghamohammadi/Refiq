@@ -4,6 +4,7 @@ query GetTopicByName($name:String!) {
         name
         owner
         infoCid
+        moderators
     }
 
 }
