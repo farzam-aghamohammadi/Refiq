@@ -42,7 +42,7 @@ val appModule = module {
     single<LocalDataStorage> { SharedPrefLocalDataStorage(androidApplication()) }
 
     single<Web3Repository> { Web3JRepository(androidApplication(), get(), get()) }
-    single<CreateContentRepository> { CreateContent(get()) }
+    single<CreateContentRepository> { CreateContent(get(),get()) }
 
 
     single {

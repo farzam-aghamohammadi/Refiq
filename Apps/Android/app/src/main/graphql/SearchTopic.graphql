@@ -1,0 +1,6 @@
+query GetTopicByName($name:String!) {
+    topicSearch(text:$name) {
+        id
+        name
+    }
+}

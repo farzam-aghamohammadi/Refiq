@@ -1,8 +1,14 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.apollographql.apollo3") version "3.8.2"
 }
 
+apollo {
+    // instruct the compiler to generate Kotlin models
+    generateKotlinModels.set(true)
+    packageNamesFromFilePaths()
+}
 android {
     namespace = "com.eth.refiq"
     compileSdk = 34
@@ -74,8 +80,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    implementation ("androidx.security:security-crypto:1.1.0-alpha06")
-    implementation ("org.web3j:core:4.9.0")
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation("org.web3j:core:4.9.0")
 
 
 
@@ -84,14 +90,12 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.4.2")
 
 
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
-    implementation("com.apollographql.apollo3:apollo-runtime:3.6.2")
-
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
 
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
