@@ -16,7 +16,8 @@ import com.eth.refiq.domain.PostType
 
 class PostAdapter constructor(
     private val onPostClicked: ((Post) -> Unit),
-    private val onCommentClicked: ((Post) -> Unit)
+    private val onCommentClicked: ((Post) -> Unit),
+    private val onGoldClicked: ((Post) -> Unit),
 ) :
     RecyclerView.Adapter<PostItemViewHolder>() {
     private val items = mutableListOf<Post>()
@@ -57,7 +58,7 @@ class PostAdapter constructor(
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: PostItemViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], onPostClicked, onCommentClicked, onGoldClicked)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -82,33 +83,58 @@ class PostAdapter constructor(
 
 
 abstract class PostItemViewHolder(private val view: ViewGroup) : RecyclerView.ViewHolder(view) {
-    abstract fun bind(post: Post)
+    abstract fun bind(
+        post: Post,
+        onPostClicked: (Post) -> Unit,
+        onCommentClicked: (Post) -> Unit,
+        onGoldClicked: (Post) -> Unit
+    )
 }
 
 class PostTextItemViewHolder(private val binding: ItemPostTextBinding) :
     PostItemViewHolder(binding.root) {
-    override fun bind(post: Post) {
+    override fun bind(
+        post: Post,
+        onPostClicked: (Post) -> Unit,
+        onCommentClicked: (Post) -> Unit,
+        onGoldClicked: (Post) -> Unit
+    ) {
         binding.itemcontentTextTop.itemcontentText.text = post.text
         binding.itemcontentTextTop.itemcontentAuthorid.text = post.walletAddress
         binding.itemcontentTextTop.itemcontentText.isGone = post.text.isEmpty()
+        binding.itemcontentTextBottom.itemcontentCommentimage.setOnClickListener {
+            onCommentClicked(post)
+        }
+        binding.itemcontentTextBottom.itemcontentGiftimage.setOnClickListener {
+            onGoldClicked(post)
+        }
     }
 }
 
 class PostVideoItemViewHolder(private val binding: ItemPostVideoBinding) :
     PostItemViewHolder(binding.root) {
     private lateinit var post: Post
-    override fun bind(post: Post) {
+    override fun bind(
+        post: Post,
+        onPostClicked: (Post) -> Unit,
+        onCommentClicked: (Post) -> Unit,
+        onGoldClicked: (Post) -> Unit
+    ) {
         this.post = post
         binding.itemVideoTop.itemcontentAuthorid.text = post.walletAddress
         binding.itemVideoTop.itemcontentText.text = post.text
         binding.itemVideoTop.itemcontentText.isGone = post.text.isEmpty()
-        /*binding.itemVideoContent.stopPlayback()
-        binding.itemVideoContent.setVideoPath((post.postType as PostType.Video).uri)
-        binding.itemVideoContent.start()*/
+
         val postType = post.postType as PostType.Video
         Glide.with(binding.itemVideoContent).load(postType.uri).into(
             binding.itemVideothubnailContent
         )
+        binding.itemVideoBottom.itemcontentCommentimage.setOnClickListener {
+            onCommentClicked(post)
+        }
+        binding.itemVideoBottom.itemcontentGiftimage.setOnClickListener {
+            onGoldClicked(post)
+        }
     }
 
     fun showVideo(exoPlayer: ExoPlayer) {
@@ -133,11 +159,22 @@ class PostVideoItemViewHolder(private val binding: ItemPostVideoBinding) :
 
 class PostImageItemViewHolder(private val binding: ItemPostImageBinding) :
     PostItemViewHolder(binding.root) {
-    override fun bind(post: Post) {
+    override fun bind(
+        post: Post,
+        onPostClicked: (Post) -> Unit,
+        onCommentClicked: (Post) -> Unit,
+        onGoldClicked: (Post) -> Unit
+    ) {
         binding.itemImageTop.itemcontentAuthorid.text = post.walletAddress
         binding.itemImageTop.itemcontentText.text = post.text
         binding.itemImageTop.itemcontentText.isGone = post.text.isEmpty()
         Glide.with(binding.itemImageContent).load((post.postType as PostType.Image).uri)
             .into(binding.itemImageContent)
+        binding.itemImageBottom.itemcontentCommentimage.setOnClickListener {
+            onCommentClicked(post)
+        }
+        binding.itemImageBottom.itemcontentGiftimage.setOnClickListener {
+            onGoldClicked(post)
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.eth.refiq.ui.post
+package com.eth.refiq.ui.contentdetail
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -10,11 +10,6 @@ import com.eth.refiq.R
 
 class PostDetailFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PostDetailFragment()
-    }
-
-    private lateinit var viewModel: PostDetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,10 +18,5 @@ class PostDetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_post_detail, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PostDetailViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
 }

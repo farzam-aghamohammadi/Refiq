@@ -1,4 +1,4 @@
-package com.eth.refiq.ui.post
+package com.eth.refiq.ui.contentdetail
 
 import androidx.lifecycle.ViewModel
 

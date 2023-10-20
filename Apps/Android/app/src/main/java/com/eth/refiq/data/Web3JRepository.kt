@@ -139,6 +139,21 @@ class Web3JRepository constructor(
         localDataStorage.saveValue(IS_WALLET_CREATED, true)
     }
 
+    override suspend fun createComment(parentId: String, cid: String) {
+        val transactionManager: TransactionManager = RawTransactionManager(
+            web3, credential, CHAIN_ID
+        )
+
+
+        val topic = Topics.load(
+            contractAddress, web3, transactionManager,
+            StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
+        )
+
+        val createTopic = topic.createComment(parentId.toBigInteger(), cid)
+        val transactionReceipt = createTopic.send()
+        println("${transactionReceipt.gasUsed}")
+    }
 
     companion object {
         private const val IS_WALLET_CREATED = "hasWallet"

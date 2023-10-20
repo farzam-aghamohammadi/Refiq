@@ -63,8 +63,13 @@ class TopicFragment : Fragment() {
         }
         val adapter = PostAdapter({
 
-        }, { commentClicked ->
+        }, { onCommentClicked ->
+            findNavController().navigate(R.id.action_to_add_content, Bundle().apply {
+                putSerializable(AddContentFragment.CONTENT_TYPE, ContentType.COMMENT)
+                putString(AddContentFragment.PARENT_ID, onCommentClicked.id)
+            })
 
+        }, {
 
         })
         binding.topicListPost.adapter = adapter

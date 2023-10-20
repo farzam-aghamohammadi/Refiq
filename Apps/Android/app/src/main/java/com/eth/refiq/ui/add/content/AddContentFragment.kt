@@ -83,7 +83,8 @@ class AddContentFragment : Fragment() {
         }
         val contentType = requireArguments().getSerializable(
             CONTENT_TYPE
-        ) as ContentType;
+        ) as ContentType
+
         binding.addcontentCreateContentButton.onClicked = {
             addContentViewModel.createContent(
                 binding.addcontentEditText.text.toString(), contentType,
@@ -93,28 +94,25 @@ class AddContentFragment : Fragment() {
         if (contentType == ContentType.POST) {
             binding.addcontentToolbar.title = getString(R.string.add_post_topic)
         } else {
-
+            binding.addcontentToolbar.title = getString(R.string.add_comment)
         }
 
-        addContentViewModel.creatingContent.observe(viewLifecycleOwner) {status->
+        addContentViewModel.creatingContent.observe(viewLifecycleOwner) { status ->
             when (status) {
                 AddContentViewModel.CreatingContentStatus.Creating -> {
                     binding.addcontentCreateContentButton.showLoading()
                 }
-
                 AddContentViewModel.CreatingContentStatus.Created -> {
                     binding.addcontentCreateContentButton.hideLoading()
                     requireContext().showMessage("Created")
                     findNavController().popBackStack()
                 }
-
-               is AddContentViewModel.CreatingContentStatus.Failed -> {
-                   binding.addcontentCreateContentButton.hideLoading()
-                   (status).message?.let {
-                       requireContext().showMessage(it)
-                   }
-               }
-
+                is AddContentViewModel.CreatingContentStatus.Failed -> {
+                    binding.addcontentCreateContentButton.hideLoading()
+                    (status).message?.let {
+                        requireContext().showMessage(it)
+                    }
+                }
                 else -> {}
             }
         }
@@ -169,10 +167,8 @@ class AddContentFragment : Fragment() {
     private fun getRealPathFromURI(uri: Uri, context: Context): String? {
         val returnCursor = context.contentResolver.query(uri, null, null, null, null)
         val nameIndex = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
         returnCursor.moveToFirst()
         val name = returnCursor.getString(nameIndex)
-        val size = returnCursor.getLong(sizeIndex).toString()
         val file = File(context.filesDir, name)
         try {
             val inputStream: InputStream? = context.contentResolver.openInputStream(uri)

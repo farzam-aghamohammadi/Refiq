@@ -30,4 +30,5 @@
     <string name="title_create_topic">Create Topic</string>
     <string name="create">Create</string>
     <string name="add_post_topic">Add a post to the Topic</string>
+    <string name="add_comment">Add a comment</string>
 </resources>

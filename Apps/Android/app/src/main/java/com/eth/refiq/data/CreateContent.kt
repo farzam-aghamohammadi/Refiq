@@ -29,8 +29,10 @@ class CreateContent constructor(private val api: Api, private val web3Repository
         }
         val saveContentDto = ContentDto(text, imageCid, videoCid)
         val contentCid = api.uploadContent(saveContentDto).cid
-        if (contentType==ContentType.POST){
-            web3Repository.createPost(parentId,contentCid)
+        if (contentType == ContentType.POST) {
+            web3Repository.createPost(parentId, contentCid)
+        } else {
+            web3Repository.createComment(parentId, contentCid)
         }
     }
 
