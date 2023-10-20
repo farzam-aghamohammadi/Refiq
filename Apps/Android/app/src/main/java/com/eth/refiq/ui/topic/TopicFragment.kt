@@ -5,21 +5,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import androidx.fragment.app.Fragment
+import androidx.media3.common.util.Util
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.fragment.findNavController
-import com.eth.refiq.databinding.FragmentTopicBinding
-import com.eth.refiq.domain.Topic
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.eth.refiq.R
+import com.eth.refiq.databinding.FragmentTopicBinding
 import com.eth.refiq.domain.ContentType
+import com.eth.refiq.domain.Topic
 import com.eth.refiq.ui.add.content.AddContentFragment
-import com.eth.refiq.ui.add.content.AddContentViewModel
 import com.eth.refiq.ui.topic.adapter.PostAdapter
+import com.eth.refiq.ui.topic.adapter.PostVideoItemViewHolder
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 
 class TopicFragment : Fragment() {
     private var _binding: FragmentTopicBinding? = null
+    private var player: ExoPlayer? = null
+
+    private fun initializePlayer() {
+        player = ExoPlayer.Builder(requireContext())
+            .build()
+
+    }
 
     private val binding get() = _binding!!
 
@@ -51,15 +63,74 @@ class TopicFragment : Fragment() {
         }
         val adapter = PostAdapter({
 
+        }, { commentClicked ->
+
+
         })
         binding.topicListPost.adapter = adapter
+        binding.topicListPost.addOnScrollListener(recyclerViewScrollChangeListener)
         topicViewModel.postsLiveData.observe(viewLifecycleOwner) {
             adapter.updateAdapter(it)
+        }
+
+    }
+
+    private val recyclerViewScrollChangeListener = object : RecyclerView.OnScrollListener() {
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                val visibleItemPosition =
+                    (binding.topicListPost.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+                if (recyclerView.findViewHolderForLayoutPosition(visibleItemPosition) is PostVideoItemViewHolder) {
+                    (recyclerView.findViewHolderForLayoutPosition(visibleItemPosition) as? PostVideoItemViewHolder)?.showVideo(
+                        exoPlayer = player!!
+                    )?.apply {
+                        if (currentPlayerItemPosition == -1) {
+                            (recyclerView.findViewHolderForLayoutPosition(visibleItemPosition) as? PostVideoItemViewHolder)?.stopVideo()
+                            currentPlayerItemPosition = visibleItemPosition
+                        }
+                    }
+                } else {
+                    player?.pause()
+                }
+            }
+        }
+    }
+    private var currentPlayerItemPosition = -1;
+
+    override fun onStart() {
+        super.onStart()
+        initializePlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        releasePlayer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        releasePlayer()
+    }
+
+    private fun releasePlayer() {
+        player?.let { exoPlayer ->
+            exoPlayer.release()
+        }
+        player = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (player == null) {
+            initializePlayer()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.topicListPost.removeOnScrollListener(recyclerViewScrollChangeListener)
         _binding = null
     }
 
