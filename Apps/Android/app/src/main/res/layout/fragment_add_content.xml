@@ -9,6 +9,7 @@
     tools:context=".ui.add.content.AddContentFragment">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/addcontent_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="?colorPrimary"
@@ -26,6 +27,7 @@
         android:layout_margin="16dp"
         android:background="@null"
         android:clickable="true"
+        android:autoLink="all"
         android:focusable="true" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -33,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="256dp"
         android:layout_margin="8dp"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:visibility="gone" />
 
     <VideoView

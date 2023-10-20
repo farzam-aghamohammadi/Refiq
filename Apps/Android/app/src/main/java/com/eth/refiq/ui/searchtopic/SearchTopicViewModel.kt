@@ -32,7 +32,9 @@ class SearchTopicViewModel constructor(
                     topicRepository.searchTopic(query)
                 }
             }.fold({
-                   _topicsLiveData.value=it
+                it?.let {
+                    _topicsLiveData.value=it
+                }
             },{
                 println(it)
             })

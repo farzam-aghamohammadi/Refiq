@@ -16,12 +16,15 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.eth.refiq.databinding.FragmentAddContentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import com.eth.refiq.R
+import com.eth.refiq.domain.ContentType
+import com.eth.refiq.ui.custom.showMessage
 
 
 class AddContentFragment : Fragment() {
@@ -71,17 +74,49 @@ class AddContentFragment : Fragment() {
         binding.addcontentEditText.addTextChangedListener {
             it.toString().let {
                 addContentViewModel.onContentTextChanged(it)
-
             }
-
         }
         binding.addcontentCreateContentButton.setText(getString(R.string.create))
         binding.addcontentCreateContentButton.hideLoading()
         addContentViewModel.enableCreateContent.observe(viewLifecycleOwner) {
             binding.addcontentCreateContentButton.isGone = it.not()
         }
+        val contentType = requireArguments().getSerializable(
+            CONTENT_TYPE
+        ) as ContentType;
         binding.addcontentCreateContentButton.onClicked = {
-            addContentViewModel.createContent(binding.addcontentEditText.text.toString())
+            addContentViewModel.createContent(
+                binding.addcontentEditText.text.toString(), contentType,
+                requireArguments().getString(PARENT_ID, null)
+            )
+        }
+        if (contentType == ContentType.POST) {
+            binding.addcontentToolbar.title = getString(R.string.add_post_topic)
+        } else {
+
+        }
+
+        addContentViewModel.creatingContent.observe(viewLifecycleOwner) {status->
+            when (status) {
+                AddContentViewModel.CreatingContentStatus.Creating -> {
+                    binding.addcontentCreateContentButton.showLoading()
+                }
+
+                AddContentViewModel.CreatingContentStatus.Created -> {
+                    binding.addcontentCreateContentButton.hideLoading()
+                    requireContext().showMessage("Created")
+                    findNavController().popBackStack()
+                }
+
+               is AddContentViewModel.CreatingContentStatus.Failed -> {
+                   binding.addcontentCreateContentButton.hideLoading()
+                   (status).message?.let {
+                       requireContext().showMessage(it)
+                   }
+               }
+
+                else -> {}
+            }
         }
     }
 
@@ -162,4 +197,9 @@ class AddContentFragment : Fragment() {
         return file.path
     }
 
+    companion object {
+        const val PARENT_ID = "parent_id"
+        const val CONTENT_TYPE = "content"
+        const val COMMENT_CONTENT = "comment"
+    }
 }

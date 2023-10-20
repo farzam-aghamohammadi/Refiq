@@ -3,8 +3,13 @@ package com.eth.refiq.domain
 import java.io.Serializable
 
 
-data class Topic(val id: String, val name: String, val info: String, val avatar: String) :
+data class Topic(val id: String, val name: String, val owner: String, val infoCid: String) :
     Serializable
+
+enum class ContentType : Serializable {
+    POST,
+    COMMENT
+}
 
 data class Post(
     val walletAddress: String,

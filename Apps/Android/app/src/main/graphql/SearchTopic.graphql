@@ -1,6 +1,9 @@
 query GetTopicByName($name:String!) {
-    topicSearch(text:$name) {
+    topics(where: {name_contains_nocase: $name}) {
         id
         name
+        owner
+        infoCid
     }
+
 }

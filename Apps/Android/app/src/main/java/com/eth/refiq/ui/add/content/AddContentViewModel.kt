@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eth.refiq.domain.ContentType
 import com.eth.refiq.domain.CreateContentRepository
 import com.eth.refiq.domain.Post
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ class AddContentViewModel constructor(
     private val _enableCreateContent =
         MutableLiveData<Boolean>(false)
 
+
     fun onVideoUriSelected(uri: String) {
         _enableCreateContent.value = true
 
@@ -47,18 +49,34 @@ class AddContentViewModel constructor(
         _enableCreateContent.value = !(text.isEmpty() && imageUri == null && videoUri == null)
     }
 
-    fun createContent(text: String) {
+    val creatingContent: LiveData<CreatingContentStatus>
+        get() = _creatingContent
+
+    private val _creatingContent =
+        MutableLiveData<CreatingContentStatus>()
+
+    fun createContent(text: String, contentType: ContentType, parentId: String) {
         viewModelScope.launch {
+            _creatingContent.value = CreatingContentStatus.Creating
             kotlin.runCatching {
-                withContext(coroutineDispatcherProvider.ioDispatcher()){
-                    contentRepository.createContent(text, imageUri, videoUri)
+                withContext(coroutineDispatcherProvider.ioDispatcher()) {
+                    contentRepository.createContent(text, imageUri, videoUri, contentType, parentId)
                 }
             }.fold({
-                   println(it)
-            },{
+                _creatingContent.value = CreatingContentStatus.Created
+                println(it)
+            }, {
+                _creatingContent.value = CreatingContentStatus.Failed(it.message)
+
                 it.printStackTrace()
             })
         }
     }
 
+    sealed class CreatingContentStatus {
+        data object Creating : CreatingContentStatus()
+        data object Created : CreatingContentStatus()
+        data class Failed(val message: String?) : CreatingContentStatus()
+
+    }
 }

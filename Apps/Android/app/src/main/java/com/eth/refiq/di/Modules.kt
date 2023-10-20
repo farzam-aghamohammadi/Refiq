@@ -34,7 +34,7 @@ val appModule = module {
     single<Api> {
         get<Retrofit>().create(Api::class.java)
     }
-    single<TopicRepository> { RemoteTopicRepository(get()) }
+    single<TopicRepository> { RemoteTopicRepository(get(),get()) }
     single<PostRepository> { RemotePostRepository() }
     single<CoroutineDispatcherProvider> {
         AppDispatcherProvider()
@@ -70,7 +70,7 @@ val appModule = module {
     }
     single {
         ApolloClient.Builder()
-            .serverUrl("https://api.studio.thegraph.com/query/50954/refiq-test/v0.0.1")
+            .serverUrl("https://api.studio.thegraph.com/query/50954/refiq-test/v0.0.3")
             .okHttpClient(get()).build()
     }
 

@@ -2,7 +2,7 @@ package com.eth.refiq.data
 
 import CoroutineDispatcherProvider
 import android.content.Context
-import com.eth.refiq.data.contract.IRefeqTopics
+import com.eth.refiq.data.contract.Topics
 import com.eth.refiq.domain.LocalDataStorage
 import com.eth.refiq.domain.Web3Repository
 import kotlinx.coroutines.withContext
@@ -65,20 +65,21 @@ class Web3JRepository constructor(
 
     }
 
-    val contractAddress = "0x3661b6d0d1b27f6C942f56567deEc9A6e5c9246d"
-     override suspend fun createTopic(name: String, cid: String) {
+    val contractAddress = "0xF0cC1e1Cc8882Ca251990304D4C8D1BDe10C765d"
+    override suspend fun createTopic(name: String, cid: String) {
         val transactionManager: TransactionManager = RawTransactionManager(
             web3, credential, CHAIN_ID
         )
 
 
-        val topic = IRefeqTopics.load(
+        val topic = Topics.load(
             contractAddress, web3, transactionManager,
             StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
         )
 
         val createTopic = topic.createTopic(name, cid)
         val transactionReceipt = createTopic.send()
+        println("$name")
         println("${transactionReceipt.logs}")
         println("${transactionReceipt.blockNumber}")
         println("${transactionReceipt.gasUsed}")
@@ -95,14 +96,14 @@ class Web3JRepository constructor(
         )
 
 
-        val topic = IRefeqTopics.load(
+        val topic = Topics.load(
             contractAddress, web3, transactionManager,
             StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
         )
 
-        val createTopic = topic.createPost(BigInteger.valueOf(1000), cid)
+        val createTopic = topic.createPost(topicId.toBigInteger(), cid)
         val transactionReceipt = createTopic.send()
-
+        println("${transactionReceipt.gasUsed}")
     }
 
     override suspend fun isWalletCreated(): Boolean {

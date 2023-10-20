@@ -11,6 +11,9 @@ import com.eth.refiq.databinding.FragmentTopicBinding
 import com.eth.refiq.domain.Topic
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.eth.refiq.R
+import com.eth.refiq.domain.ContentType
+import com.eth.refiq.ui.add.content.AddContentFragment
+import com.eth.refiq.ui.add.content.AddContentViewModel
 
 
 class TopicFragment : Fragment() {
@@ -33,10 +36,14 @@ class TopicFragment : Fragment() {
         val topic: Topic = arguments?.getSerializable("topic") as Topic
 
         binding.topicToolbar.title = topic.name
-        binding.topicTextviewTopicinfo.paintFlags = binding.topicTextviewTopicinfo.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        binding.topicTextviewTopicinfo.paintFlags =
+            binding.topicTextviewTopicinfo.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
         binding.topicNewpost.setOnClickListener {
-            findNavController().navigate(R.id.action_to_add_content)
+            findNavController().navigate(R.id.action_to_add_content, Bundle().apply {
+                putSerializable(AddContentFragment.CONTENT_TYPE, ContentType.POST)
+                putString(AddContentFragment.PARENT_ID, topic.id)
+            })
         }
 
     }

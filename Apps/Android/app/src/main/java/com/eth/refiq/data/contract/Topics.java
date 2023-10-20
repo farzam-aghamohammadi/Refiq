@@ -37,8 +37,10 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Generated with web3j version 1.5.0.
  */
 @SuppressWarnings("rawtypes")
-public class IRefeqTopics extends Contract {
+public class Topics extends Contract {
     public static final String BINARY = "Bin file was not provided";
+
+    public static final String FUNC_ADDMODERATOR = "addModerator";
 
     public static final String FUNC_APPROVE = "approve";
 
@@ -57,6 +59,10 @@ public class IRefeqTopics extends Contract {
     public static final String FUNC_NAME = "name";
 
     public static final String FUNC_OWNEROF = "ownerOf";
+
+    public static final String FUNC_REMOVECONTENT = "removeContent";
+
+    public static final String FUNC_REMOVEMODERATOR = "removeModerator";
 
     public static final String FUNC_safeTransferFrom = "safeTransferFrom";
 
@@ -84,6 +90,18 @@ public class IRefeqTopics extends Contract {
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Address>() {}, new TypeReference<Utf8String>() {}));
     ;
 
+    public static final Event CONTENTREMOVED_EVENT = new Event("ContentRemoved", 
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+    ;
+
+    public static final Event MODERATORADDED_EVENT = new Event("ModeratorAdded", 
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Address>() {}));
+    ;
+
+    public static final Event MODERATORREMOVED_EVENT = new Event("ModeratorRemoved", 
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Address>() {}));
+    ;
+
     public static final Event POSTCREATED_EVENT = new Event("PostCreated", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Address>() {}, new TypeReference<Utf8String>() {}));
     ;
@@ -101,27 +119,27 @@ public class IRefeqTopics extends Contract {
     ;
 
     @Deprecated
-    protected IRefeqTopics(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    protected Topics(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    protected IRefeqTopics(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected Topics(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     @Deprecated
-    protected IRefeqTopics(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    protected Topics(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    protected IRefeqTopics(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected Topics(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public static List<ApprovalEventResponse> getApprovalEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
-            valueList.add(staticExtractEventParametersWithLog(POSTCREATED_EVENT, log));
+            valueList.add(staticExtractEventParametersWithLog(APPROVAL_EVENT, log));
         }
         ArrayList<ApprovalEventResponse> responses = new ArrayList<ApprovalEventResponse>(valueList.size());
         for (EventValuesWithLog eventValues : valueList) {
@@ -158,7 +176,7 @@ public class IRefeqTopics extends Contract {
     public static List<ApprovalForAllEventResponse> getApprovalForAllEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
-            valueList.add(staticExtractEventParametersWithLog(POSTCREATED_EVENT, log));
+            valueList.add(staticExtractEventParametersWithLog(APPROVALFORALL_EVENT, log));
         }
         ArrayList<ApprovalForAllEventResponse> responses = new ArrayList<ApprovalForAllEventResponse>(valueList.size());
         for (EventValuesWithLog eventValues : valueList) {
@@ -195,13 +213,13 @@ public class IRefeqTopics extends Contract {
     public static List<CommentCreatedEventResponse> getCommentCreatedEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
-            valueList.add(staticExtractEventParametersWithLog(POSTCREATED_EVENT, log));
+            valueList.add(staticExtractEventParametersWithLog(COMMENTCREATED_EVENT, log));
         }
         ArrayList<CommentCreatedEventResponse> responses = new ArrayList<CommentCreatedEventResponse>(valueList.size());
         for (EventValuesWithLog eventValues : valueList) {
             CommentCreatedEventResponse typedResponse = new CommentCreatedEventResponse();
             typedResponse.log = eventValues.getLog();
-            typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse.parentId = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse.author = (String) eventValues.getNonIndexedValues().get(2).getValue();
             typedResponse.contentCid = (String) eventValues.getNonIndexedValues().get(3).getValue();
@@ -214,7 +232,7 @@ public class IRefeqTopics extends Contract {
         EventValuesWithLog eventValues = staticExtractEventParametersWithLog(COMMENTCREATED_EVENT, log);
         CommentCreatedEventResponse typedResponse = new CommentCreatedEventResponse();
         typedResponse.log = log;
-        typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
         typedResponse.parentId = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
         typedResponse.author = (String) eventValues.getNonIndexedValues().get(2).getValue();
         typedResponse.contentCid = (String) eventValues.getNonIndexedValues().get(3).getValue();
@@ -231,6 +249,109 @@ public class IRefeqTopics extends Contract {
         return commentCreatedEventFlowable(filter);
     }
 
+    public static List<ContentRemovedEventResponse> getContentRemovedEvents(TransactionReceipt transactionReceipt) {
+        List<EventValuesWithLog> valueList = new ArrayList<>();
+        for (Log log : transactionReceipt.getLogs()) {
+            valueList.add(staticExtractEventParametersWithLog(CONTENTREMOVED_EVENT, log));
+        }
+        ArrayList<ContentRemovedEventResponse> responses = new ArrayList<ContentRemovedEventResponse>(valueList.size());
+        for (EventValuesWithLog eventValues : valueList) {
+            ContentRemovedEventResponse typedResponse = new ContentRemovedEventResponse();
+            typedResponse.log = eventValues.getLog();
+            typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            responses.add(typedResponse);
+        }
+        return responses;
+    }
+
+    public static ContentRemovedEventResponse getContentRemovedEventFromLog(Log log) {
+        EventValuesWithLog eventValues = staticExtractEventParametersWithLog(CONTENTREMOVED_EVENT, log);
+        ContentRemovedEventResponse typedResponse = new ContentRemovedEventResponse();
+        typedResponse.log = log;
+        typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        return typedResponse;
+    }
+
+    public Flowable<ContentRemovedEventResponse> contentRemovedEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> getContentRemovedEventFromLog(log));
+    }
+
+    public Flowable<ContentRemovedEventResponse> contentRemovedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(CONTENTREMOVED_EVENT));
+        return contentRemovedEventFlowable(filter);
+    }
+
+    public static List<ModeratorAddedEventResponse> getModeratorAddedEvents(TransactionReceipt transactionReceipt) {
+        List<EventValuesWithLog> valueList = new ArrayList<>();
+        for (Log log : transactionReceipt.getLogs()) {
+            valueList.add(staticExtractEventParametersWithLog(MODERATORADDED_EVENT, log));
+        }
+        ArrayList<ModeratorAddedEventResponse> responses = new ArrayList<ModeratorAddedEventResponse>(valueList.size());
+        for (EventValuesWithLog eventValues : valueList) {
+            ModeratorAddedEventResponse typedResponse = new ModeratorAddedEventResponse();
+            typedResponse.log = eventValues.getLog();
+            typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.moderator = (String) eventValues.getNonIndexedValues().get(1).getValue();
+            responses.add(typedResponse);
+        }
+        return responses;
+    }
+
+    public static ModeratorAddedEventResponse getModeratorAddedEventFromLog(Log log) {
+        EventValuesWithLog eventValues = staticExtractEventParametersWithLog(MODERATORADDED_EVENT, log);
+        ModeratorAddedEventResponse typedResponse = new ModeratorAddedEventResponse();
+        typedResponse.log = log;
+        typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.moderator = (String) eventValues.getNonIndexedValues().get(1).getValue();
+        return typedResponse;
+    }
+
+    public Flowable<ModeratorAddedEventResponse> moderatorAddedEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> getModeratorAddedEventFromLog(log));
+    }
+
+    public Flowable<ModeratorAddedEventResponse> moderatorAddedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(MODERATORADDED_EVENT));
+        return moderatorAddedEventFlowable(filter);
+    }
+
+    public static List<ModeratorRemovedEventResponse> getModeratorRemovedEvents(TransactionReceipt transactionReceipt) {
+        List<EventValuesWithLog> valueList = new ArrayList<>();
+        for (Log log : transactionReceipt.getLogs()) {
+            valueList.add(staticExtractEventParametersWithLog(MODERATORREMOVED_EVENT, log));
+        }
+        ArrayList<ModeratorRemovedEventResponse> responses = new ArrayList<ModeratorRemovedEventResponse>(valueList.size());
+        for (EventValuesWithLog eventValues : valueList) {
+            ModeratorRemovedEventResponse typedResponse = new ModeratorRemovedEventResponse();
+            typedResponse.log = eventValues.getLog();
+            typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.moderator = (String) eventValues.getNonIndexedValues().get(1).getValue();
+            responses.add(typedResponse);
+        }
+        return responses;
+    }
+
+    public static ModeratorRemovedEventResponse getModeratorRemovedEventFromLog(Log log) {
+        EventValuesWithLog eventValues = staticExtractEventParametersWithLog(MODERATORREMOVED_EVENT, log);
+        ModeratorRemovedEventResponse typedResponse = new ModeratorRemovedEventResponse();
+        typedResponse.log = log;
+        typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.moderator = (String) eventValues.getNonIndexedValues().get(1).getValue();
+        return typedResponse;
+    }
+
+    public Flowable<ModeratorRemovedEventResponse> moderatorRemovedEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> getModeratorRemovedEventFromLog(log));
+    }
+
+    public Flowable<ModeratorRemovedEventResponse> moderatorRemovedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(MODERATORREMOVED_EVENT));
+        return moderatorRemovedEventFlowable(filter);
+    }
+
     public static List<PostCreatedEventResponse> getPostCreatedEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
@@ -240,7 +361,7 @@ public class IRefeqTopics extends Contract {
         for (EventValuesWithLog eventValues : valueList) {
             PostCreatedEventResponse typedResponse = new PostCreatedEventResponse();
             typedResponse.log = eventValues.getLog();
-            typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse.author = (String) eventValues.getNonIndexedValues().get(2).getValue();
             typedResponse.contentCid = (String) eventValues.getNonIndexedValues().get(3).getValue();
@@ -253,7 +374,7 @@ public class IRefeqTopics extends Contract {
         EventValuesWithLog eventValues = staticExtractEventParametersWithLog(POSTCREATED_EVENT, log);
         PostCreatedEventResponse typedResponse = new PostCreatedEventResponse();
         typedResponse.log = log;
-        typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
         typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
         typedResponse.author = (String) eventValues.getNonIndexedValues().get(2).getValue();
         typedResponse.contentCid = (String) eventValues.getNonIndexedValues().get(3).getValue();
@@ -273,13 +394,13 @@ public class IRefeqTopics extends Contract {
     public static List<TopicCreatedEventResponse> getTopicCreatedEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
-            valueList.add(staticExtractEventParametersWithLog(POSTCREATED_EVENT, log));
+            valueList.add(staticExtractEventParametersWithLog(TOPICCREATED_EVENT, log));
         }
         ArrayList<TopicCreatedEventResponse> responses = new ArrayList<TopicCreatedEventResponse>(valueList.size());
         for (EventValuesWithLog eventValues : valueList) {
             TopicCreatedEventResponse typedResponse = new TopicCreatedEventResponse();
             typedResponse.log = eventValues.getLog();
-            typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse.name = (String) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse.infoCid = (String) eventValues.getNonIndexedValues().get(2).getValue();
             responses.add(typedResponse);
@@ -291,7 +412,7 @@ public class IRefeqTopics extends Contract {
         EventValuesWithLog eventValues = staticExtractEventParametersWithLog(TOPICCREATED_EVENT, log);
         TopicCreatedEventResponse typedResponse = new TopicCreatedEventResponse();
         typedResponse.log = log;
-        typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
         typedResponse.name = (String) eventValues.getNonIndexedValues().get(1).getValue();
         typedResponse.infoCid = (String) eventValues.getNonIndexedValues().get(2).getValue();
         return typedResponse;
@@ -310,13 +431,13 @@ public class IRefeqTopics extends Contract {
     public static List<TopicInfoUpdatedEventResponse> getTopicInfoUpdatedEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
-            valueList.add(staticExtractEventParametersWithLog(POSTCREATED_EVENT, log));
+            valueList.add(staticExtractEventParametersWithLog(TOPICINFOUPDATED_EVENT, log));
         }
         ArrayList<TopicInfoUpdatedEventResponse> responses = new ArrayList<TopicInfoUpdatedEventResponse>(valueList.size());
         for (EventValuesWithLog eventValues : valueList) {
             TopicInfoUpdatedEventResponse typedResponse = new TopicInfoUpdatedEventResponse();
             typedResponse.log = eventValues.getLog();
-            typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse.infoCid = (String) eventValues.getNonIndexedValues().get(1).getValue();
             responses.add(typedResponse);
         }
@@ -327,7 +448,7 @@ public class IRefeqTopics extends Contract {
         EventValuesWithLog eventValues = staticExtractEventParametersWithLog(TOPICINFOUPDATED_EVENT, log);
         TopicInfoUpdatedEventResponse typedResponse = new TopicInfoUpdatedEventResponse();
         typedResponse.log = log;
-        typedResponse.id = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
         typedResponse.infoCid = (String) eventValues.getNonIndexedValues().get(1).getValue();
         return typedResponse;
     }
@@ -345,7 +466,7 @@ public class IRefeqTopics extends Contract {
     public static List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
-            valueList.add(staticExtractEventParametersWithLog(POSTCREATED_EVENT, log));
+            valueList.add(staticExtractEventParametersWithLog(TRANSFER_EVENT, log));
         }
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
         for (EventValuesWithLog eventValues : valueList) {
@@ -377,6 +498,15 @@ public class IRefeqTopics extends Contract {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
         return transferEventFlowable(filter);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> addModerator(BigInteger topicId, String moderator) {
+        final Function function = new Function(
+                FUNC_ADDMODERATOR, 
+                Arrays.<Type>asList(new Uint256(topicId),
+                new Address(160, moderator)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> approve(String to, BigInteger tokenId) {
@@ -451,6 +581,23 @@ public class IRefeqTopics extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
+    public RemoteFunctionCall<TransactionReceipt> removeContent(BigInteger contentId) {
+        final Function function = new Function(
+                FUNC_REMOVECONTENT, 
+                Arrays.<Type>asList(new Uint256(contentId)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> removeModerator(BigInteger topicId, String moderator) {
+        final Function function = new Function(
+                FUNC_REMOVEMODERATOR, 
+                Arrays.<Type>asList(new Uint256(topicId),
+                new Address(160, moderator)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
     public RemoteFunctionCall<TransactionReceipt> safeTransferFrom(String from, String to, BigInteger tokenId) {
         final Function function = new Function(
                 FUNC_safeTransferFrom, 
@@ -512,31 +659,31 @@ public class IRefeqTopics extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> updateTopicInfo(BigInteger id, String infoCid) {
+    public RemoteFunctionCall<TransactionReceipt> updateTopicInfo(BigInteger topicId, String infoCid) {
         final Function function = new Function(
                 FUNC_UPDATETOPICINFO, 
-                Arrays.<Type>asList(new Uint256(id),
+                Arrays.<Type>asList(new Uint256(topicId),
                 new Utf8String(infoCid)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     @Deprecated
-    public static IRefeqTopics load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return new IRefeqTopics(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    public static Topics load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return new Topics(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
-    public static IRefeqTopics load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        return new IRefeqTopics(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    public static Topics load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new Topics(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static IRefeqTopics load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return new IRefeqTopics(contractAddress, web3j, credentials, contractGasProvider);
+    public static Topics load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        return new Topics(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static IRefeqTopics load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
-        return new IRefeqTopics(contractAddress, web3j, transactionManager, contractGasProvider);
+    public static Topics load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        return new Topics(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public static class ApprovalEventResponse extends BaseEventResponse {
@@ -556,7 +703,7 @@ public class IRefeqTopics extends Contract {
     }
 
     public static class CommentCreatedEventResponse extends BaseEventResponse {
-        public BigInteger id;
+        public BigInteger contentId;
 
         public BigInteger parentId;
 
@@ -565,8 +712,24 @@ public class IRefeqTopics extends Contract {
         public String contentCid;
     }
 
+    public static class ContentRemovedEventResponse extends BaseEventResponse {
+        public BigInteger contentId;
+    }
+
+    public static class ModeratorAddedEventResponse extends BaseEventResponse {
+        public BigInteger topicId;
+
+        public String moderator;
+    }
+
+    public static class ModeratorRemovedEventResponse extends BaseEventResponse {
+        public BigInteger topicId;
+
+        public String moderator;
+    }
+
     public static class PostCreatedEventResponse extends BaseEventResponse {
-        public BigInteger id;
+        public BigInteger contentId;
 
         public BigInteger topicId;
 
@@ -576,7 +739,7 @@ public class IRefeqTopics extends Contract {
     }
 
     public static class TopicCreatedEventResponse extends BaseEventResponse {
-        public BigInteger id;
+        public BigInteger topicId;
 
         public String name;
 
@@ -584,7 +747,7 @@ public class IRefeqTopics extends Contract {
     }
 
     public static class TopicInfoUpdatedEventResponse extends BaseEventResponse {
-        public BigInteger id;
+        public BigInteger topicId;
 
         public String infoCid;
     }
