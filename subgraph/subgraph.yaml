@@ -1,14 +1,16 @@
 specVersion: 0.0.5
 schema:
   file: ./schema.graphql
+features:
+  - fullTextSearch
 dataSources:
   - kind: ethereum
     name: Topics
     network: scroll-sepolia
     source:
-      address: "0x3661b6d0d1b27f6C942f56567deEc9A6e5c9246d"
+      address: "0xF0cC1e1Cc8882Ca251990304D4C8D1BDe10C765d"
       abi: Topics
-      startBlock: 1692230
+      startBlock: 1719771
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -34,7 +36,7 @@ dataSources:
         - event: PostCreated(uint256,uint256,address,string)
           handler: handlePostCreated
         - event: CommentCreated(uint256,uint256,address,string)
-          handler: handleTopicCreated
+          handler: handleCommentCreated
         - event: ContentRemoved(uint256)
           handler: handleContentRemoved
       file: ./src/topics.ts
