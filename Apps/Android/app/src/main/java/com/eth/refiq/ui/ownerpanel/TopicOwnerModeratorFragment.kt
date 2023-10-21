@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import com.eth.refiq.databinding.FragmentTopicownerModeratorsBinding
 import com.eth.refiq.domain.Topic
@@ -53,10 +55,20 @@ class TopicOwnerModeratorFragment(topic: Topic) : Fragment() {
         }
         viewModel.moderators.observe(viewLifecycleOwner) {
             binding.topicownerpanelModeratorlayout.removeAllViews()
-            it.forEach {
+            it.forEach {address->
                 binding.topicownerpanelModeratorlayout.addView(
                     AppCompatTextView(requireContext()).apply {
-                        text = it
+                        text = address
+
+                        layoutParams =  LinearLayoutCompat.LayoutParams(
+                            LinearLayoutCompat.LayoutParams.MATCH_PARENT,
+                            LinearLayoutCompat.LayoutParams.WRAP_CONTENT
+                        ).apply {
+                          setMargins(26)
+                        }
+                            setOnClickListener {
+                                viewModel.removeModerator(address)
+                            }
                     }
                 )
             }

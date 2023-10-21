@@ -180,7 +180,7 @@ class Web3JRepository constructor(
             contractAddress, web3, transactionManager,
             StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
         )
-        topic.addModerator(address.toBigInteger(), topicId).send()
+        topic.addModerator(topicId.toBigInteger(),address).send()
 
     }
 
@@ -192,7 +192,7 @@ class Web3JRepository constructor(
             contractAddress, web3, transactionManager,
             StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
         )
-        topic.removeModerator(address.toBigInteger(), topicId)
+        topic.removeModerator(topicId.toBigInteger(),address).send()
     }
 
     override suspend fun awardContent(weiAmount: String,contentId:String) {
@@ -203,7 +203,7 @@ class Web3JRepository constructor(
             contractAddress, web3, transactionManager,
             StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
         )
-        topic.awardContent(contentId.toBigInteger(),weiAmount.toBigInteger())
+        topic.awardContent(contentId.toBigInteger(),weiAmount.toBigInteger()).send()
 
     }
 
