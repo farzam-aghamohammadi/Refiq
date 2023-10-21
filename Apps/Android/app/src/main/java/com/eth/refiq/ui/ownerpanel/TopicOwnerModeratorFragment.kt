@@ -9,14 +9,18 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.eth.refiq.databinding.FragmentTopicownerModeratorsBinding
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import com.eth.refiq.domain.Topic
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class TopicOwnerModeratorFragment : Fragment() {
+class TopicOwnerModeratorFragment(topic: Topic) : Fragment() {
     private var _binding: FragmentTopicownerModeratorsBinding? = null
 
     private val binding get() = _binding!!
 
-    private val viewModel: TopicOwnerViewModel by activityViewModel()
+    private val viewModel: TopicOwnerViewModel by viewModel{
+        parametersOf(topic)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -3,10 +3,11 @@ package com.eth.refiq.ui.ownerpanel.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.eth.refiq.domain.Topic
 import com.eth.refiq.ui.ownerpanel.TopicOwnerModeratorFragment
 import com.eth.refiq.ui.ownerpanel.TopicOwnerShareFragment
 
-class TopicOwnerPanelAdapter constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class TopicOwnerPanelAdapter constructor(fm: FragmentManager,private val topic:Topic) : FragmentStatePagerAdapter(fm) {
 
     override fun getCount(): Int = 2
 
@@ -20,7 +21,9 @@ class TopicOwnerPanelAdapter constructor(fm: FragmentManager) : FragmentStatePag
 
     override fun getItem(position: Int): Fragment {
         return if (position==0){
-            TopicOwnerModeratorFragment()
+            TopicOwnerModeratorFragment(topic).apply {
+
+            }
         }else {
             TopicOwnerShareFragment()
         }

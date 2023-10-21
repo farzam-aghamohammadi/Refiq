@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TopicOwnerViewModel constructor(
-    private var topic: Topic,
+    private val topic: Topic,
     private val web3Repository: Web3Repository,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
@@ -20,14 +20,16 @@ class TopicOwnerViewModel constructor(
 
     val moderators: LiveData<List<String>> = _moderators
     fun addModerator(address: String) {
+
+        topic.moderators.add(address)
+        _moderators.value = topic.moderators
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(coroutineDispatcherProvider.ioDispatcher()) {
                     web3Repository.addModerator(address, topic.id)
                 }
             }.fold({
-                topic.moderators.add(address)
-                _moderators.value = topic.moderators
+
             }, {
                 it.printStackTrace()
             })

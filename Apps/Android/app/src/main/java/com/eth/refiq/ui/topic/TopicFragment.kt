@@ -118,7 +118,7 @@ class TopicFragment : Fragment() {
         }
         binding.topicOwnerpanel.setOnClickListener {
             findNavController().navigate(R.id.action_to_owner_panel, Bundle().apply {
-                putSerializable("topic", requireArguments().getSerializable(TOPIC))
+                putSerializable("topic", requireArguments().getSerializable(TOPIC) as Topic)
             })
         }
     }
