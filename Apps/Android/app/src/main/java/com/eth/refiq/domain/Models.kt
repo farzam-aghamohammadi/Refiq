@@ -16,9 +16,9 @@ data class Post(
     val id: String,
     val walletAddress: String,
     val postType: PostType,
-    val text: String,
-    val comments: List<String>
+    val text: String
 )
+
 
 sealed class PostType {
     data object Text : PostType()
@@ -28,7 +28,10 @@ sealed class PostType {
 }
 
 data class Content(
-    val text: String,
-    val imageCid: String?,
-    val videoCid: String?
+    val id: String,
+    val walletAddress: String,
+    val postType: PostType,
+    val text: String
 )
+
+data class ContentDetail(val mainContent: Content, val contents: List<Content>)

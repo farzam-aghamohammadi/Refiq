@@ -6,10 +6,12 @@ import com.apollographql.apollo3.network.okHttpClient
 import com.eth.refiq.MainViewModel
 import com.eth.refiq.data.Api
 import com.eth.refiq.data.CreateContent
+import com.eth.refiq.data.RemoteContentRepository
 import com.eth.refiq.data.RemotePostRepository
 import com.eth.refiq.data.RemoteTopicRepository
 import com.eth.refiq.data.SharedPrefLocalDataStorage
 import com.eth.refiq.data.Web3JRepository
+import com.eth.refiq.domain.ContentRepository
 import com.eth.refiq.domain.CreateContentRepository
 import com.eth.refiq.domain.LocalDataStorage
 import com.eth.refiq.domain.PostRepository
@@ -17,6 +19,7 @@ import com.eth.refiq.domain.TopicRepository
 import com.eth.refiq.domain.Web3Repository
 import com.eth.refiq.ui.add.content.AddContentViewModel
 import com.eth.refiq.ui.add.topic.CreateTopicViewModel
+import com.eth.refiq.ui.contentdetail.ContentDetailViewModel
 import com.eth.refiq.ui.searchtopic.SearchTopicViewModel
 import com.eth.refiq.ui.topic.TopicViewModel
 import com.eth.refiq.ui.wallet.WalletViewModel
@@ -35,7 +38,7 @@ val appModule = module {
     single<Api> {
         get<Retrofit>().create(Api::class.java)
     }
-    single<TopicRepository> { RemoteTopicRepository(get(),get()) }
+    single<TopicRepository> { RemoteTopicRepository(get(), get()) }
     single<PostRepository> { RemotePostRepository(get()) }
     single<CoroutineDispatcherProvider> {
         AppDispatcherProvider()
@@ -43,8 +46,8 @@ val appModule = module {
     single<LocalDataStorage> { SharedPrefLocalDataStorage(androidApplication()) }
 
     single<Web3Repository> { Web3JRepository(androidApplication(), get(), get()) }
-    single<CreateContentRepository> { CreateContent(get(),get()) }
-
+    single<CreateContentRepository> { CreateContent(get(), get()) }
+    single<ContentRepository> { RemoteContentRepository(get()) }
 
     single {
         val logging = HttpLoggingInterceptor()
@@ -91,4 +94,6 @@ val appModule = module {
     viewModel { WalletViewModel(get(), get()) }
 
     viewModel { AddContentViewModel(get(), get()) }
+
+    viewModel { ContentDetailViewModel(get(), get(), get(), get(), get()) }
 }

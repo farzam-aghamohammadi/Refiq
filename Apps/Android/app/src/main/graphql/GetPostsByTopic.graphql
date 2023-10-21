@@ -5,9 +5,6 @@ query GetPostsByTopicId($id:ID!){
             id,
             contentCid,
             author
-            comments(first: 5, skip: 0){
-                id
-            }
         }
     }
 }

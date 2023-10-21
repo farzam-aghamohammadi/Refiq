@@ -18,7 +18,7 @@ class RemotePostRepository(private val apolloClient: ApolloClient) : PostReposit
     override suspend fun getPostsByTopicId(topicId: String): List<Post> {
         val response = apolloClient.query(GetPostsByTopicIdQuery(topicId)).execute()
         val listOfContentResponseDto = response.data?.topic?.posts?.map {
-            ContentResponseDto(it.id, it.contentCid, it.author, it.comments.map { it.id })
+            ContentResponseDto(it.id, it.contentCid, it.author)
         }
         val posts = mutableListOf<Post>()
         listOfContentResponseDto?.forEach {
@@ -29,8 +29,7 @@ class RemotePostRepository(private val apolloClient: ApolloClient) : PostReposit
                         it.id,
                         it.author,
                         mapToPostType(contentDto),
-                        contentDto.text,
-                        it.comments
+                        contentDto.text
                     )
                 )
             } catch (e: Exception) {

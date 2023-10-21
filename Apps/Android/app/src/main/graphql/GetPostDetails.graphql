@@ -1,0 +1,18 @@
+query GetPostDetails($id:ID!,$first:Int!,$skip:Int!){
+    post(id: $id) {
+        id
+        contentCid
+        author
+        topic {
+            id
+            owner
+            moderators
+        }
+        comments (first: $first,skip: $skip){
+            id
+            contentCid
+            author
+        }
+    }
+}
+

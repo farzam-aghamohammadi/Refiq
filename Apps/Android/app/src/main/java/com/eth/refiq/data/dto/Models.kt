@@ -31,9 +31,7 @@ data class ContentDto(
 data class ContentResponseDto(
     val id: String,
     val contentCid: String,
-    val author: String,
-    val comments: List<String>
-)
+    val author: String)
 
 data class UploadApiResponse(
     @SerializedName("cid")

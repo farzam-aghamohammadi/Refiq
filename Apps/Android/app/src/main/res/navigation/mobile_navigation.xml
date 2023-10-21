@@ -30,6 +30,13 @@
         android:label="@string/topic"
         tools:layout="@layout/fragment_topic" >
         <action android:id="@+id/action_to_add_content" app:destination="@+id/navigation_addContent"/>
+        <action android:id="@+id/action_to_contentdetail" app:destination="@+id/navigation_content_detail"/>
+    </fragment>
+    <fragment android:id="@+id/navigation_content_detail"
+        android:name="com.eth.refiq.ui.contentdetail.ContentDetailFragment"
+        android:label="Content Detail"
+        tools:layout="@layout/fragment_content_detail">
+
     </fragment>
     <fragment
         android:id="@+id/navigation_addContent"

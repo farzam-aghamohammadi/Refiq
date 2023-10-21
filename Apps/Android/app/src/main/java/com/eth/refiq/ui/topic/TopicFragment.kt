@@ -7,16 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import androidx.fragment.app.Fragment
-import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentTopicBinding
+import com.eth.refiq.domain.Content
 import com.eth.refiq.domain.ContentType
 import com.eth.refiq.domain.Topic
 import com.eth.refiq.ui.add.content.AddContentFragment
+import com.eth.refiq.ui.contentdetail.ContentDetailFragment
+import com.eth.refiq.ui.contentdetail.ContentDetailInfo
 import com.eth.refiq.ui.topic.adapter.PostAdapter
 import com.eth.refiq.ui.topic.adapter.PostVideoItemViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -63,6 +65,16 @@ class TopicFragment : Fragment() {
         }
         val adapter = PostAdapter({
 
+            findNavController().navigate(R.id.action_to_contentdetail, Bundle().apply {
+                putStringArrayList(ContentDetailFragment.Moderators, ArrayList())
+                putSerializable(
+                    ContentDetailFragment.ContentDetail, ContentDetailInfo.PostDetail(
+                        it.id,
+                        Content(it.id, it.walletAddress, it.postType, it.text)
+                    )
+                )
+            })
+            println("clicked")
         }, { onCommentClicked ->
             findNavController().navigate(R.id.action_to_add_content, Bundle().apply {
                 putSerializable(AddContentFragment.CONTENT_TYPE, ContentType.COMMENT)

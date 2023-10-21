@@ -31,4 +31,6 @@
     <string name="create">Create</string>
     <string name="add_post_topic">Add a post to the Topic</string>
     <string name="add_comment">Add a comment</string>
+    <string name="post">Post</string>
+    <string name="comment">Comment</string>
 </resources>

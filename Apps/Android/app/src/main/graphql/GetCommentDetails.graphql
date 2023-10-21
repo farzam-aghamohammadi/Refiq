@@ -1,0 +1,13 @@
+query GetCommentDetails($id:ID!,$first:Int!,$skip:Int!){
+    comment(id: $id) {
+        id
+        contentCid
+        author
+        comments (first: $first,skip: $skip){
+            id
+            contentCid
+            author
+        }
+    }
+
+}
