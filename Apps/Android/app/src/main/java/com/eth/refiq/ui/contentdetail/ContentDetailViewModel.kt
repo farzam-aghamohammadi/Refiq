@@ -34,6 +34,7 @@ class ContentDetailViewModel constructor(
     private val _mainContentLiveData =
         MutableLiveData<Content>()
 
+    fun getModerators()=moderators
     val canDelete: LiveData<Boolean>
         get() = _canDelete
 
@@ -148,6 +149,6 @@ class ContentDetailViewModel constructor(
 
 sealed class ContentDetailInfo : Serializable {
     data class PostDetail(val parentId: String, val content: Content) : ContentDetailInfo()
-    data class CommentDetail(val parentId: String, val content: Content) : ContentDetailInfo()
+    data class CommentDetail(val parentId: String, val content: Content,val moderators:List<String>) : ContentDetailInfo()
 
 }

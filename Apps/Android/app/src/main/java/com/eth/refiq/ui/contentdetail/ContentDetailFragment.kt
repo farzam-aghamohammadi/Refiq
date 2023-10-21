@@ -71,7 +71,8 @@ class ContentDetailFragment : Fragment() {
                 putSerializable(
                     ContentDetail, ContentDetailInfo.CommentDetail(
                         it.id,
-                        Content(it.id, it.walletAddress, it.postType, it.text)
+                        Content(it.id, it.walletAddress, it.postType, it.text),
+                        viewModel.getModerators()
                     )
                 )
             }
