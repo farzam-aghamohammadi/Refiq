@@ -67,12 +67,12 @@ class ContentDetailFragment : Fragment() {
         }
         val adapter = ContentAdapter({
             val bundle = Bundle().apply {
-                putStringArrayList(Moderators, ArrayList())
+                putStringArrayList(Moderators, viewModel.getModerators())
                 putSerializable(
                     ContentDetail, ContentDetailInfo.CommentDetail(
                         it.id,
-                        Content(it.id, it.walletAddress, it.postType, it.text),
-                        viewModel.getModerators()
+                        Content(it.id, it.walletAddress, it.postType, it.text)
+
                     )
                 )
             }

@@ -34,7 +34,10 @@ class ContentDetailViewModel constructor(
     private val _mainContentLiveData =
         MutableLiveData<Content>()
 
-    fun getModerators()=moderators
+    fun getModerators():ArrayList<String>{
+
+        return moderators
+    }
     val canDelete: LiveData<Boolean>
         get() = _canDelete
 
@@ -44,6 +47,7 @@ class ContentDetailViewModel constructor(
     init {
         getWalletAddress()
         fetchContentDetail()
+
     }
     fun refresh(){
         fetchContentDetail()
@@ -60,6 +64,7 @@ class ContentDetailViewModel constructor(
                 }
             }.fold({
                 walletAddress = it
+
             }, {
                 it.printStackTrace()
             })
@@ -82,7 +87,6 @@ class ContentDetailViewModel constructor(
                 }
             }.fold({ pair ->
                 pair?.let {
-                    println("dasdasda ${pair.first} ${pair.second}")
                     val contentDetail = pair.first
                     _contentsLiveData.value = contentDetail.contents
                     _mainContentLiveData.value = contentDetail.mainContent
@@ -120,6 +124,7 @@ class ContentDetailViewModel constructor(
             if (currentAddress == contentDetail.mainContent.walletAddress) {
                 _canDelete.value = true
             } else {
+
                 moderators.forEach {
                     if (it == currentAddress) {
                         _canDelete.value = true
@@ -149,6 +154,6 @@ class ContentDetailViewModel constructor(
 
 sealed class ContentDetailInfo : Serializable {
     data class PostDetail(val parentId: String, val content: Content) : ContentDetailInfo()
-    data class CommentDetail(val parentId: String, val content: Content,val moderators:List<String>) : ContentDetailInfo()
+    data class CommentDetail(val parentId: String, val content: Content) : ContentDetailInfo()
 
 }
