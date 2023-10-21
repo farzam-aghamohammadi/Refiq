@@ -3,11 +3,13 @@ import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts";
 import {
   TopicCreated,
   Transfer,
+  TopicPolicyUpdated,
   ModeratorAdded,
   ModeratorRemoved,
   TopicInfoUpdated,
   PostCreated,
   CommentCreated,
+  ContentAwarded,
   ContentRemoved,
 } from "../generated/Topics/Topics";
 
@@ -56,6 +58,34 @@ export function createTransferEvent(
   );
 
   return transferEvent;
+}
+
+export function createTopicPolicyUpdatedEvent(
+  topicId: BigInt,
+  ownerShare: u8,
+  moderatorsShare: u8
+): TopicPolicyUpdated {
+  let topicPolicyUpdatedEvent = changetype<TopicPolicyUpdated>(newMockEvent());
+
+  topicPolicyUpdatedEvent.parameters = new Array();
+
+  topicPolicyUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "topicId",
+      ethereum.Value.fromUnsignedBigInt(topicId)
+    )
+  );
+  topicPolicyUpdatedEvent.parameters.push(
+    new ethereum.EventParam("ownerShare", ethereum.Value.fromI32(ownerShare))
+  );
+  topicPolicyUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "moderatorsShare",
+      ethereum.Value.fromI32(moderatorsShare)
+    )
+  );
+
+  return topicPolicyUpdatedEvent;
 }
 
 export function createModeratorAddedEvent(
@@ -174,6 +204,28 @@ export function createCommentCreatedEvent(
   );
 
   return commentCreatedEvent;
+}
+
+export function createContentAwardedEvent(
+  topicId: BigInt,
+  amount: BigInt
+): ContentAwarded {
+  let contentAwardedEvent = changetype<ContentAwarded>(newMockEvent());
+
+  contentAwardedEvent.parameters = new Array();
+
+  contentAwardedEvent.parameters.push(
+    new ethereum.EventParam(
+      "topicId",
+      ethereum.Value.fromUnsignedBigInt(topicId)
+    )
+  );
+
+  contentAwardedEvent.parameters.push(
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  );
+
+  return contentAwardedEvent;
 }
 
 export function createContentRemovedEvent(topicId: BigInt): ContentRemoved {

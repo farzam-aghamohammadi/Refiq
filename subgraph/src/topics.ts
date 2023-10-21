@@ -2,11 +2,13 @@ import { BigInt, store } from "@graphprotocol/graph-ts";
 import {
   TopicCreated as TopicCreatedEvent,
   Transfer as TransferEvent,
+  TopicPolicyUpdated as TopicPolicyUpdatedEvent,
   ModeratorAdded as ModeratorAddedEvent,
   ModeratorRemoved as ModeratorRemovedEvent,
   TopicInfoUpdated as TopicInfoUpdatedEvent,
   PostCreated as PostCreatedEvent,
   CommentCreated as CommentCreatedEvent,
+  ContentAwarded as ContentAwardedEvent,
   ContentRemoved as ContentRemovedEvent,
 } from "../generated/Topics/Topics";
 import { Topic, Post, Comment } from "../generated/schema";
@@ -30,6 +32,17 @@ export function handleTransfer(event: TransferEvent): void {
     throw new Error(`tokenId for handleTransfer is invalid: ${id}`);
   }
   topic.owner = event.params.to.toHexString();
+  topic.save();
+}
+
+export function handleTopicPolicyUpdated(event: TopicPolicyUpdatedEvent): void {
+  const id = event.params.topicId;
+  const topic = Topic.load(id.toString());
+  if (topic === null) {
+    throw new Error(`tokenId for handleTransfer is invalid: ${id}`);
+  }
+  topic.ownerShare = event.params.ownerShare;
+  topic.moderatorsShare = event.params.moderatorsShare;
   topic.save();
 }
 
@@ -98,6 +111,21 @@ export function handleCommentCreated(event: CommentCreatedEvent): void {
   comment.contentCid = event.params.contentCid;
   comment.parent = event.params.parentId.toString();
   comment.save();
+}
+
+export function handleContentAwarded(event: ContentAwardedEvent): void {
+  const id = event.params.contentId;
+  const post = Post.load(id.toString());
+  const comment = Comment.load(id.toString());
+  if (post) {
+    post.awards = post.awards.plus(event.params.amount);
+    post.save();
+  } else if (comment) {
+    comment.awards = comment.awards.plus(event.params.amount);
+    comment.save();
+  } else {
+    throw new Error(`tokenId for handleContentAwarded is invalid: ${id}`);
+  }
 }
 
 export function handleContentRemoved(event: ContentRemovedEvent): void {

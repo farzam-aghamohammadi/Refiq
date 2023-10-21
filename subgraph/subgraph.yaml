@@ -8,9 +8,9 @@ dataSources:
     name: Topics
     network: scroll-sepolia
     source:
-      address: "0xF0cC1e1Cc8882Ca251990304D4C8D1BDe10C765d"
+      address: "0xAC0Ac07D405b5435B1bc5B305e2cCeB191F643d4"
       abi: Topics
-      startBlock: 1719771
+      startBlock: 1753112
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -27,6 +27,8 @@ dataSources:
           handler: handleTopicCreated
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: TopicPolicyUpdated(uint256,uint8,uint8)
+          handler: handleTopicPolicyUpdated
         - event: ModeratorAdded(uint256,address)
           handler: handleModeratorAdded
         - event: ModeratorRemoved(uint256,address)
@@ -37,6 +39,8 @@ dataSources:
           handler: handlePostCreated
         - event: CommentCreated(uint256,uint256,address,string)
           handler: handleCommentCreated
+        - event: ContentAwarded(uint256,uint256)
+          handler: handleContentAwarded
         - event: ContentRemoved(uint256)
           handler: handleContentRemoved
       file: ./src/topics.ts
