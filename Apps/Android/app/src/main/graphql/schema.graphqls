@@ -70,6 +70,7 @@ scalar Bytes
 type Comment implements Content {
   id: String!
   author: String!
+  awards: BigInt!
   contentCid: String!
   parent: Content!
   comments(skip: Int = 0, first: Int = 100, orderBy: Comment_orderBy, orderDirection: OrderDirection, where: Comment_filter): [Comment!]!
@@ -116,6 +117,14 @@ input Comment_filter {
   author_ends_with_nocase: String
   author_not_ends_with: String
   author_not_ends_with_nocase: String
+  awards: BigInt
+  awards_not: BigInt
+  awards_gt: BigInt
+  awards_lt: BigInt
+  awards_gte: BigInt
+  awards_lte: BigInt
+  awards_in: [BigInt!]
+  awards_not_in: [BigInt!]
   contentCid: String
   contentCid_not: String
   contentCid_gt: String
@@ -168,10 +177,12 @@ input Comment_filter {
 enum Comment_orderBy {
   id
   author
+  awards
   contentCid
   parent
   parent__id
   parent__author
+  parent__awards
   parent__contentCid
   comments
 }
@@ -179,6 +190,7 @@ enum Comment_orderBy {
 interface Content {
   id: String!
   author: String!
+  awards: BigInt!
   contentCid: String!
   comments(skip: Int = 0, first: Int = 100, orderBy: Comment_orderBy, orderDirection: OrderDirection, where: Comment_filter): [Comment!]!
 }
@@ -224,6 +236,14 @@ input Content_filter {
   author_ends_with_nocase: String
   author_not_ends_with: String
   author_not_ends_with_nocase: String
+  awards: BigInt
+  awards_not: BigInt
+  awards_gt: BigInt
+  awards_lt: BigInt
+  awards_gte: BigInt
+  awards_lte: BigInt
+  awards_in: [BigInt!]
+  awards_not_in: [BigInt!]
   contentCid: String
   contentCid_not: String
   contentCid_gt: String
@@ -255,6 +275,7 @@ input Content_filter {
 enum Content_orderBy {
   id
   author
+  awards
   contentCid
   comments
 }
@@ -274,6 +295,7 @@ enum OrderDirection {
 type Post implements Content {
   id: String!
   author: String!
+  awards: BigInt!
   contentCid: String!
   topic: Topic!
   comments(skip: Int = 0, first: Int = 100, orderBy: Comment_orderBy, orderDirection: OrderDirection, where: Comment_filter): [Comment!]!
@@ -320,6 +342,14 @@ input Post_filter {
   author_ends_with_nocase: String
   author_not_ends_with: String
   author_not_ends_with_nocase: String
+  awards: BigInt
+  awards_not: BigInt
+  awards_gt: BigInt
+  awards_lt: BigInt
+  awards_gte: BigInt
+  awards_lte: BigInt
+  awards_in: [BigInt!]
+  awards_not_in: [BigInt!]
   contentCid: String
   contentCid_not: String
   contentCid_gt: String
@@ -372,11 +402,14 @@ input Post_filter {
 enum Post_orderBy {
   id
   author
+  awards
   contentCid
   topic
   topic__id
   topic__name
   topic__owner
+  topic__ownerShare
+  topic__moderatorsShare
   topic__infoCid
   comments
 }
@@ -739,6 +772,8 @@ type Topic {
   name: String!
   owner: String!
   moderators: [String!]!
+  ownerShare: Int!
+  moderatorsShare: Int!
   infoCid: String!
   posts(skip: Int = 0, first: Int = 100, orderBy: Post_orderBy, orderDirection: OrderDirection, where: Post_filter): [Post!]!
 }
@@ -810,6 +845,22 @@ input Topic_filter {
   moderators_contains_nocase: [String!]
   moderators_not_contains: [String!]
   moderators_not_contains_nocase: [String!]
+  ownerShare: Int
+  ownerShare_not: Int
+  ownerShare_gt: Int
+  ownerShare_lt: Int
+  ownerShare_gte: Int
+  ownerShare_lte: Int
+  ownerShare_in: [Int!]
+  ownerShare_not_in: [Int!]
+  moderatorsShare: Int
+  moderatorsShare_not: Int
+  moderatorsShare_gt: Int
+  moderatorsShare_lt: Int
+  moderatorsShare_gte: Int
+  moderatorsShare_lte: Int
+  moderatorsShare_in: [Int!]
+  moderatorsShare_not_in: [Int!]
   infoCid: String
   infoCid_not: String
   infoCid_gt: String
@@ -843,6 +894,8 @@ enum Topic_orderBy {
   name
   owner
   moderators
+  ownerShare
+  moderatorsShare
   infoCid
   posts
 }

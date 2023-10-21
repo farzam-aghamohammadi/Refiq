@@ -63,6 +63,9 @@ class TopicFragment : Fragment() {
                 putString(AddContentFragment.PARENT_ID, topic.id)
             })
         }
+        binding.topicfragmentSwiperefreshlayout.setOnRefreshListener {
+            topicViewModel.refresh()
+        }
         val adapter = PostAdapter({
 
             findNavController().navigate(R.id.action_to_contentdetail, Bundle().apply {
@@ -86,7 +89,11 @@ class TopicFragment : Fragment() {
         })
         binding.topicListPost.adapter = adapter
         binding.topicListPost.addOnScrollListener(recyclerViewScrollChangeListener)
+        binding.topicListPost.addRecyclerListener {
+            println("hjbjklhbjlb")
+        }
         topicViewModel.postsLiveData.observe(viewLifecycleOwner) {
+            binding.topicfragmentSwiperefreshlayout.isRefreshing = false
             adapter.updateAdapter(it)
         }
 
@@ -96,6 +103,7 @@ class TopicFragment : Fragment() {
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
+            println("HJgbjkb")
             if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 val visibleItemPosition =
                     (binding.topicListPost.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()

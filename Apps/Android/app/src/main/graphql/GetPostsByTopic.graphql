@@ -1,7 +1,7 @@
 query GetPostsByTopicId($id:ID!){
     topic(id: $id) {
         name
-        posts {
+        posts(orderDirection: asc) {
             id,
             contentCid,
             author

@@ -16,7 +16,6 @@ import org.web3j.tx.TransactionManager
 import org.web3j.tx.gas.DefaultGasProvider
 import org.web3j.tx.gas.StaticGasProvider
 import java.io.File
-import java.math.BigInteger
 
 
 class Web3JRepository constructor(

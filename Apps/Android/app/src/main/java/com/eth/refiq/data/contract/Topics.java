@@ -15,6 +15,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -43,6 +44,8 @@ public class Topics extends Contract {
     public static final String FUNC_ADDMODERATOR = "addModerator";
 
     public static final String FUNC_APPROVE = "approve";
+
+    public static final String FUNC_AWARDCONTENT = "awardContent";
 
     public static final String FUNC_BALANCEOF = "balanceOf";
 
@@ -78,6 +81,8 @@ public class Topics extends Contract {
 
     public static final String FUNC_UPDATETOPICINFO = "updateTopicInfo";
 
+    public static final String FUNC_UPDATETOPICPOLICY = "updateTopicPolicy";
+
     public static final Event APPROVAL_EVENT = new Event("Approval", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>(true) {}));
     ;
@@ -88,6 +93,10 @@ public class Topics extends Contract {
 
     public static final Event COMMENTCREATED_EVENT = new Event("CommentCreated", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Address>() {}, new TypeReference<Utf8String>() {}));
+    ;
+
+    public static final Event CONTENTAWARDED_EVENT = new Event("ContentAwarded", 
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
     ;
 
     public static final Event CONTENTREMOVED_EVENT = new Event("ContentRemoved", 
@@ -112,6 +121,10 @@ public class Topics extends Contract {
 
     public static final Event TOPICINFOUPDATED_EVENT = new Event("TopicInfoUpdated", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Utf8String>() {}));
+    ;
+
+    public static final Event TOPICPOLICYUPDATED_EVENT = new Event("TopicPolicyUpdated", 
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint8>() {}, new TypeReference<Uint8>() {}));
     ;
 
     public static final Event TRANSFER_EVENT = new Event("Transfer", 
@@ -249,10 +262,45 @@ public class Topics extends Contract {
         return commentCreatedEventFlowable(filter);
     }
 
+    public static List<ContentAwardedEventResponse> getContentAwardedEvents(TransactionReceipt transactionReceipt) {
+        List<EventValuesWithLog> valueList = new ArrayList<>();
+        for (Log log : transactionReceipt.getLogs()) {
+            valueList.add(staticExtractEventParametersWithLog(CONTENTAWARDED_EVENT, log));
+        }
+        ArrayList<ContentAwardedEventResponse> responses = new ArrayList<ContentAwardedEventResponse>(valueList.size());
+        for (EventValuesWithLog eventValues : valueList) {
+            ContentAwardedEventResponse typedResponse = new ContentAwardedEventResponse();
+            typedResponse.log = eventValues.getLog();
+            typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.amount = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+            responses.add(typedResponse);
+        }
+        return responses;
+    }
+
+    public static ContentAwardedEventResponse getContentAwardedEventFromLog(Log log) {
+        EventValuesWithLog eventValues = staticExtractEventParametersWithLog(CONTENTAWARDED_EVENT, log);
+        ContentAwardedEventResponse typedResponse = new ContentAwardedEventResponse();
+        typedResponse.log = log;
+        typedResponse.contentId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.amount = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+        return typedResponse;
+    }
+
+    public Flowable<ContentAwardedEventResponse> contentAwardedEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> getContentAwardedEventFromLog(log));
+    }
+
+    public Flowable<ContentAwardedEventResponse> contentAwardedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(CONTENTAWARDED_EVENT));
+        return contentAwardedEventFlowable(filter);
+    }
+
     public static List<ContentRemovedEventResponse> getContentRemovedEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
-            valueList.add(staticExtractEventParametersWithLog(CONTENTREMOVED_EVENT, log));
+            valueList.add(staticExtractEventParametersWithLog(CONTENTAWARDED_EVENT, log));
         }
         ArrayList<ContentRemovedEventResponse> responses = new ArrayList<ContentRemovedEventResponse>(valueList.size());
         for (EventValuesWithLog eventValues : valueList) {
@@ -463,6 +511,43 @@ public class Topics extends Contract {
         return topicInfoUpdatedEventFlowable(filter);
     }
 
+    public static List<TopicPolicyUpdatedEventResponse> getTopicPolicyUpdatedEvents(TransactionReceipt transactionReceipt) {
+        List<EventValuesWithLog> valueList = new ArrayList<>();
+        for (Log log : transactionReceipt.getLogs()) {
+            valueList.add(staticExtractEventParametersWithLog(TOPICPOLICYUPDATED_EVENT, log));
+        }
+        ArrayList<TopicPolicyUpdatedEventResponse> responses = new ArrayList<TopicPolicyUpdatedEventResponse>(valueList.size());
+        for (EventValuesWithLog eventValues : valueList) {
+            TopicPolicyUpdatedEventResponse typedResponse = new TopicPolicyUpdatedEventResponse();
+            typedResponse.log = eventValues.getLog();
+            typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.ownerShare = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+            typedResponse.moderatorsShare = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
+            responses.add(typedResponse);
+        }
+        return responses;
+    }
+
+    public static TopicPolicyUpdatedEventResponse getTopicPolicyUpdatedEventFromLog(Log log) {
+        EventValuesWithLog eventValues = staticExtractEventParametersWithLog(TOPICPOLICYUPDATED_EVENT, log);
+        TopicPolicyUpdatedEventResponse typedResponse = new TopicPolicyUpdatedEventResponse();
+        typedResponse.log = log;
+        typedResponse.topicId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+        typedResponse.ownerShare = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+        typedResponse.moderatorsShare = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
+        return typedResponse;
+    }
+
+    public Flowable<TopicPolicyUpdatedEventResponse> topicPolicyUpdatedEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> getTopicPolicyUpdatedEventFromLog(log));
+    }
+
+    public Flowable<TopicPolicyUpdatedEventResponse> topicPolicyUpdatedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(TOPICPOLICYUPDATED_EVENT));
+        return topicPolicyUpdatedEventFlowable(filter);
+    }
+
     public static List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = new ArrayList<>();
         for (Log log : transactionReceipt.getLogs()) {
@@ -516,6 +601,14 @@ public class Topics extends Contract {
                 new Uint256(tokenId)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> awardContent(BigInteger contentId, BigInteger weiValue) {
+        final Function function = new Function(
+                FUNC_AWARDCONTENT, 
+                Arrays.<Type>asList(new Uint256(contentId)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function, weiValue);
     }
 
     public RemoteFunctionCall<BigInteger> balanceOf(String owner) {
@@ -668,6 +761,16 @@ public class Topics extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
+    public RemoteFunctionCall<TransactionReceipt> updateTopicPolicy(BigInteger topicId, BigInteger ownerShare, BigInteger moderatorsShare) {
+        final Function function = new Function(
+                FUNC_UPDATETOPICPOLICY, 
+                Arrays.<Type>asList(new Uint256(topicId),
+                new Uint8(ownerShare),
+                new Uint8(moderatorsShare)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
     @Deprecated
     public static Topics load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         return new Topics(contractAddress, web3j, credentials, gasPrice, gasLimit);
@@ -712,6 +815,12 @@ public class Topics extends Contract {
         public String contentCid;
     }
 
+    public static class ContentAwardedEventResponse extends BaseEventResponse {
+        public BigInteger contentId;
+
+        public BigInteger amount;
+    }
+
     public static class ContentRemovedEventResponse extends BaseEventResponse {
         public BigInteger contentId;
     }
@@ -750,6 +859,14 @@ public class Topics extends Contract {
         public BigInteger topicId;
 
         public String infoCid;
+    }
+
+    public static class TopicPolicyUpdatedEventResponse extends BaseEventResponse {
+        public BigInteger topicId;
+
+        public BigInteger ownerShare;
+
+        public BigInteger moderatorsShare;
     }
 
     public static class TransferEventResponse extends BaseEventResponse {

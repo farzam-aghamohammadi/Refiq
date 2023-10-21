@@ -74,7 +74,7 @@ val appModule = module {
     }
     single {
         ApolloClient.Builder()
-            .serverUrl("https://api.studio.thegraph.com/query/50954/refiq-test/v0.0.4")
+            .serverUrl("https://api.studio.thegraph.com/query/50954/refiq-test/v0.0.5")
             .okHttpClient(get()).build()
     }
 

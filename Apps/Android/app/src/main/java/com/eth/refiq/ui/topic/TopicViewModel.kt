@@ -49,8 +49,10 @@ class TopicViewModel constructor(
         }
     }
 
-    fun addPost() {
-
+    fun refresh() {
+        topic?.let {
+            getPosts(topic)
+        }
     }
 
 

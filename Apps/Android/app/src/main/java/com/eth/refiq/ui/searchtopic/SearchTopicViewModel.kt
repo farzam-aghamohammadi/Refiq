@@ -16,6 +16,9 @@ class SearchTopicViewModel constructor(
     private val topicRepository: TopicRepository
 
 ) : ViewModel() {
+    init {
+        onSearchTopicChanged("")
+    }
     val topicsLiveData: LiveData<List<Topic>>
         get() = _topicsLiveData
 

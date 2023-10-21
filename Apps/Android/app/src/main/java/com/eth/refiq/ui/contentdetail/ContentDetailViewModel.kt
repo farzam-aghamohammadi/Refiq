@@ -44,6 +44,9 @@ class ContentDetailViewModel constructor(
         getWalletAddress()
         fetchContentDetail()
     }
+    fun refresh(){
+        fetchContentDetail()
+    }
 
     private var walletAddress: String? = null
 
