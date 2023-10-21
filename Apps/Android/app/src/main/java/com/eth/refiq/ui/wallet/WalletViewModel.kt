@@ -33,6 +33,10 @@ class WalletViewModel constructor(
     fun init() {}
 
     init {
+        loadWallet()
+    }
+
+    fun loadWallet() {
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(coroutineDispatcherProvider.ioDispatcher()) {
@@ -103,11 +107,11 @@ class WalletViewModel constructor(
     fun importWallet(secretPhrase: String, password: String) {
         viewModelScope.launch {
             kotlin.runCatching {
-                withContext(coroutineDispatcherProvider.ioDispatcher()){
-                    web3Repository.importWallet(secretPhrase,password)
+                withContext(coroutineDispatcherProvider.ioDispatcher()) {
+                    web3Repository.importWallet(secretPhrase, password)
                 }
             }.fold({
-                   _walletImported.postValue(true)
+                _walletImported.postValue(true)
             }, {
 
                 it.printStackTrace()

@@ -84,7 +84,7 @@ val appModule = module {
     }
 
     viewModel {
-        TopicViewModel(get(), get(), get())
+        TopicViewModel(get(), get(), get(),get())
     }
     viewModel {
         CreateTopicViewModel(get(), get(), get())

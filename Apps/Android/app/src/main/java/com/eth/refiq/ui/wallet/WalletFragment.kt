@@ -20,8 +20,7 @@ class WalletFragment : Fragment() {
 
     private var _binding: FragmentWalletBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+
     private val binding get() = _binding!!
 
     private val walletViewModel: WalletViewModel by activityViewModel()
@@ -57,18 +56,25 @@ class WalletFragment : Fragment() {
                 )
             })
         }
+        binding.walletfragmentSwiperefresh.setOnRefreshListener {
+            walletViewModel.loadWallet()
+        }
 
     }
 
     private fun observeWalletInfo() {
         walletViewModel.walletInfo.observe(viewLifecycleOwner) {
             binding.walletviewaccountTextviewBalance.text = it.balance
-            binding.walletviewaccountTextviewAddress.text=it.address
+            binding.walletviewaccountTextviewAddress.text = it.address
+            binding.walletfragmentSwiperefresh.isRefreshing = false
         }
         binding.walletviewaccountTextviewAddress.setOnClickListener {
             val clipboard: ClipboardManager? =
                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-            val clip = ClipData.newPlainText("label", binding.walletviewaccountTextviewAddress.text.toString())
+            val clip = ClipData.newPlainText(
+                "label",
+                binding.walletviewaccountTextviewAddress.text.toString()
+            )
             clipboard?.setPrimaryClip(clip)
         }
     }

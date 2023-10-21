@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentCreateTopicBinding
 import com.eth.refiq.ui.custom.showMessage
-import com.eth.refiq.ui.topic.TopicViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 
 class CreateTopicFragment : Fragment() {

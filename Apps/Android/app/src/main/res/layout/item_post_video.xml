@@ -18,6 +18,7 @@
             android:id="@+id/item_video_content"
             android:layout_width="match_parent"
             android:layout_height="256dp"
+            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp" />
         <androidx.appcompat.widget.AppCompatImageView

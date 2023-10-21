@@ -22,7 +22,12 @@
         <action
             android:id="@+id/action_to_topic"
             app:destination="@id/navigation_topic" />
+
     </fragment>
+    <fragment android:id="@+id/navigation_owner_panel"
+        android:name="com.eth.refiq.ui.ownerpanel.OwnerPanelFragment"
+        android:label="Owner panel"
+        tools:layout="@layout/fragment_owner_panel"/>
 
     <fragment
         android:id="@+id/navigation_topic"
@@ -31,6 +36,9 @@
         tools:layout="@layout/fragment_topic" >
         <action android:id="@+id/action_to_add_content" app:destination="@+id/navigation_addContent"/>
         <action android:id="@+id/action_to_contentdetail" app:destination="@+id/navigation_content_detail"/>
+        <action
+            android:id="@+id/action_to_owner_panel"
+            app:destination="@id/navigation_owner_panel" />
     </fragment>
     <fragment android:id="@+id/navigation_content_detail"
         android:name="com.eth.refiq.ui.contentdetail.ContentDetailFragment"

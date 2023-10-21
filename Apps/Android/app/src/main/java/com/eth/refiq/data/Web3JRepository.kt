@@ -15,6 +15,7 @@ import org.web3j.tx.RawTransactionManager
 import org.web3j.tx.TransactionManager
 import org.web3j.tx.gas.DefaultGasProvider
 import org.web3j.tx.gas.StaticGasProvider
+import org.web3j.utils.Convert
 import java.io.File
 
 
@@ -31,6 +32,7 @@ class Web3JRepository constructor(
         web3 =
             Web3j.build(HttpService("https://1rpc.io/scroll/sepolia"))
     }
+
 
     private fun getWalletDirectory(): String {
         return context.filesDir.toString() + context.packageName
@@ -64,7 +66,7 @@ class Web3JRepository constructor(
 
     }
 
-    val contractAddress = "0xF0cC1e1Cc8882Ca251990304D4C8D1BDe10C765d"
+    val contractAddress = "0xAC0Ac07D405b5435B1bc5B305e2cCeB191F643d4"
     override suspend fun createTopic(name: String, cid: String) {
         val transactionManager: TransactionManager = RawTransactionManager(
             web3, credential, CHAIN_ID
@@ -103,7 +105,9 @@ class Web3JRepository constructor(
         val removeTopic = topic.removeContent(id.toBigInteger())
         val transactionReceipt = removeTopic.send()
     }
+
     override suspend fun createPost(topicId: String, cid: String) {
+
         val transactionManager: TransactionManager = RawTransactionManager(
             web3, credential, CHAIN_ID
         )
@@ -116,7 +120,6 @@ class Web3JRepository constructor(
 
         val createPost = topic.createPost(topicId.toBigInteger(), cid)
         val transactionReceipt = createPost.send()
-        println("${transactionReceipt.gasUsed}")
     }
 
     override suspend fun isWalletCreated(): Boolean {
@@ -134,12 +137,13 @@ class Web3JRepository constructor(
     }
 
     override suspend fun getBalance(): String {
+
         return withContext(coroutineDispatcherProvider.ioDispatcher()) {
-            web3?.ethGetBalance(
+           val amount= web3?.ethGetBalance(
                 credential?.address,
                 DefaultBlockParameterName.LATEST
-            )?.sendAsync()
-                ?.get()?.balance.toString()
+            )?.send()?.balance.toString()
+          return@withContext  Convert.fromWei(amount, Convert.Unit.ETHER).toString()
         }
 
     }

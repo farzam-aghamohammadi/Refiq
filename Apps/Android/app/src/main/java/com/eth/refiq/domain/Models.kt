@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 
-data class Topic(val id: String, val name: String, val owner: String, val infoCid: String) :
+data class Topic(val id: String, val name: String, val owner: String, val infoCid: String,val moderators:List<String>) :
     Serializable
 
 enum class ContentType : Serializable {

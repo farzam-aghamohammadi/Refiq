@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.fragment.findNavController
@@ -95,15 +96,22 @@ class TopicFragment : Fragment() {
         topicViewModel.postsLiveData.observe(viewLifecycleOwner) {
             binding.topicfragmentSwiperefreshlayout.isRefreshing = false
             adapter.updateAdapter(it)
-        }
 
+        }
+        topicViewModel.isOwner.observe(viewLifecycleOwner) {
+            binding.topicOwnerpanel.isVisible = it
+        }
+        binding.topicOwnerpanel.setOnClickListener {
+            findNavController().navigate(R.id.action_to_owner_panel,Bundle().apply {
+                putSerializable("topic",requireArguments().getSerializable(TOPIC))
+            })
+        }
     }
 
     private val recyclerViewScrollChangeListener = object : RecyclerView.OnScrollListener() {
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
-            println("HJgbjkb")
             if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 val visibleItemPosition =
                     (binding.topicListPost.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
@@ -112,8 +120,10 @@ class TopicFragment : Fragment() {
                         exoPlayer = player!!
                     )?.apply {
                         if (currentPlayerItemPosition == -1) {
-                            (recyclerView.findViewHolderForLayoutPosition(visibleItemPosition) as? PostVideoItemViewHolder)?.stopVideo()
                             currentPlayerItemPosition = visibleItemPosition
+                        }else {
+                            (recyclerView.findViewHolderForLayoutPosition(currentPlayerItemPosition) as? PostVideoItemViewHolder)?.stopVideo()
+                            currentPlayerItemPosition=visibleItemPosition
                         }
                     }
                 } else {

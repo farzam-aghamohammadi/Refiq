@@ -88,6 +88,7 @@ class ContentDetailFragment : Fragment() {
             binding.contentdetailCandeletelayout.isGone = it.not()
         }
         binding.contentdetailCandeletelayout.setOnClickListener {
+            findNavController().popBackStack(R.id.navigation_topic,false)
             viewModel.deleteContent()
         }
     }

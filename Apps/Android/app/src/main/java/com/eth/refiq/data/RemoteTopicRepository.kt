@@ -1,4 +1,5 @@
 package com.eth.refiq.data
+
 import GetTopicByNameQuery
 import com.apollographql.apollo3.ApolloClient
 import com.eth.refiq.data.dto.SaveTopicDto
@@ -14,7 +15,7 @@ class RemoteTopicRepository constructor(
     override suspend fun searchTopic(query: String): List<Topic>? {
         val response = apolloClient.query(GetTopicByNameQuery(query)).execute()
         return response.data?.topics?.map {
-            Topic(it.id, it.name, it.owner, it.infoCid)
+            Topic(it.id, it.name, it.owner, it.infoCid, it.moderators)
         }
     }
 

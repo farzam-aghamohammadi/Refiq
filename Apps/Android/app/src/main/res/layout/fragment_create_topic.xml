@@ -13,36 +13,34 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:hint="Topic name"
         android:padding="16dp"
         android:textSize="16sp"
-        android:text="Start creating your own topic"
+        android:text="Create a NFT topic"
         android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/createtopic_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Topic name"
+        android:hint="Topic name (required)"
         app:backgroundTint="@color/black" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/createtopic_bio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Topic bio"
+        android:hint="Topic bio (optional)"
         app:backgroundTint="@color/black"
-
         />
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/createtopic_rules"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Topic Rules"
+        android:hint="Topic Rules (optional)"
         app:backgroundTint="@color/black"
-
         />
     <com.eth.refiq.ui.custom.AppProgressButton
+        android:layout_marginTop="16dp"
         android:id="@+id/createtopic_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

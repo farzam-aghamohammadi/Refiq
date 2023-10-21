@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eth.refiq.data.Web3JRepository
 import com.eth.refiq.domain.Post
 import com.eth.refiq.domain.PostRepository
 import com.eth.refiq.domain.Topic
@@ -14,22 +15,43 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TopicViewModel constructor(
-    private val topic: Topic?,
+    private val topic: Topic,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val postRepository: PostRepository,
+    private val web3Repository: Web3Repository
 ) : ViewModel() {
-    init {
-        println("initt")
-        topic?.let {
-            getPosts(topic)
-        }
-    }
+    val isOwner: LiveData<Boolean>
+        get() = _isOwner
 
+    private val _isOwner =
+        MutableLiveData<Boolean>(false)
     val postsLiveData: LiveData<List<Post>>
         get() = _postsLiveData
 
     private val _postsLiveData =
         MutableLiveData<List<Post>>()
+
+    init {
+            getPosts(topic)
+            isOwner()
+    }
+
+    private fun isOwner() {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                withContext(coroutineDispatcherProvider.ioDispatcher()) {
+                    web3Repository.getAddress()
+                }
+            }.fold({
+                _isOwner.postValue(topic.owner == it)
+            }, {
+                it.printStackTrace()
+            })
+        }
+    }
+
+
+
 
     private fun getPosts(topic: Topic) {
         println("getPostss")

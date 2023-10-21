@@ -156,7 +156,6 @@ class AddContentFragment : Fragment() {
                     binding.addcontentVideoview.isVisible = true
                     binding.addcontentImageview.isGone = true
                     binding.addcontentVideoview.post {
-                        binding.addcontentVideoview.setZOrderOnTop(true)
                         binding.addcontentVideoview.setVideoURI(it)
                         binding.addcontentVideoview.start()
                     }
