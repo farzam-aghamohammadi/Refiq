@@ -7,7 +7,7 @@ import {
   test,
 } from "matchstick-as/assembly/index";
 
-import { Topic, Post, Comment } from "../generated/schema";
+import { Topic, Post } from "../generated/schema";
 import {
   handleTopicCreated,
   handleTransfer,
@@ -55,6 +55,8 @@ describe("Topics", function () {
       "0x0000000000000000000000000000000000000000"
     );
     assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
+    assert.fieldEquals("Topic", topicId.toString(), "ownerShare", "0");
+    assert.fieldEquals("Topic", topicId.toString(), "moderatorsShare", "0");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
   });
 
@@ -69,6 +71,8 @@ describe("Topics", function () {
     topic.name = topicName;
     topic.owner = topicOwner.toHexString();
     topic.moderators = [];
+    topic.ownerShare = 0;
+    topic.moderatorsShare = 0;
     topic.infoCid = topicInfoCid;
     topic.save();
 
@@ -91,6 +95,8 @@ describe("Topics", function () {
       newTopicOwner.toHexString()
     );
     assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
+    assert.fieldEquals("Topic", topicId.toString(), "ownerShare", "0");
+    assert.fieldEquals("Topic", topicId.toString(), "moderatorsShare", "0");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
   });
 
@@ -105,6 +111,8 @@ describe("Topics", function () {
     topic.name = topicName;
     topic.owner = topicOwner.toHexString();
     topic.moderators = [];
+    topic.ownerShare = 0;
+    topic.moderatorsShare = 0;
     topic.infoCid = topicInfoCid;
     topic.save();
 
@@ -131,6 +139,8 @@ describe("Topics", function () {
       "moderators",
       "[" + newTopicModerator.toHexString() + "]"
     );
+    assert.fieldEquals("Topic", topicId.toString(), "ownerShare", "0");
+    assert.fieldEquals("Topic", topicId.toString(), "moderatorsShare", "0");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
   });
 
@@ -148,6 +158,8 @@ describe("Topics", function () {
     topic.name = topicName;
     topic.owner = topicOwner.toHexString();
     topic.moderators = [topicModerator.toHexString()];
+    topic.ownerShare = 0;
+    topic.moderatorsShare = 0;
     topic.infoCid = topicInfoCid;
     topic.save();
 
@@ -166,6 +178,8 @@ describe("Topics", function () {
       topicOwner.toHexString()
     );
     assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
+    assert.fieldEquals("Topic", topicId.toString(), "ownerShare", "0");
+    assert.fieldEquals("Topic", topicId.toString(), "moderatorsShare", "0");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", topicInfoCid);
   });
 
@@ -180,6 +194,8 @@ describe("Topics", function () {
     topic.name = topicName;
     topic.owner = topicOwner.toHexString();
     topic.moderators = [];
+    topic.ownerShare = 0;
+    topic.moderatorsShare = 0;
     topic.infoCid = topicInfoCid;
     topic.save();
 
@@ -199,6 +215,8 @@ describe("Topics", function () {
       topicOwner.toHexString()
     );
     assert.fieldEquals("Topic", topicId.toString(), "moderators", "[]");
+    assert.fieldEquals("Topic", topicId.toString(), "ownerShare", "0");
+    assert.fieldEquals("Topic", topicId.toString(), "moderatorsShare", "0");
     assert.fieldEquals("Topic", topicId.toString(), "infoCid", newTopicInfoCid);
   });
 
@@ -208,6 +226,8 @@ describe("Topics", function () {
     topic.name = "test_topic";
     topic.owner = "0x0000000000000000000000000000000000000001";
     topic.moderators = [];
+    topic.ownerShare = 0;
+    topic.moderatorsShare = 0;
     topic.infoCid = "test_info_cid";
     topic.save();
 
@@ -231,6 +251,7 @@ describe("Topics", function () {
       "author",
       postAuthor.toHexString()
     );
+    assert.fieldEquals("Post", postId.toString(), "awards", "0");
     assert.fieldEquals("Post", postId.toString(), "contentCid", postContentCid);
     assert.fieldEquals("Post", postId.toString(), "topic", topicId.toString());
   });
@@ -241,12 +262,15 @@ describe("Topics", function () {
     topic.name = "test_topic";
     topic.owner = "0x0000000000000000000000000000000000000001";
     topic.moderators = [];
+    topic.ownerShare = 0;
+    topic.moderatorsShare = 0;
     topic.infoCid = "test_info_cid";
     topic.save();
 
     const postId = BigInt.fromI64(64);
     const post = new Post(postId.toString());
     post.author = "0x0000000000000000000000000000000000000002";
+    post.awards = BigInt.zero();
     post.contentCid = "test_post_content_cid";
     post.topic = topicId.toString();
     post.save();
@@ -271,6 +295,7 @@ describe("Topics", function () {
       "author",
       commentAuthor.toHexString()
     );
+    assert.fieldEquals("Comment", commentId.toString(), "awards", "0");
     assert.fieldEquals(
       "Comment",
       commentId.toString(),
@@ -304,6 +329,7 @@ describe("Topics", function () {
       "author",
       nestedCommentAuthor.toHexString()
     );
+    assert.fieldEquals("Comment", nestedCommentId.toString(), "awards", "0");
     assert.fieldEquals(
       "Comment",
       nestedCommentId.toString(),
@@ -324,12 +350,15 @@ describe("Topics", function () {
     topic.name = "test_topic";
     topic.owner = "0x0000000000000000000000000000000000000001";
     topic.moderators = [];
+    topic.ownerShare = 0;
+    topic.moderatorsShare = 0;
     topic.infoCid = "test_info_cid";
     topic.save();
 
     const postId = BigInt.fromI64(64);
     const post = new Post(postId.toString());
     post.author = "0x0000000000000000000000000000000000000002";
+    post.awards = BigInt.zero();
     post.contentCid = "test_post_content_cid";
     post.topic = topicId.toString();
     post.save();

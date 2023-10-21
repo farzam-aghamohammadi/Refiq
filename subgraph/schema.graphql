@@ -9,6 +9,7 @@ type _Schema_
 interface Content {
   id: String!
   author: String!
+  awards: BigInt!
   contentCid: String!
   comments: [Comment!]! @derivedFrom(field: "parent")
 }
@@ -18,6 +19,8 @@ type Topic @entity {
   name: String!
   owner: String!
   moderators: [String!]!
+  ownerShare: Int!
+  moderatorsShare: Int!
   infoCid: String!
   posts: [Post!]! @derivedFrom(field: "topic")
 }
@@ -25,6 +28,7 @@ type Topic @entity {
 type Post implements Content @entity {
   id: String!
   author: String!
+  awards: BigInt!
   contentCid: String!
   topic: Topic!
   comments: [Comment!]! @derivedFrom(field: "parent")
@@ -33,6 +37,7 @@ type Post implements Content @entity {
 type Comment implements Content @entity {
   id: String!
   author: String!
+  awards: BigInt!
   contentCid: String!
   parent: Content!
   comments: [Comment!]! @derivedFrom(field: "parent")

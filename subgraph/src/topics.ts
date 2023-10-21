@@ -1,4 +1,4 @@
-import { store } from "@graphprotocol/graph-ts";
+import { BigInt, store } from "@graphprotocol/graph-ts";
 import {
   TopicCreated as TopicCreatedEvent,
   Transfer as TransferEvent,
@@ -17,6 +17,8 @@ export function handleTopicCreated(event: TopicCreatedEvent): void {
   topic.name = event.params.name;
   topic.owner = "0x0000000000000000000000000000000000000000";
   topic.moderators = [];
+  topic.ownerShare = 0;
+  topic.moderatorsShare = 0;
   topic.infoCid = event.params.infoCid;
   topic.save();
 }
@@ -82,6 +84,7 @@ export function handlePostCreated(event: PostCreatedEvent): void {
   const id = event.params.contentId;
   const post = new Post(id.toString());
   post.author = event.params.author.toHexString();
+  post.awards = BigInt.zero();
   post.contentCid = event.params.contentCid;
   post.topic = event.params.topicId.toString();
   post.save();
@@ -91,6 +94,7 @@ export function handleCommentCreated(event: CommentCreatedEvent): void {
   const id = event.params.contentId;
   const comment = new Comment(id.toString());
   comment.author = event.params.author.toHexString();
+  comment.awards = BigInt.zero();
   comment.contentCid = event.params.contentCid;
   comment.parent = event.params.parentId.toString();
   comment.save();
