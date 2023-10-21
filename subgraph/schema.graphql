@@ -1,0 +1,44 @@
+type _Schema_
+  @fulltext(
+    name: "topicSearch"
+    language: en
+    algorithm: proximityRank
+    include: [{ entity: "Topic", fields: [{ name: "name" }] }]
+  )
+
+interface Content {
+  id: String!
+  author: String!
+  awards: BigInt!
+  contentCid: String!
+  comments: [Comment!]! @derivedFrom(field: "parent")
+}
+
+type Topic @entity {
+  id: String!
+  name: String!
+  owner: String!
+  moderators: [String!]!
+  ownerShare: Int!
+  moderatorsShare: Int!
+  infoCid: String!
+  posts: [Post!]! @derivedFrom(field: "topic")
+}
+
+type Post implements Content @entity {
+  id: String!
+  author: String!
+  awards: BigInt!
+  contentCid: String!
+  topic: Topic!
+  comments: [Comment!]! @derivedFrom(field: "parent")
+}
+
+type Comment implements Content @entity {
+  id: String!
+  author: String!
+  awards: BigInt!
+  contentCid: String!
+  parent: Content!
+  comments: [Comment!]! @derivedFrom(field: "parent")
+}
