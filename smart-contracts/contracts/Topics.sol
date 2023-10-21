@@ -8,11 +8,15 @@ import {IRefiqTopics} from "./interfaces/ITopics.sol";
 using AddressSetLib for AddressSet;
 
 contract RefiqTopics is ERC721, IRefiqTopics {
+    struct Content {
+        address author;
+        string cid;
+    }
+
     mapping(uint256 topicId => AddressSet moderatorAddresses)
         private _moderators;
     mapping(uint256 contentId => uint256 topicId) private _topics;
-    mapping(uint256 contentId => address author) private _authors;
-    mapping(uint256 contentId => string contentCid) private _contents;
+    mapping(uint256 contentId => Content content) private _contents;
 
     constructor() ERC721("RefiqTopics", "RTP") {}
 
@@ -57,15 +61,8 @@ contract RefiqTopics is ERC721, IRefiqTopics {
     }
 
     function createPost(uint256 topicId, string calldata contentCid) external {
-        uint256 contentId = uint256(
-            keccak256(abi.encodePacked(topicId, contentCid))
-        );
-        if (_topics[contentId] != 0) {
-            revert DuplicateContent(contentId);
-        }
+        uint256 contentId = _createContent(topicId, contentCid);
         _topics[contentId] = topicId;
-        _authors[contentId] = msg.sender;
-        _contents[contentId] = contentCid;
         emit PostCreated(contentId, topicId, msg.sender, contentCid);
     }
 
@@ -73,15 +70,8 @@ contract RefiqTopics is ERC721, IRefiqTopics {
         uint256 parentId,
         string calldata contentCid
     ) external {
-        uint256 contentId = uint256(
-            keccak256(abi.encodePacked(parentId, contentCid))
-        );
-        if (_topics[contentId] != 0) {
-            revert DuplicateContent(contentId);
-        }
+        uint256 contentId = _createContent(parentId, contentCid);
         _topics[contentId] = _topics[parentId];
-        _authors[contentId] = msg.sender;
-        _contents[contentId] = contentCid;
         emit CommentCreated(contentId, parentId, msg.sender, contentCid);
     }
 
@@ -89,14 +79,27 @@ contract RefiqTopics is ERC721, IRefiqTopics {
         uint256 topicId = _topics[contentId];
         address sender = msg.sender;
         if (
-            _authors[contentId] != sender &&
+            _contents[contentId].author != sender &&
             !_moderators[topicId].contains(sender) &&
             sender != ownerOf(topicId)
         ) {
             revert Unauthorized();
         }
-        delete _authors[contentId];
         delete _contents[contentId];
         emit ContentRemoved(contentId);
+    }
+
+    function _createContent(
+        uint256 parentId,
+        string calldata contentCid
+    ) internal returns (uint256) {
+        uint256 contentId = uint256(
+            keccak256(abi.encodePacked(parentId, contentCid))
+        );
+        if (_topics[contentId] != 0) {
+            revert DuplicateContent(contentId);
+        }
+        _contents[contentId] = Content({author: msg.sender, cid: contentCid});
+        return contentId;
     }
 }
