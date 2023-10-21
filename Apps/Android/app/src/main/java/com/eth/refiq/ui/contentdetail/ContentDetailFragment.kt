@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.navigation.fragment.findNavController
 import com.eth.refiq.databinding.FragmentContentDetailBinding
 import com.eth.refiq.R
+import com.eth.refiq.domain.Content
+import com.eth.refiq.domain.ContentType
+import com.eth.refiq.ui.add.content.AddContentFragment
 import com.eth.refiq.ui.contentdetail.adapter.ContentAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -46,7 +50,23 @@ class ContentDetailFragment : Fragment() {
             binding.contentDetailToolbar.title = getString(R.string.comment)
 
         }
-        val adapter = ContentAdapter({}, {}, {})
+        val adapter = ContentAdapter({
+            val bundle = Bundle().apply {
+                putStringArrayList(Moderators, ArrayList())
+                putSerializable(
+                    ContentDetail, ContentDetailInfo.CommentDetail(
+                        it.id,
+                        Content(it.id, it.walletAddress, it.postType, it.text)
+                    )
+                )
+            }
+            findNavController().navigate(R.id.action_detail_content, bundle)
+        }, {
+            findNavController().navigate(R.id.action_detail_to_add_content, Bundle().apply {
+                putSerializable(AddContentFragment.CONTENT_TYPE, ContentType.COMMENT)
+                putString(AddContentFragment.PARENT_ID, it.id)
+            })
+        }, {})
         binding.contentDetailList.adapter = adapter
         viewModel.contentsLiveData.observe(viewLifecycleOwner) {
             println("update")
@@ -54,13 +74,21 @@ class ContentDetailFragment : Fragment() {
             adapter.updateAdapter(it)
         }
 
-        val mainContentAdapter = ContentAdapter({}, {}, {})
+        val mainContentAdapter = ContentAdapter({}, {
+            findNavController().navigate(R.id.action_detail_to_add_content, Bundle().apply {
+                putSerializable(AddContentFragment.CONTENT_TYPE, ContentType.COMMENT)
+                putString(AddContentFragment.PARENT_ID, it.id)
+            })
+        }, {})
         binding.contentDetailMain.adapter = mainContentAdapter
         viewModel.mainContentLiveData.observe(viewLifecycleOwner) {
             mainContentAdapter.updateAdapter(listOf(it))
         }
         viewModel.canDelete.observe(viewLifecycleOwner) {
             binding.contentdetailCandeletelayout.isGone = it.not()
+        }
+        binding.contentdetailCandeletelayout.setOnClickListener {
+            viewModel.deleteContent()
         }
     }
 

@@ -90,6 +90,20 @@ class Web3JRepository constructor(
 
     }
 
+    override suspend fun deleteContent(id: String) {
+        val transactionManager: TransactionManager = RawTransactionManager(
+            web3, credential, CHAIN_ID
+        )
+
+
+        val topic = Topics.load(
+            contractAddress, web3, transactionManager,
+            StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
+        )
+
+        val removeTopic = topic.removeContent(id.toBigInteger())
+        val transactionReceipt = removeTopic.send()
+    }
     override suspend fun createPost(topicId: String, cid: String) {
         val transactionManager: TransactionManager = RawTransactionManager(
             web3, credential, CHAIN_ID
@@ -101,8 +115,8 @@ class Web3JRepository constructor(
             StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
         )
 
-        val createTopic = topic.createPost(topicId.toBigInteger(), cid)
-        val transactionReceipt = createTopic.send()
+        val createPost = topic.createPost(topicId.toBigInteger(), cid)
+        val transactionReceipt = createPost.send()
         println("${transactionReceipt.gasUsed}")
     }
 
@@ -150,8 +164,8 @@ class Web3JRepository constructor(
             StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
         )
 
-        val createTopic = topic.createComment(parentId.toBigInteger(), cid)
-        val transactionReceipt = createTopic.send()
+        val createComment = topic.createComment(parentId.toBigInteger(), cid)
+        val transactionReceipt = createComment.send()
         println("${transactionReceipt.gasUsed}")
     }
 

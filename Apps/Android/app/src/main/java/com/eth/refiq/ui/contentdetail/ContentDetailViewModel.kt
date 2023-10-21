@@ -124,6 +124,23 @@ class ContentDetailViewModel constructor(
             }
         }
     }
+
+    fun deleteContent() {
+        _mainContentLiveData.value?.let {
+            content ->
+            viewModelScope.launch {
+                kotlin.runCatching {
+                    withContext(coroutineDispatcherProvider.ioDispatcher()){
+                        web3Repository.deleteContent(content.id)
+                    }
+                }.fold({
+
+                },{
+                    it.printStackTrace()
+                })
+            }
+        }
+    }
 }
 
 sealed class ContentDetailInfo : Serializable {
