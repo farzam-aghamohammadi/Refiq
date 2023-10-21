@@ -100,6 +100,32 @@ describe("RefiqTopics", function () {
     });
   });
 
+  describe("updateTopicPolicy", async function () {
+    it("Should emit topicPolicyUpdated event with correct args", async function () {
+      const { topics, topicId, owner1 } = await loadFixture(
+        deployFixtureWithTopic,
+      );
+      const ownerShare = 16;
+      const moderatorsShare = 32;
+      await expect(
+        topics
+          .connect(owner1)
+          .updateTopicPolicy(topicId, ownerShare, moderatorsShare),
+      )
+        .to.emit(topics, "TopicPolicyUpdated")
+        .withArgs(topicId, ownerShare, moderatorsShare);
+    });
+
+    it("Should revert on unauthorized access", async function () {
+      const { topics, topicId, nobody } = await loadFixture(
+        deployFixtureWithTopic,
+      );
+      await expect(
+        topics.connect(nobody).updateTopicPolicy(topicId, 16, 32),
+      ).to.revertedWithCustomError(topics, "Unauthorized");
+    });
+  });
+
   describe("addModerator", async function () {
     it("Should emit ModeratorAdded event with correct args", async function () {
       const { topics, topicId, owner1, moderator2 } = await loadFixture(
@@ -119,6 +145,15 @@ describe("RefiqTopics", function () {
       await expect(
         topics.connect(owner1).addModerator(topicId, moderator1.address),
       ).to.not.emit(topics, "ModeratorAdded");
+    });
+
+    it("Should revert on unauthorized access", async function () {
+      const { topics, topicId, nobody, moderator2 } = await loadFixture(
+        deployFixtureWithTopic,
+      );
+      await expect(
+        topics.connect(nobody).addModerator(topicId, moderator2.address),
+      ).to.revertedWithCustomError(topics, "Unauthorized");
     });
   });
 
@@ -141,6 +176,15 @@ describe("RefiqTopics", function () {
       await expect(
         topics.connect(owner1).removeModerator(topicId, moderator2.address),
       ).to.not.emit(topics, "ModeratorRemoved");
+    });
+
+    it("Should revert on unauthorized access", async function () {
+      const { topics, topicId, nobody, moderator1 } = await loadFixture(
+        deployFixtureWithModerator,
+      );
+      await expect(
+        topics.connect(nobody).removeModerator(topicId, moderator1.address),
+      ).to.revertedWithCustomError(topics, "Unauthorized");
     });
   });
 
@@ -232,6 +276,28 @@ describe("RefiqTopics", function () {
     });
   });
 
+  describe("awardContent", async function () {
+    it("Should emit ContentAwarded event with correct args", async function () {
+      const { topics, postId, nobody } = await loadFixture(
+        deployFixtureWithPost,
+      );
+      const amount = ethers.parseEther("0.01");
+      await expect(
+        topics.connect(nobody).awardContent(postId, { value: amount }),
+      )
+        .to.emit(topics, "ContentAwarded")
+        .withArgs(postId, amount);
+    });
+
+    it("Should revert on invalid content id with InvalidContent", async function () {
+      const { topics, nobody } = await loadFixture(deployFixtureWithTopic);
+      const amount = ethers.parseEther("0.01");
+      await expect(
+        topics.connect(nobody).awardContent(10, { value: amount }),
+      ).to.revertedWithCustomError(topics, "InvalidContent");
+    });
+  });
+
   describe("removeContent", async function () {
     it("Should emit contentRemoved event with correct args for owner", async function () {
       const { topics, postId, owner1 } = await loadFixture(
@@ -267,6 +333,13 @@ describe("RefiqTopics", function () {
       await expect(
         topics.connect(nobody).removeContent(postId),
       ).to.revertedWithCustomError(topics, "Unauthorized");
+    });
+
+    it("Should revert on invalid content id with InvalidContent", async function () {
+      const { topics, owner1 } = await loadFixture(deployFixtureWithPost);
+      await expect(
+        topics.connect(owner1).removeContent(10),
+      ).to.revertedWithCustomError(topics, "InvalidContent");
     });
   });
 });

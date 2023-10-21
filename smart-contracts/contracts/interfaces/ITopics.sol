@@ -6,6 +6,11 @@ import {IERC721Metadata} from "@openzeppelin/contracts/token/ERC721/extensions/I
 
 interface IRefiqTopics is IERC721, IERC721Metadata {
     event TopicCreated(uint256 topicId, string name, string infoCid);
+    event TopicPolicyUpdated(
+        uint256 topicId,
+        uint8 ownerShare,
+        uint8 moderatorsShare
+    );
     event ModeratorAdded(uint256 topicId, address moderator);
     event ModeratorRemoved(uint256 topicId, address moderator);
     event TopicInfoUpdated(uint256 topicId, string infoCid);
@@ -21,14 +26,23 @@ interface IRefiqTopics is IERC721, IERC721Metadata {
         address author,
         string contentCid
     );
+    event ContentAwarded(uint256 contentId, uint256 amount);
     event ContentRemoved(uint256 contentId);
 
     error Unauthorized();
     error DuplicateContent(uint256 contentId);
+    error InvalidContent(uint256 contentId);
+    error FailedToSendAward();
 
     function createTopic(
         string calldata name,
         string calldata infoCid
+    ) external;
+
+    function updateTopicPolicy(
+        uint256 topicId,
+        uint8 ownerShare,
+        uint8 moderatorsShare
     ) external;
 
     function addModerator(uint256 topicId, address moderator) external;
@@ -43,6 +57,8 @@ interface IRefiqTopics is IERC721, IERC721Metadata {
         uint256 parentId,
         string calldata contentCid
     ) external;
+
+    function awardContent(uint256 contentId) external payable;
 
     function removeContent(uint256 contentId) external;
 }

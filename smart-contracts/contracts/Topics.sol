@@ -10,9 +10,13 @@ using AddressSetLib for AddressSet;
 contract RefiqTopics is ERC721, IRefiqTopics {
     struct Content {
         address author;
+        uint8 ownerShare;
+        uint8 moderatorsShare;
         string cid;
     }
 
+    mapping(uint256 topicId => uint8 share) private _ownerShare;
+    mapping(uint256 topicId => uint8 share) private _moderatorsShare;
     mapping(uint256 topicId => AddressSet moderatorAddresses)
         private _moderators;
     mapping(uint256 contentId => uint256 topicId) private _topics;
@@ -27,6 +31,19 @@ contract RefiqTopics is ERC721, IRefiqTopics {
         uint256 topicId = uint256(keccak256(abi.encodePacked(name)));
         emit TopicCreated(topicId, name, infoCid);
         _safeMint(msg.sender, topicId);
+    }
+
+    function updateTopicPolicy(
+        uint256 topicId,
+        uint8 ownerShare,
+        uint8 moderatorsShare
+    ) external {
+        if (msg.sender != ownerOf(topicId)) {
+            revert Unauthorized();
+        }
+        _ownerShare[topicId] = ownerShare;
+        _moderatorsShare[topicId] = moderatorsShare;
+        emit TopicPolicyUpdated(topicId, ownerShare, moderatorsShare);
     }
 
     function addModerator(uint256 topicId, address moderator) external {
@@ -61,8 +78,7 @@ contract RefiqTopics is ERC721, IRefiqTopics {
     }
 
     function createPost(uint256 topicId, string calldata contentCid) external {
-        uint256 contentId = _createContent(topicId, contentCid);
-        _topics[contentId] = topicId;
+        uint256 contentId = _createContent(topicId, topicId, contentCid);
         emit PostCreated(contentId, topicId, msg.sender, contentCid);
     }
 
@@ -70,16 +86,64 @@ contract RefiqTopics is ERC721, IRefiqTopics {
         uint256 parentId,
         string calldata contentCid
     ) external {
-        uint256 contentId = _createContent(parentId, contentCid);
-        _topics[contentId] = _topics[parentId];
+        uint256 topicId = _topics[parentId];
+        uint256 contentId = _createContent(topicId, parentId, contentCid);
         emit CommentCreated(contentId, parentId, msg.sender, contentCid);
     }
 
-    function removeContent(uint256 contentId) external {
+    function awardContent(uint256 contentId) external payable {
+        uint256 amount = msg.value;
         uint256 topicId = _topics[contentId];
+        address author = _contents[contentId].author;
+        if (author == address(0)) {
+            revert InvalidContent(contentId);
+        }
+
+        address owner = ownerOf(topicId);
+        uint256 ownerShare = (_contents[contentId].ownerShare * amount) /
+            type(uint8).max;
+        {
+            (bool succeed, ) = owner.call{value: ownerShare}("");
+            if (!succeed) {
+                revert FailedToSendAward();
+            }
+        }
+
+        AddressSet storage moderators = _moderators[topicId];
+        uint256 moderatorShare = (_contents[contentId].moderatorsShare *
+            amount) /
+            moderators.size() /
+            type(uint8).max;
+        {
+            bool succeed = moderators.sendEth(moderatorShare);
+            if (!succeed) {
+                revert FailedToSendAward();
+            }
+        }
+
+        uint256 authorShare = amount -
+            ownerShare -
+            (moderatorShare * moderators.size());
+        {
+            (bool succeed, ) = author.call{value: authorShare}("");
+            if (!succeed) {
+                revert FailedToSendAward();
+            }
+        }
+
+        emit ContentAwarded(contentId, amount);
+    }
+
+    function removeContent(uint256 contentId) external {
+        address author = _contents[contentId].author;
+        if (author == address(0)) {
+            revert InvalidContent(contentId);
+        }
+
         address sender = msg.sender;
+        uint256 topicId = _topics[contentId];
         if (
-            _contents[contentId].author != sender &&
+            author != sender &&
             !_moderators[topicId].contains(sender) &&
             sender != ownerOf(topicId)
         ) {
@@ -90,6 +154,7 @@ contract RefiqTopics is ERC721, IRefiqTopics {
     }
 
     function _createContent(
+        uint256 topicId,
         uint256 parentId,
         string calldata contentCid
     ) internal returns (uint256) {
@@ -99,7 +164,13 @@ contract RefiqTopics is ERC721, IRefiqTopics {
         if (_topics[contentId] != 0) {
             revert DuplicateContent(contentId);
         }
-        _contents[contentId] = Content({author: msg.sender, cid: contentCid});
+        _topics[contentId] = topicId;
+        _contents[contentId] = Content({
+            author: msg.sender,
+            ownerShare: _ownerShare[topicId],
+            moderatorsShare: _moderatorsShare[topicId],
+            cid: contentCid
+        });
         return contentId;
     }
 }

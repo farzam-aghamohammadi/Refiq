@@ -7,8 +7,6 @@ struct AddressSet {
 }
 
 library AddressSetLib {
-    error FailedToSend(address add);
-
     function insert(
         AddressSet storage set,
         address add
@@ -40,14 +38,18 @@ library AddressSetLib {
         return true;
     }
 
-    function sendEth(AddressSet storage set, uint256 value) internal {
+    function sendEth(
+        AddressSet storage set,
+        uint256 value
+    ) internal returns (bool) {
         for (uint256 index = 0; index < set.elements.length; index++) {
             address add = set.elements[index];
             (bool succeed, ) = add.call{value: value}("");
             if (!succeed) {
-                revert FailedToSend(add);
+                return false;
             }
         }
+        return true;
     }
 
     function contains(
