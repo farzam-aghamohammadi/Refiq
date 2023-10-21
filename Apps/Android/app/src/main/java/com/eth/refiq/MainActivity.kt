@@ -13,7 +13,10 @@ import com.eth.refiq.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.ui.setupWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.eth.refiq.ui.AwardViewModel
+import com.eth.refiq.ui.add.content.AddContentViewModel
 import com.eth.refiq.ui.wallet.WalletViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +24,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private val walletViewModel: WalletViewModel by viewModel()
+    private val awardViewModel: AwardViewModel by viewModel()
+    private val addContentViewModel: AddContentViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
@@ -29,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         walletViewModel.init()
+        awardViewModel.init()
+        addContentViewModel.init()
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)

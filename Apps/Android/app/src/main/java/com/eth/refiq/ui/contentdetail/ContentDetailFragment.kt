@@ -5,14 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.isGone
 import androidx.navigation.fragment.findNavController
 import com.eth.refiq.databinding.FragmentContentDetailBinding
 import com.eth.refiq.R
 import com.eth.refiq.domain.Content
 import com.eth.refiq.domain.ContentType
+import com.eth.refiq.ui.AwardViewModel
 import com.eth.refiq.ui.add.content.AddContentFragment
 import com.eth.refiq.ui.contentdetail.adapter.ContentAdapter
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -26,7 +30,18 @@ class ContentDetailFragment : Fragment() {
             requireArguments().getSerializable(ContentDetail) as ContentDetailInfo
         )
     }
-
+    private val awardViewModel: AwardViewModel by activityViewModel()
+    private fun showGoldDialog(id: String) {
+        val alert: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        val editText = AppCompatEditText(requireContext())
+        alert.setView(editText)
+        alert.setPositiveButton(
+            "Award (wei)"
+        ) { dialog, which ->
+            awardViewModel.sendGold(editText.toString(), id)
+        }
+        alert.show()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,7 +81,9 @@ class ContentDetailFragment : Fragment() {
                 putSerializable(AddContentFragment.CONTENT_TYPE, ContentType.COMMENT)
                 putString(AddContentFragment.PARENT_ID, it.id)
             })
-        }, {})
+        }, {
+            showGoldDialog(it.id)
+        })
         binding.contentDetailList.adapter = adapter
         viewModel.contentsLiveData.observe(viewLifecycleOwner) {
             println("update")
@@ -79,7 +96,9 @@ class ContentDetailFragment : Fragment() {
                 putSerializable(AddContentFragment.CONTENT_TYPE, ContentType.COMMENT)
                 putString(AddContentFragment.PARENT_ID, it.id)
             })
-        }, {})
+        }, {
+            showGoldDialog(it.id)
+        })
         binding.contentDetailMain.adapter = mainContentAdapter
         viewModel.mainContentLiveData.observe(viewLifecycleOwner) {
             mainContentAdapter.updateAdapter(listOf(it))

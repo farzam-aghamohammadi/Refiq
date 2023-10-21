@@ -1,5 +1,8 @@
 package com.eth.refiq.ui.topic.adapter
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -13,6 +16,7 @@ import com.eth.refiq.databinding.ItemPostTextBinding
 import com.eth.refiq.databinding.ItemPostVideoBinding
 import com.eth.refiq.domain.Post
 import com.eth.refiq.domain.PostType
+import com.eth.refiq.ui.custom.showMessage
 
 class PostAdapter constructor(
     private val onPostClicked: ((Post) -> Unit),
@@ -111,6 +115,13 @@ class PostTextItemViewHolder(private val binding: ItemPostTextBinding) :
         binding.root.setOnClickListener {
             onPostClicked(post)
         }
+        binding.itemcontentTextTop.itemcontentAuthorid.setOnClickListener {
+            val clipboard: ClipboardManager? =
+                binding.root.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+            val clip = ClipData.newPlainText("label", post.walletAddress)
+            clipboard?.setPrimaryClip(clip)
+            binding.root.context.showMessage(post.walletAddress)
+        }
     }
 }
 
@@ -140,6 +151,14 @@ class PostVideoItemViewHolder(private val binding: ItemPostVideoBinding) :
         }
         binding.root.setOnClickListener {
             onPostClicked(post)
+        }
+        binding.itemVideoTop.itemcontentAuthorid.setOnClickListener {
+            val clipboard: ClipboardManager? =
+                binding.root.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+            val clip = ClipData.newPlainText("label", post.walletAddress)
+            clipboard?.setPrimaryClip(clip)
+            binding.root.context.showMessage(post.walletAddress)
+
         }
     }
 
@@ -172,6 +191,14 @@ class PostImageItemViewHolder(private val binding: ItemPostImageBinding) :
         onCommentClicked: (Post) -> Unit,
         onGoldClicked: (Post) -> Unit
     ) {
+        binding.itemImageTop.itemcontentAuthorid.setOnClickListener {
+            val clipboard: ClipboardManager? =
+                binding.root.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+            val clip = ClipData.newPlainText("label", post.walletAddress)
+            clipboard?.setPrimaryClip(clip)
+            binding.root.context.showMessage(post.walletAddress)
+
+        }
         binding.itemImageTop.itemcontentAuthorid.text = post.walletAddress
         binding.itemImageTop.itemcontentText.text = post.text
         binding.itemImageTop.itemcontentText.isGone = post.text.isEmpty()

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.media3.exoplayer.ExoPlayer
@@ -17,11 +19,13 @@ import com.eth.refiq.databinding.FragmentTopicBinding
 import com.eth.refiq.domain.Content
 import com.eth.refiq.domain.ContentType
 import com.eth.refiq.domain.Topic
+import com.eth.refiq.ui.AwardViewModel
 import com.eth.refiq.ui.add.content.AddContentFragment
 import com.eth.refiq.ui.contentdetail.ContentDetailFragment
 import com.eth.refiq.ui.contentdetail.ContentDetailInfo
 import com.eth.refiq.ui.topic.adapter.PostAdapter
 import com.eth.refiq.ui.topic.adapter.PostVideoItemViewHolder
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -34,6 +38,19 @@ class TopicFragment : Fragment() {
         player = ExoPlayer.Builder(requireContext())
             .build()
 
+    }
+
+    private val awardViewModel: AwardViewModel by activityViewModel()
+    private fun showGoldDialog(id: String) {
+        val alert: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        val editText = AppCompatEditText(requireContext())
+        alert.setView(editText)
+        alert.setPositiveButton(
+            "Award (wei)"
+        ) { dialog, which ->
+            awardViewModel.sendGold(editText.toString(), id)
+        }
+        alert.show()
     }
 
     private val binding get() = _binding!!
@@ -86,13 +103,11 @@ class TopicFragment : Fragment() {
             })
 
         }, {
-
+            showGoldDialog(it.id)
         })
         binding.topicListPost.adapter = adapter
         binding.topicListPost.addOnScrollListener(recyclerViewScrollChangeListener)
-        binding.topicListPost.addRecyclerListener {
-            println("hjbjklhbjlb")
-        }
+
         topicViewModel.postsLiveData.observe(viewLifecycleOwner) {
             binding.topicfragmentSwiperefreshlayout.isRefreshing = false
             adapter.updateAdapter(it)
@@ -102,11 +117,12 @@ class TopicFragment : Fragment() {
             binding.topicOwnerpanel.isVisible = it
         }
         binding.topicOwnerpanel.setOnClickListener {
-            findNavController().navigate(R.id.action_to_owner_panel,Bundle().apply {
-                putSerializable("topic",requireArguments().getSerializable(TOPIC))
+            findNavController().navigate(R.id.action_to_owner_panel, Bundle().apply {
+                putSerializable("topic", requireArguments().getSerializable(TOPIC))
             })
         }
     }
+
 
     private val recyclerViewScrollChangeListener = object : RecyclerView.OnScrollListener() {
 
@@ -121,9 +137,9 @@ class TopicFragment : Fragment() {
                     )?.apply {
                         if (currentPlayerItemPosition == -1) {
                             currentPlayerItemPosition = visibleItemPosition
-                        }else {
+                        } else {
                             (recyclerView.findViewHolderForLayoutPosition(currentPlayerItemPosition) as? PostVideoItemViewHolder)?.stopVideo()
-                            currentPlayerItemPosition=visibleItemPosition
+                            currentPlayerItemPosition = visibleItemPosition
                         }
                     }
                 } else {

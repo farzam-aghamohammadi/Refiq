@@ -25,6 +25,7 @@ import java.io.InputStream
 import com.eth.refiq.R
 import com.eth.refiq.domain.ContentType
 import com.eth.refiq.ui.custom.showMessage
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
 class AddContentFragment : Fragment() {
@@ -34,7 +35,7 @@ class AddContentFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val addContentViewModel: AddContentViewModel by viewModel()
+    private val addContentViewModel: AddContentViewModel by activityViewModel()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,6 +61,9 @@ class AddContentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //sample of bad practice in reactive programming :D
+        addContentViewModel.onViewCreated()
+
         showSoftKeyboard(binding.addcontentEditText)
         binding.addcontentPhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)

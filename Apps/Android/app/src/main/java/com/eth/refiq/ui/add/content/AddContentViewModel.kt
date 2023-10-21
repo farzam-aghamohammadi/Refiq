@@ -30,6 +30,16 @@ class AddContentViewModel constructor(
     private val _enableCreateContent =
         MutableLiveData<Boolean>(false)
 
+    fun init() {
+
+    }
+
+    fun onViewCreated() {
+        videoUri = null
+        imageUri = null
+        _creatingContent.value = CreatingContentStatus.None
+
+    }
 
     fun onVideoUriSelected(uri: String) {
         _enableCreateContent.value = true
@@ -78,5 +88,6 @@ class AddContentViewModel constructor(
         data object Created : CreatingContentStatus()
         data class Failed(val message: String?) : CreatingContentStatus()
 
+        data object None : CreatingContentStatus()
     }
 }

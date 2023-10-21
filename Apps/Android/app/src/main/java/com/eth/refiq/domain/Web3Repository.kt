@@ -18,4 +18,6 @@ interface Web3Repository {
     suspend fun deleteContent(id: String)
     suspend fun addModerator(address: String, topicId: String)
     suspend fun removeModerator(address: String, topicId: String)
+
+    suspend fun awardContent(weiAmount: String, contentId: String)
 }

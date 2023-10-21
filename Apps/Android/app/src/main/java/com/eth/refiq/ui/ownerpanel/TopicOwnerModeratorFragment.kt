@@ -1,6 +1,5 @@
 package com.eth.refiq.ui.ownerpanel
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import com.eth.refiq.databinding.FragmentTopicownerModeratorsBinding
-import com.eth.refiq.ui.wallet.WalletViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class TopicOwnerModeratorFragment : Fragment() {

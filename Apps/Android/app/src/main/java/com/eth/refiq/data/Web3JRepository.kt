@@ -195,6 +195,18 @@ class Web3JRepository constructor(
         topic.removeModerator(address.toBigInteger(), topicId)
     }
 
+    override suspend fun awardContent(weiAmount: String,contentId:String) {
+        val transactionManager: TransactionManager = RawTransactionManager(
+            web3, credential, CHAIN_ID
+        )
+        val topic = Topics.load(
+            contractAddress, web3, transactionManager,
+            StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
+        )
+        topic.awardContent(contentId.toBigInteger(),weiAmount.toBigInteger())
+
+    }
+
     companion object {
         private const val IS_WALLET_CREATED = "hasWallet"
         private const val PASSWORD = "password"

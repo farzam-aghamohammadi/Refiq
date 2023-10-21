@@ -17,9 +17,11 @@ import com.eth.refiq.domain.LocalDataStorage
 import com.eth.refiq.domain.PostRepository
 import com.eth.refiq.domain.TopicRepository
 import com.eth.refiq.domain.Web3Repository
+import com.eth.refiq.ui.AwardViewModel
 import com.eth.refiq.ui.add.content.AddContentViewModel
 import com.eth.refiq.ui.add.topic.CreateTopicViewModel
 import com.eth.refiq.ui.contentdetail.ContentDetailViewModel
+import com.eth.refiq.ui.ownerpanel.TopicOwnerViewModel
 import com.eth.refiq.ui.searchtopic.SearchTopicViewModel
 import com.eth.refiq.ui.topic.TopicViewModel
 import com.eth.refiq.ui.wallet.WalletViewModel
@@ -96,4 +98,7 @@ val appModule = module {
     viewModel { AddContentViewModel(get(), get()) }
 
     viewModel { ContentDetailViewModel(get(), get(), get(), get(), get()) }
+
+    viewModel { TopicOwnerViewModel(get(),get(),get()) }
+    viewModel { AwardViewModel(get(),get()) }
 }
