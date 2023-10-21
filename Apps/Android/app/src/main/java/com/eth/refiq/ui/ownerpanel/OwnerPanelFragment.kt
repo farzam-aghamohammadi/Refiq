@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.eth.refiq.R
 import com.eth.refiq.databinding.FragmentOwnerPanelBinding
 import com.eth.refiq.databinding.FragmentWalletBinding
+import com.eth.refiq.ui.ownerpanel.adapter.TopicOwnerPanelAdapter
 import com.eth.refiq.ui.wallet.WalletViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -30,6 +31,7 @@ class OwnerPanelFragment : Fragment() {
         return binding.root
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -37,5 +39,7 @@ class OwnerPanelFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.topicownerpanelViewpager.adapter = TopicOwnerPanelAdapter(childFragmentManager)
+        binding.topicownerpanelTablayout.setupWithViewPager(binding.topicownerpanelViewpager)
     }
 }

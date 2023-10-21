@@ -15,7 +15,7 @@ class RemoteTopicRepository constructor(
     override suspend fun searchTopic(query: String): List<Topic>? {
         val response = apolloClient.query(GetTopicByNameQuery(query)).execute()
         return response.data?.topics?.map {
-            Topic(it.id, it.name, it.owner, it.infoCid, it.moderators)
+            Topic(it.id, it.name, it.owner, it.infoCid, it.moderators.toMutableList())
         }
     }
 

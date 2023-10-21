@@ -139,11 +139,11 @@ class Web3JRepository constructor(
     override suspend fun getBalance(): String {
 
         return withContext(coroutineDispatcherProvider.ioDispatcher()) {
-           val amount= web3?.ethGetBalance(
+            val amount = web3?.ethGetBalance(
                 credential?.address,
                 DefaultBlockParameterName.LATEST
             )?.send()?.balance.toString()
-          return@withContext  Convert.fromWei(amount, Convert.Unit.ETHER).toString()
+            return@withContext Convert.fromWei(amount, Convert.Unit.ETHER).toString()
         }
 
     }
@@ -170,6 +170,29 @@ class Web3JRepository constructor(
         val createComment = topic.createComment(parentId.toBigInteger(), cid)
         val transactionReceipt = createComment.send()
         println("${transactionReceipt.gasUsed}")
+    }
+
+    override suspend fun addModerator(address: String, topicId: String) {
+        val transactionManager: TransactionManager = RawTransactionManager(
+            web3, credential, CHAIN_ID
+        )
+        val topic = Topics.load(
+            contractAddress, web3, transactionManager,
+            StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
+        )
+        topic.addModerator(address.toBigInteger(), topicId).send()
+
+    }
+
+    override suspend fun removeModerator(address: String, topicId: String) {
+        val transactionManager: TransactionManager = RawTransactionManager(
+            web3, credential, CHAIN_ID
+        )
+        val topic = Topics.load(
+            contractAddress, web3, transactionManager,
+            StaticGasProvider(DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT)
+        )
+        topic.removeModerator(address.toBigInteger(), topicId)
     }
 
     companion object {
